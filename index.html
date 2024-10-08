@@ -11,9 +11,10 @@
             color: #fff;
             font-family: 'Arial', sans-serif;
             position: relative;
+            overflow-x: hidden;
         }
 
-        /* Estilo para burbujas flotantes */
+        /* Burbuja flotantes animadas */
         .bubble {
             position: absolute;
             background-color: rgba(243, 156, 18, 0.5);
@@ -24,10 +25,11 @@
 
         @keyframes float {
             0% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+            50% { transform: translateY(-30px); }
             100% { transform: translateY(0); }
         }
 
+        /* Distribución de las burbujas para mejorar estética */
         .bubble1 { width: 100px; height: 100px; top: 10%; left: 20%; }
         .bubble2 { width: 150px; height: 150px; top: 25%; left: 70%; }
         .bubble3 { width: 120px; height: 120px; top: 45%; left: 10%; }
@@ -43,7 +45,36 @@
         .bubble13 { width: 130px; height: 130px; top: 50%; left: 70%; }
         .bubble14 { width: 100px; height: 100px; top: 80%; left: 90%; }
         .bubble15 { width: 60px; height: 60px; top: 20%; left: 30%; }
+        .bubble16 { width: 140px; height: 140px; top: 60%; left: 15%; }
+        .bubble17 { width: 100px; height: 100px; top: 90%; left: 40%; }
+        .bubble18 { width: 120px; height: 120px; top: 50%; left: 95%; }
+        .bubble19 { width: 80px; height: 80px; top: 25%; left: 10%; }
+        .bubble20 { width: 70px; height: 70px; top: 45%; left: 80%; }
 
+        /* Nueva barra de título con fondo naranja */
+        .navbar {
+            background-color: #f39c12;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            color: #fff;
+        }
+
+        /* Animación para el título */
+        .navbar h1 {
+            animation: titleGlow 3s infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            from { text-shadow: 0 0 10px #f39c12, 0 0 20px #f39c12; }
+            to { text-shadow: 0 0 20px #e67e22, 0 0 30px #e67e22; }
+        }
+
+        /* Estilos generales */
         h1, h2 {
             color: #f39c12;
             font-weight: bold;
@@ -54,11 +85,13 @@
             color: #333;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 2;
         }
 
         .container:hover {
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
 
         footer {
@@ -84,6 +117,10 @@
             background-color: #e67e22;
         }
 
+        .accordion-body {
+            transition: all 0.3s ease;
+        }
+
         #calculatorResult {
             font-weight: bold;
             color: #f39c12;
@@ -97,6 +134,7 @@
 
         .select-product:hover {
             color: #e67e22;
+            text-shadow: 0px 0px 8px #e67e22;
         }
 
         .small-table {
@@ -131,10 +169,14 @@
             cursor: pointer;
             border-radius: 5px;
             font-size: 16px;
+            margin-right: 10px;
+            transition: all 0.3s ease;
         }
 
         .btn-custom:hover {
             background-color: #e67e22;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
         }
 
         .phone-input-container {
@@ -171,45 +213,18 @@
             text-decoration: none;
             font-size: 16px;
             margin-top: 20px;
+            transition: all 0.3s ease;
         }
 
         .btn-whatsapp:hover {
             background-color: #20b857;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
         }
 
         .radio-options label {
             margin-right: 20px;
         }
-
-        /* Nueva barra de título con fondo naranja */
-        .navbar {
-            background-color: #f39c12;
-            color: #fff;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .navbar h1 {
-            margin: 0;
-            color: #fff;
-        }
-
-        /* Burbujas */
-        .bubble1 { width: 100px; height: 100px; top: 10%; left: 20%; }
-        .bubble2 { width: 150px; height: 150px; top: 25%; left: 70%; }
-        .bubble3 { width: 120px; height: 120px; top: 45%; left: 10%; }
-        .bubble4 { width: 80px; height: 80px; top: 70%; left: 60%; }
-        .bubble5 { width: 130px; height: 130px; top: 85%; left: 35%; }
-        .bubble6 { width: 50px; height: 50px; top: 15%; left: 50%; }
-        .bubble7 { width: 140px; height: 140px; top: 55%; left: 80%; }
-        .bubble8 { width: 90px; height: 90px; top: 75%; left: 15%; }
-        .bubble9 { width: 100px; height: 100px; top: 5%; left: 5%; }
-        .bubble10 { width: 110px; height: 110px; top: 40%; left: 50%; }
-        .bubble11 { width: 120px; height: 120px; top: 65%; left: 85%; }
-        .bubble12 { width: 150px; height: 150px; top: 30%; left: 25%; }
-        .bubble13 { width: 130px; height: 130px; top: 50%; left: 70%; }
-        .bubble14 { width: 100px; height: 100px; top: 80%; left: 90%; }
-        .bubble15 { width: 60px; height: 60px; top: 20%; left: 30%; }
 
         tr:hover {
             background-color: #f7f7f7;
@@ -220,9 +235,41 @@
             color: #fff;
         }
 
-        .accordion-body {
+        /* Estilos para sombras de hover en las tablas */
+        .table tbody tr:hover {
+            background-color: #f39c12;
+            color: #fff;
             transition: all 0.3s ease;
         }
+
+        /* Animación para las burbujas */
+        @keyframes growShrink {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .bubble:hover {
+            animation: growShrink 1s infinite ease-in-out;
+        }
+
+        /* Transición suave al cambiar el fondo de las burbujas */
+        .bubble {
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .bubble:hover {
+            background-color: rgba(46, 204, 113, 0.7);
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.8);
+        }
+
+        .phone-input-container input:hover {
+            border-color: #f39c12;
+        }
+
     </style>
 </head>
 <body>
@@ -352,6 +399,11 @@
     <div class="bubble bubble13"></div>
     <div class="bubble bubble14"></div>
     <div class="bubble bubble15"></div>
+    <div class="bubble bubble16"></div>
+    <div class="bubble bubble17"></div>
+    <div class="bubble bubble18"></div>
+    <div class="bubble bubble19"></div>
+    <div class="bubble bubble20"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
