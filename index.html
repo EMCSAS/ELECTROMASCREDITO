@@ -3,11 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Precios CSV</title>
+    <title>Precios por Categoría</title>
 </head>
 <body>
 
-    <h1>Precios de productos</h1>
+    <h1>Precios de productos por Categoría</h1>
+
+    <!-- Listas desplegables para Categoría y Subcategoría -->
+    <label for="categoria">Categoría:</label>
+    <select id="categoria">
+        <option value="">Selecciona una categoría</option>
+    </select>
+
+    <label for="subcategoria">Subcategoría:</label>
+    <select id="subcategoria">
+        <option value="">Selecciona una subcategoría</option>
+    </select>
+
+    <!-- Tabla para mostrar los productos filtrados -->
     <table id="preciosTable" border="1">
         <thead>
             <tr>
@@ -19,41 +32,91 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Aquí se insertarán los datos del CSV -->
+            <!-- Aquí se insertarán los datos del CSV filtrados -->
         </tbody>
     </table>
 
     <script>
+        let datosCSV = [];
+
         // Función para cargar y mostrar el archivo CSV
         async function cargarCSV() {
             const response = await fetch('precio.csv');
             const data = await response.text();
             const rows = data.split('\n');
 
-            // Seleccionar el cuerpo de la tabla
+            // Procesar las filas del archivo CSV y crear un array de objetos
+            datosCSV = rows.map(row => {
+                const cols = row.split(';');
+                return {
+                    categoria: cols[0],
+                    subcategoria: cols[1],
+                    codigo: cols[2],
+                    descripcion: cols[3],
+                    precio: cols[4]
+                };
+            });
+
+            // Llenar las listas desplegables
+            llenarListas();
+        }
+
+        // Función para llenar las listas desplegables con categorías y subcategorías únicas
+        function llenarListas() {
+            const categorias = [...new Set(datosCSV.map(item => item.categoria))];
+            const subcategorias = [...new Set(datosCSV.map(item => item.subcategoria))];
+
+            const categoriaSelect = document.getElementById('categoria');
+            const subcategoriaSelect = document.getElementById('subcategoria');
+
+            categorias.forEach(categoria => {
+                const option = document.createElement('option');
+                option.value = categoria;
+                option.textContent = categoria;
+                categoriaSelect.appendChild(option);
+            });
+
+            subcategorias.forEach(subcategoria => {
+                const option = document.createElement('option');
+                option.value = subcategoria;
+                option.textContent = subcategoria;
+                subcategoriaSelect.appendChild(option);
+            });
+        }
+
+        // Función para mostrar los datos filtrados en la tabla
+        function mostrarDatosFiltrados() {
+            const categoriaSeleccionada = document.getElementById('categoria').value;
+            const subcategoriaSeleccionada = document.getElementById('subcategoria').value;
             const tbody = document.querySelector('#preciosTable tbody');
+            tbody.innerHTML = '';  // Limpiar la tabla
 
-            // Iterar sobre cada fila del archivo CSV
-            rows.forEach(row => {
-                const cols = row.split(';'); // Separar por ';'
-                
-                // Crear una nueva fila en la tabla
+            // Filtrar los datos con base en la categoría y subcategoría seleccionadas
+            const datosFiltrados = datosCSV.filter(item => {
+                return (categoriaSeleccionada === '' || item.categoria === categoriaSeleccionada) &&
+                       (subcategoriaSeleccionada === '' || item.subcategoria === subcategoriaSeleccionada);
+            });
+
+            // Mostrar los datos filtrados en la tabla
+            datosFiltrados.forEach(item => {
                 const tr = document.createElement('tr');
-                
-                // Agregar cada columna de la fila
-                cols.forEach(col => {
-                    const td = document.createElement('td');
-                    td.textContent = col;
-                    tr.appendChild(td);
-                });
-
-                // Agregar la fila completa al cuerpo de la tabla
+                tr.innerHTML = `
+                    <td>${item.categoria}</td>
+                    <td>${item.subcategoria}</td>
+                    <td>${item.codigo}</td>
+                    <td>${item.descripcion}</td>
+                    <td>${item.precio}</td>
+                `;
                 tbody.appendChild(tr);
             });
         }
 
-        // Llamar a la función para cargar y mostrar el CSV
-        cargarCSV();
+        // Event listeners para actualizar la tabla cuando se cambien las listas desplegables
+        document.getElementById('categoria').addEventListener('change', mostrarDatosFiltrados);
+        document.getElementById('subcategoria').addEventListener('change', mostrarDatosFiltrados);
+
+        // Cargar el archivo CSV al cargar la página
+        window.onload = cargarCSV;
     </script>
 
 </body>
