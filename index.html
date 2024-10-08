@@ -14,7 +14,7 @@
             overflow-x: hidden;
         }
 
-        /* Burbuja estática con colores y opacidad baja */
+        /* Burbujas decorativas */
         .bubble {
             position: absolute;
             border-radius: 50%;
@@ -33,19 +33,34 @@
         .bubble9 { background-color: rgba(46, 204, 113, 0.6); width: 100px; height: 100px; top: 5%; left: 5%; }
         .bubble10 { background-color: rgba(52, 152, 219, 0.6); width: 110px; height: 110px; top: 40%; left: 50%; }
 
-        /* Nueva barra de título con fondo naranja */
+        /* Barra de título naranja */
         .navbar {
             background-color: #f39c12;
             color: #fff;
-            padding: 10px;
+            padding: 20px;
             text-align: center;
-            position: relative;
-            top: 50px; /* Baja la franja naranja */
+            margin-top: 60px;
         }
 
+        /* Título Bienvenido centrado y con estilo elegante */
         .navbar h1 {
+            font-family: 'Georgia', serif;
+            font-size: 3rem;
+            letter-spacing: 2px;
             margin: 0;
             color: #fff;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            animation: glow 2s infinite alternate;
+        }
+
+        /* Efecto Glow para el título */
+        @keyframes glow {
+            0% {
+                text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5), 0 0 20px #f39c12, 0 0 30px #e67e22;
+            }
+            100% {
+                text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5), 0 0 30px #f39c12, 0 0 40px #e67e22;
+            }
         }
 
         /* Estilos generales */
@@ -63,7 +78,7 @@
             transition: all 0.3s ease;
             z-index: 2;
             position: relative;
-            margin-top: 100px; /* Baja todo el contenedor */
+            margin-top: 100px;
         }
 
         .container:hover {
@@ -110,6 +125,7 @@
 
         .select-product:hover {
             color: #e67e22;
+            text-shadow: 0px 0px 8px #e67e22;
         }
 
         .small-table {
@@ -151,6 +167,7 @@
         .btn-custom:hover {
             background-color: #e67e22;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
         }
 
         .phone-input-container {
@@ -193,6 +210,7 @@
         .btn-whatsapp:hover {
             background-color: #20b857;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
         }
 
         .radio-options label {
@@ -222,7 +240,7 @@
     </style>
 </head>
 <body>
-    <!-- Franja Naranja con el título principal -->
+    <!-- Franja Naranja con el título principal centrado -->
     <div class="navbar">
         <h1>Bienvenido a Electromáscrédito</h1>
     </div>
