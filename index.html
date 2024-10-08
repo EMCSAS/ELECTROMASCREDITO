@@ -12,24 +12,16 @@
             color: #fff;
             font-family: 'Arial', sans-serif;
             position: relative;
-            overflow-x: hidden;
             margin: 0;
             padding: 0;
         }
 
-        /* Burbujas decorativas grandes */
+        /* Burbujas decorativas estáticas */
         .bubble {
             position: absolute;
             border-radius: 50%;
             z-index: 1;
             opacity: 0.3;
-            animation: bubbleMovement 25s infinite ease-in-out;
-        }
-
-        @keyframes bubbleMovement {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-50px); }
-            100% { transform: translateY(0); }
         }
 
         .bubble1 { background-color: rgba(243, 156, 18, 0.7); width: 250px; height: 250px; top: 10%; left: 10%; }
@@ -47,13 +39,12 @@
         .navbar {
             background-color: #f39c12;
             color: #fff;
-            padding: 20px 0;
-            text-align: center;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 2;
+            margin: 50px 0; /* Separación de la parte superior y de la tabla */
         }
 
         /* Título Bienvenido centrado */
@@ -61,25 +52,10 @@
             font-family: 'Georgia', serif;
             font-size: 3rem;
             letter-spacing: 2px;
-            margin: 0;
             color: #fff;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-            animation: glow 2s infinite alternate;
-        }
-
-        /* Efecto Glow para el título */
-        @keyframes glow {
-            0% {
-                text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5), 0 0 20px #f39c12, 0 0 30px #e67e22;
-            }
-            100% {
-                text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5), 0 0 30px #f39c12, 0 0 40px #e67e22;
-            }
-        }
-
-        /* Separación entre la franja naranja y el contenido */
-        .spacer {
-            height: 150px;
+            text-align: center;
+            margin: 0;
         }
 
         /* Contenedor principal */
@@ -92,8 +68,8 @@
             transition: all 0.3s ease;
             z-index: 2;
             position: relative;
-            margin-top: 100px;
             width: 80%;
+            margin: 0 auto 50px; /* Separación de la franja naranja */
         }
 
         .container:hover {
@@ -281,9 +257,6 @@
     <div class="navbar">
         <h1>Bienvenido a Electromáscrédito</h1>
     </div>
-
-    <!-- Espaciador para separar la franja naranja del contenido -->
-    <div class="spacer"></div>
 
     <!-- Contenedor principal -->
     <div class="container mt-5">
