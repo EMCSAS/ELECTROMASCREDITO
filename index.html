@@ -456,6 +456,7 @@
                                                 <tr>
                                                     <th>Producto</th>
                                                     <th>Código SAP</th>
+                                                    <th>PVC</th>
                                                     <th>Contado</th>
                                                     <th>3 meses</th>
                                                     <th>6 meses</th>
@@ -480,6 +481,7 @@
                         tr.innerHTML = `
                             <td>${producto.descripcion}</td>
                             <td>${producto.codigoSAP}</td>
+                            <td class="pvc">$${producto.pvc.toFixed(2)}</td>
                             <td class="contado">$${(producto.pvc * 1.20).toFixed(2)}</td>
                             <td class="tresMeses">$${(producto.pvc * 1.40).toFixed(2)}</td>
                             <td class="seisMeses">$${(producto.pvc * 1.60).toFixed(2)}</td>
@@ -495,7 +497,7 @@
         function selectProduct(element) {
             const row = element.closest('tr');
             const productName = row.querySelector('td:nth-child(1)').textContent;
-            const pvc = parseFloat(row.querySelector('.contado').textContent.replace('$', ''));
+            const pvc = parseFloat(row.querySelector('.pvc').textContent.replace('$', ''));
             document.getElementById('productSelected').value = productName;
             document.getElementById('productSelectedType').textContent = productName;
 
@@ -580,7 +582,14 @@
             const discount = document.getElementById('discountResult').textContent;
 
             const message = `
-                *Electromáscrédito*\n\n📦 *Producto*: ${product}\n💰 *Precio a crédito*: ${creditPrice}\n\n💵 *Entrada*: ${downPayment}\n\n💸 *Valor financiado*: ${financedAmount}\n\n💳 *Cuota mensual*: ${monthlyPayment}\n⏳ *Tiempo de financiamiento*: ${financingTime}\n🔖 *Descuento aplicable*: ${discount}\n
+                *ELECTROMÁSCRÉDITO*\n
+                Estimado cliente, su cotización para el producto *${product}* es el siguiente:\n
+                *Precio a crédito*: ${creditPrice}\n
+                *Entrada*: ${downPayment}\n
+                *Valor financiado*: ${financedAmount}\n
+                *Cuota mensual*: ${monthlyPayment}\n
+                *Tiempo de financiamiento*: ${financingTime}\n
+                *Ahorro EMC*: ${discount}
             `;
 
             const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
