@@ -10,9 +10,10 @@
             background-color: #1b263b;
             color: #fff;
             font-family: 'Arial', sans-serif;
-            overflow: hidden;
             position: relative;
         }
+
+        /* Estilo para burbujas flotantes */
         .bubble {
             position: absolute;
             background-color: rgba(243, 156, 18, 0.5);
@@ -20,42 +21,108 @@
             z-index: 1;
             animation: float 10s infinite ease-in-out;
         }
+
         @keyframes float {
             0% { transform: translateY(0); }
             50% { transform: translateY(-20px); }
             100% { transform: translateY(0); }
         }
+
+        .bubble1 { width: 100px; height: 100px; top: 10%; left: 20%; }
+        .bubble2 { width: 150px; height: 150px; top: 25%; left: 70%; }
+        .bubble3 { width: 120px; height: 120px; top: 45%; left: 10%; }
+        .bubble4 { width: 80px; height: 80px; top: 70%; left: 60%; }
+        .bubble5 { width: 130px; height: 130px; top: 85%; left: 35%; }
+        .bubble6 { width: 50px; height: 50px; top: 15%; left: 50%; }
+        .bubble7 { width: 140px; height: 140px; top: 55%; left: 80%; }
+        .bubble8 { width: 90px; height: 90px; top: 75%; left: 15%; }
+        .bubble9 { width: 100px; height: 100px; top: 5%; left: 5%; }
+        .bubble10 { width: 110px; height: 110px; top: 40%; left: 50%; }
+        .bubble11 { width: 120px; height: 120px; top: 65%; left: 85%; }
+        .bubble12 { width: 150px; height: 150px; top: 30%; left: 25%; }
+        .bubble13 { width: 130px; height: 130px; top: 50%; left: 70%; }
+        .bubble14 { width: 100px; height: 100px; top: 80%; left: 90%; }
+        .bubble15 { width: 60px; height: 60px; top: 20%; left: 30%; }
+
         h1, h2 {
             color: #f39c12;
             font-weight: bold;
-            z-index: 2;
         }
+
         .container {
             background-color: #fff;
             color: #333;
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            z-index: 2;
         }
+
+        .container:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
         footer {
             text-align: center;
             margin-top: 20px;
             color: #f39c12;
         }
+
         .table {
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        .navbar {
+
+        .table th, .table td {
+            vertical-align: middle;
+        }
+
+        .accordion-button:not(.collapsed) {
             background-color: #f39c12;
             color: #fff;
-            padding: 10px;
-            text-align: center;
         }
-        .navbar h1 {
-            margin: 0;
+
+        .accordion-button.collapsed:hover {
+            background-color: #e67e22;
+        }
+
+        #calculatorResult {
+            font-weight: bold;
+            color: #f39c12;
+        }
+
+        .select-product {
+            cursor: pointer;
+            color: #f39c12;
+            text-decoration: underline;
+        }
+
+        .select-product:hover {
+            color: #e67e22;
+        }
+
+        .small-table {
+            font-size: 1rem;
+            width: 60%;
+            margin: 0 auto;
+        }
+
+        .small-table th, .small-table td {
+            padding: 5px;
+        }
+
+        .small-table td:first-child {
+            white-space: nowrap;
+            width: 30%;
+        }
+
+        .small-table td:nth-child(2) {
+            text-align: left;
+        }
+
+        .discount-row {
+            background-color: #28a745;
             color: #fff;
         }
+
         .btn-custom {
             background-color: #f39c12;
             color: white;
@@ -65,9 +132,68 @@
             border-radius: 5px;
             font-size: 16px;
         }
+
         .btn-custom:hover {
             background-color: #e67e22;
         }
+
+        .phone-input-container {
+            background-color: #fff;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            width: fit-content;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .phone-input-container label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .phone-input-container input {
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #20b857;
+        }
+
+        .radio-options label {
+            margin-right: 20px;
+        }
+
+        /* Nueva barra de título con fondo naranja */
+        .navbar {
+            background-color: #f39c12;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            color: #fff;
+        }
+
         /* Burbujas */
         .bubble1 { width: 100px; height: 100px; top: 10%; left: 20%; }
         .bubble2 { width: 150px; height: 150px; top: 25%; left: 70%; }
@@ -84,6 +210,19 @@
         .bubble13 { width: 130px; height: 130px; top: 50%; left: 70%; }
         .bubble14 { width: 100px; height: 100px; top: 80%; left: 90%; }
         .bubble15 { width: 60px; height: 60px; top: 20%; left: 30%; }
+
+        tr:hover {
+            background-color: #f7f7f7;
+        }
+
+        tr.selected {
+            background-color: #f39c12;
+            color: #fff;
+        }
+
+        .accordion-body {
+            transition: all 0.3s ease;
+        }
     </style>
 </head>
 <body>
@@ -106,7 +245,41 @@
                 <label for="productSelected" class="form-label">Producto Seleccionado:</label>
                 <input type="text" class="form-control" id="productSelected" readonly>
             </div>
-            <!-- Otras entradas del formulario omitidas para brevedad -->
+
+            <div class="mb-3">
+                <label class="form-label">Tipo de Cliente:</label>
+                <div class="radio-options">
+                    <label><input type="radio" name="convenio" value="convenio"> Convenio</label>
+                    <label><input type="radio" name="convenio" value="no-convenio"> No Convenio</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Número de Cuotas:</label>
+                <div id="installmentMonths" class="radio-options">
+                    <label><input type="radio" name="cuotas" value="1"> 1</label>
+                    <label><input type="radio" name="cuotas" value="2"> 2</label>
+                    <label><input type="radio" name="cuotas" value="3"> 3</label>
+                    <label><input type="radio" name="cuotas" value="4"> 4</label>
+                    <label><input type="radio" name="cuotas" value="5"> 5</label>
+                    <label><input type="radio" name="cuotas" value="6"> 6</label>
+                    <label><input type="radio" name="cuotas" value="7"> 7</label>
+                    <label><input type="radio" name="cuotas" value="8"> 8</label>
+                    <label><input type="radio" name="cuotas" value="9"> 9</label>
+                    <label><input type="radio" name="cuotas" value="10"> 10</label>
+                    <label><input type="radio" name="cuotas" value="11"> 11</label>
+                    <label><input type="radio" name="cuotas" value="12"> 12</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="downPaymentPercentage" class="form-label">Entrada (%):</label>
+                <input type="number" class="form-control" id="downPaymentPercentage" value="0" min="0" max="100">
+            </div>
+            <div class="mb-3">
+                <label for="discount" class="form-label">Descuento por Cliente (%):</label>
+                <input type="number" class="form-control" id="discount" value="0" required>
+            </div>
             <button type="button" class="btn-custom" onclick="calculateInstallments()">Calcular Cuotas</button>
             <button type="button" class="btn-custom" onclick="resetForm()">Nueva Consulta</button>
         </form>
@@ -114,8 +287,48 @@
         <div class="mt-4">
             <!-- Tabla de resultados -->
             <table class="table table-bordered small-table">
-                <!-- Contenido de la tabla omitido para brevedad -->
+                <tbody>
+                    <tr>
+                        <td>Tipo de Producto</td>
+                        <td id="productSelectedType"></td>
+                    </tr>
+                    <tr>
+                        <td>Precio a crédito</td>
+                        <td id="creditPriceResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Entrada</td>
+                        <td id="downPaymentAmountResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Valor financiado</td>
+                        <td id="financedAmountResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Cuota mensual</td>
+                        <td id="monthlyPaymentResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Tiempo de financiamiento</td>
+                        <td id="financingTimeResult"></td>
+                    </tr>
+                    <tr class="discount-row">
+                        <td>Ahorro EMC</td>
+                        <td id="discountResult">$0.00</td>
+                    </tr>
+                </tbody>
             </table>
+
+            <div class="phone-input-container">
+                <label for="phoneNumber">Número telefónico:</label>
+                <div>
+                    <input type="tel" id="phoneNumber" placeholder="Ingrese su número" />
+                </div>
+            </div>
+
+            <a href="#" class="btn-whatsapp" id="whatsappButton" target="_blank" onclick="sendWhatsApp()">
+                Enviar por WhatsApp
+            </a>
         </div>
     </div>
 
@@ -141,5 +354,229 @@
     <div class="bubble bubble15"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let categorias = {};
+        let pvcSelected = 0;
+
+        function loadCSV(file) {
+            fetch(file)
+                .then(response => response.text())
+                .then(data => {
+                    const rows = data.split('\n');
+                    let currentCategory = '';
+                    let currentSubcategory = '';
+
+                    rows.slice(1).forEach(row => {
+                        const columns = row.split(';');
+                        const categoria = columns[0]?.trim();
+                        const subcategoria = columns[1]?.trim();
+                        const codigoSAP = columns[2]?.trim();
+                        const descripcion = columns[3]?.trim();
+                        const pvc = columns[4] ? parseFloat(columns[4].replace(',', '.')) : null;
+
+                        if (categoria) {
+                            currentCategory = categoria;
+                            categorias[currentCategory] = categorias[currentCategory] || {};
+                        }
+
+                        if (subcategoria) {
+                            currentSubcategory = subcategoria;
+                            categorias[currentCategory][currentSubcategory] = [];
+                        }
+
+                        if (pvc && currentCategory && currentSubcategory) {
+                            categorias[currentCategory][currentSubcategory].push({ codigoSAP, descripcion, pvc });
+                        }
+                    });
+                    populateCatalog();
+                })
+                .catch(error => console.error('Error al cargar el archivo CSV:', error));
+        }
+
+        function populateCatalog() {
+            const accordionContainer = document.getElementById("catalogoAccordion");
+            accordionContainer.innerHTML = '';
+
+            Object.keys(categorias).forEach((categoria, categoryIndex) => {
+                const accordionItem = document.createElement('div');
+                accordionItem.classList.add('accordion-item');
+                accordionItem.innerHTML = `
+                    <h2 class="accordion-header" id="heading${categoryIndex}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${categoryIndex}" aria-expanded="false" aria-controls="collapse${categoryIndex}">
+                            ${categoria}
+                        </button>
+                    </h2>
+                    <div id="collapse${categoryIndex}" class="accordion-collapse collapse" aria-labelledby="heading${categoryIndex}" data-bs-parent="#catalogoAccordion">
+                        <div class="accordion-body" id="subcategoryContainer${categoryIndex}">
+                            <!-- Aquí se cargarán las subcategorías -->
+                        </div>
+                    </div>
+                `;
+
+                accordionContainer.appendChild(accordionItem);
+
+                const subcategoryContainer = document.getElementById(`subcategoryContainer${categoryIndex}`);
+                Object.keys(categorias[categoria]).forEach((subcategoria, subcategoryIndex) => {
+                    const subcategoryAccordion = document.createElement('div');
+                    subcategoryAccordion.innerHTML = `
+                        <div class="accordion" id="subcategoryAccordion${categoryIndex}${subcategoryIndex}">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="subHeading${categoryIndex}${subcategoryIndex}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#subCollapse${categoryIndex}${subcategoryIndex}" aria-expanded="false" aria-controls="subCollapse${categoryIndex}${subcategoryIndex}">
+                                        ${subcategoria}
+                                    </button>
+                                </h2>
+                                <div id="subCollapse${categoryIndex}${subcategoryIndex}" class="accordion-collapse collapse" aria-labelledby="subHeading${categoryIndex}${subcategoryIndex}" data-bs-parent="#subcategoryAccordion${categoryIndex}${subcategoryIndex}">
+                                    <div class="accordion-body">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Producto</th>
+                                                    <th>Código SAP</th>
+                                                    <th>PVC</th>
+                                                    <th>Contado</th>
+                                                    <th>3 meses</th>
+                                                    <th>6 meses</th>
+                                                    <th>12 meses</th>
+                                                    <th>Seleccionar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="subcategoryBody${categoryIndex}${subcategoryIndex}">
+                                                <!-- Aquí se cargarán los productos de esta subcategoría -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    subcategoryContainer.appendChild(subcategoryAccordion);
+
+                    const tbody = document.getElementById(`subcategoryBody${categoryIndex}${subcategoryIndex}`);
+                    categorias[categoria][subcategoria].forEach(producto => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>${producto.descripcion}</td>
+                            <td>${producto.codigoSAP}</td>
+                            <td class="pvc">$${producto.pvc.toFixed(2)}</td>
+                            <td class="contado">$${(producto.pvc * 1.20).toFixed(2)}</td>
+                            <td class="tresMeses">$${(producto.pvc * 1.40).toFixed(2)}</td>
+                            <td class="seisMeses">$${(producto.pvc * 1.60).toFixed(2)}</td>
+                            <td class="doceMeses">$${(producto.pvc * 1.80).toFixed(2)}</td>
+                            <td><span class="select-product" onclick="selectProduct(this)">Seleccionar</span></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                });
+            });
+        }
+
+        function selectProduct(element) {
+            const row = element.closest('tr');
+            const productName = row.querySelector('td:nth-child(1)').textContent;
+            const pvc = parseFloat(row.querySelector('.pvc').textContent.replace('$', ''));
+            document.getElementById('productSelected').value = productName;
+            document.getElementById('productSelectedType').textContent = productName;
+
+            pvcSelected = pvc;
+
+            const accordionItem = element.closest('.accordion-collapse');
+            const collapseInstance = bootstrap.Collapse.getOrCreateInstance(accordionItem);
+            collapseInstance.hide();
+
+            document.getElementById('calculatorForm').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function calculateInstallments() {
+            const downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
+            const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
+            const discountPercentage = parseFloat(document.getElementById('discount').value);
+            const convenio = document.querySelector('input[name="convenio"]:checked').value;
+            let creditPrice = 0;
+
+            if (months <= 3) {
+                creditPrice = pvcSelected * (1 + (0.25 + ((months - 1) * 0.075)));
+            } else if (months > 3 && months <= 6) {
+                creditPrice = pvcSelected * (1.40 + ((months - 4) * 0.10));
+            } else if (months > 6 && months <= 12) {
+                creditPrice = pvcSelected * (1.61 + ((months - 7) * 0.065));
+                if (creditPrice > pvcSelected * 1.80) {
+                    creditPrice = pvcSelected * 1.80;
+                }
+            }
+
+            let discountAmount = 0;
+            if (discountPercentage > 0) {
+                discountAmount = (creditPrice * discountPercentage) / 100;
+                creditPrice -= discountAmount;
+            }
+
+            if (convenio === 'no-convenio') {
+                if (downPaymentPercentage === 0) {
+                    creditPrice *= 1.05;
+                } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 9) {
+                    const extraCharge = 5 - ((downPaymentPercentage / 9) * 4);
+                    creditPrice *= (1 + extraCharge / 100);
+                } else if (downPaymentPercentage > 9 && downPaymentPercentage <= 11) {
+                } else if (downPaymentPercentage > 11 && downPaymentPercentage <= 90) {
+                    const discountReduction = ((downPaymentPercentage - 11) / (90 - 11)) * 10;
+                    creditPrice *= (1 - discountReduction / 100);
+                }
+            }
+
+            const downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
+            const financedAmount = creditPrice - downPaymentAmount;
+            const monthlyPayment = financedAmount / months;
+
+            document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
+            document.getElementById('discountResult').textContent = `$${discountAmount.toFixed(2)}`;
+            document.getElementById('financedAmountResult').textContent = `$${financedAmount.toFixed(2)}`;
+            document.getElementById('monthlyPaymentResult').textContent = `$${monthlyPayment.toFixed(2)}`;
+            document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
+            document.getElementById('financingTimeResult').textContent = `${months} meses`;
+        }
+
+        function resetForm() {
+            document.getElementById('calculatorForm').reset();
+            document.getElementById('productSelectedType').textContent = '';
+            document.getElementById('creditPriceResult').textContent = '$0.00';
+            document.getElementById('financedAmountResult').textContent = '$0.00';
+            document.getElementById('monthlyPaymentResult').textContent = '$0.00';
+            document.getElementById('downPaymentAmountResult').textContent = '$0.00';
+            document.getElementById('financingTimeResult').textContent = '';
+            document.getElementById('discountResult').textContent = '$0.00';
+            document.getElementById('phoneNumber').value = '';
+        }
+
+        function sendWhatsApp() {
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            const product = document.getElementById('productSelectedType').textContent;
+            const creditPrice = document.getElementById('creditPriceResult').textContent;
+            const downPayment = document.getElementById('downPaymentAmountResult').textContent;
+            const financedAmount = document.getElementById('financedAmountResult').textContent;
+            const monthlyPayment = document.getElementById('monthlyPaymentResult').textContent;
+            const financingTime = document.getElementById('financingTimeResult').textContent;
+            const discount = document.getElementById('discountResult').textContent;
+
+            const message = `
+                *ELECTROMÁSCRÉDITO*\n
+                Estimado cliente, su cotización para el producto *${product}* es el siguiente:\n
+                *Precio a crédito*: ${creditPrice}\n
+                *Entrada*: ${downPayment}\n
+                *Valor financiado*: ${financedAmount}\n
+                *Cuota mensual*: ${monthlyPayment}\n
+                *Tiempo de financiamiento*: ${financingTime}\n
+                *Ahorro EMC*: ${discount}
+            `;
+
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+            document.getElementById('whatsappButton').href = whatsappUrl;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            loadCSV('./precio.csv');
+        });
+    </script>
 </body>
 </html>
