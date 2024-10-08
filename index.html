@@ -14,35 +14,47 @@
             overflow-x: hidden;
         }
 
-        /* Burbujas decorativas */
+        /* Burbujas decorativas grandes */
         .bubble {
             position: absolute;
             border-radius: 50%;
             z-index: 1;
             opacity: 0.3;
+            animation: bubbleMovement 25s infinite ease-in-out;
         }
 
-        .bubble1 { background-color: rgba(243, 156, 18, 0.6); width: 100px; height: 100px; top: 10%; left: 20%; }
-        .bubble2 { background-color: rgba(52, 152, 219, 0.6); width: 150px; height: 150px; top: 25%; left: 70%; }
-        .bubble3 { background-color: rgba(46, 204, 113, 0.6); width: 120px; height: 120px; top: 45%; left: 10%; }
-        .bubble4 { background-color: rgba(155, 89, 182, 0.6); width: 80px; height: 80px; top: 70%; left: 60%; }
-        .bubble5 { background-color: rgba(241, 196, 15, 0.6); width: 130px; height: 130px; top: 85%; left: 35%; }
-        .bubble6 { background-color: rgba(231, 76, 60, 0.6); width: 50px; height: 50px; top: 15%; left: 50%; }
-        .bubble7 { background-color: rgba(52, 73, 94, 0.6); width: 140px; height: 140px; top: 55%; left: 80%; }
-        .bubble8 { background-color: rgba(241, 148, 138, 0.6); width: 90px; height: 90px; top: 75%; left: 15%; }
-        .bubble9 { background-color: rgba(46, 204, 113, 0.6); width: 100px; height: 100px; top: 5%; left: 5%; }
-        .bubble10 { background-color: rgba(52, 152, 219, 0.6); width: 110px; height: 110px; top: 40%; left: 50%; }
+        @keyframes bubbleMovement {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-50px); }
+            100% { transform: translateY(0); }
+        }
 
-        /* Barra de título naranja */
+        .bubble1 { background-color: rgba(243, 156, 18, 0.7); width: 250px; height: 250px; top: 10%; left: 10%; }
+        .bubble2 { background-color: rgba(52, 152, 219, 0.7); width: 350px; height: 350px; top: 5%; right: 15%; }
+        .bubble3 { background-color: rgba(46, 204, 113, 0.7); width: 300px; height: 300px; top: 50%; left: 5%; }
+        .bubble4 { background-color: rgba(155, 89, 182, 0.7); width: 280px; height: 280px; bottom: 10%; right: 10%; }
+        .bubble5 { background-color: rgba(241, 196, 15, 0.7); width: 200px; height: 200px; bottom: 20%; left: 50%; }
+        .bubble6 { background-color: rgba(231, 76, 60, 0.7); width: 300px; height: 300px; top: 20%; right: 5%; }
+        .bubble7 { background-color: rgba(52, 73, 94, 0.7); width: 350px; height: 350px; bottom: 25%; left: 10%; }
+        .bubble8 { background-color: rgba(241, 148, 138, 0.7); width: 180px; height: 180px; bottom: 10%; left: 5%; }
+        .bubble9 { background-color: rgba(46, 204, 113, 0.7); width: 250px; height: 250px; top: 65%; right: 15%; }
+        .bubble10 { background-color: rgba(52, 152, 219, 0.7); width: 300px; height: 300px; top: 80%; left: 70%; }
+
+        /* Barra de título naranja centrada */
         .navbar {
             background-color: #f39c12;
             color: #fff;
             padding: 20px;
             text-align: center;
-            margin-top: 60px;
+            margin: 0 auto;
+            position: relative;
+            top: 50px;
+            width: 80%;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
 
-        /* Título Bienvenido centrado y con estilo elegante */
+        /* Título Bienvenido centrado */
         .navbar h1 {
             font-family: 'Georgia', serif;
             font-size: 3rem;
@@ -63,12 +75,7 @@
             }
         }
 
-        /* Estilos generales */
-        h1, h2 {
-            color: #f39c12;
-            font-weight: bold;
-        }
-
+        /* Contenedor principal */
         .container {
             background-color: #fff;
             color: #333;
@@ -78,17 +85,20 @@
             transition: all 0.3s ease;
             z-index: 2;
             position: relative;
-            margin-top: 100px;
+            margin-top: 150px;
+            width: 80%;
         }
 
         .container:hover {
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
 
-        footer {
+        /* Sección del Catálogo */
+        h2 {
             text-align: center;
-            margin-top: 20px;
+            margin-bottom: 20px;
             color: #f39c12;
+            font-weight: bold;
         }
 
         .table {
@@ -117,10 +127,12 @@
             color: #f39c12;
         }
 
+        /* Estilo de productos seleccionables */
         .select-product {
             cursor: pointer;
             color: #f39c12;
             text-decoration: underline;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
         }
 
         .select-product:hover {
@@ -152,6 +164,7 @@
             color: #fff;
         }
 
+        /* Botón personalizado */
         .btn-custom {
             background-color: #f39c12;
             color: white;
@@ -217,6 +230,7 @@
             margin-right: 20px;
         }
 
+        /* Efectos hover para filas de la tabla */
         tr:hover {
             background-color: #f7f7f7;
         }
@@ -226,7 +240,6 @@
             color: #fff;
         }
 
-        /* Estilos para sombras de hover en las tablas */
         .table tbody tr:hover {
             background-color: #f39c12;
             color: #fff;
@@ -235,6 +248,17 @@
 
         .phone-input-container input:hover {
             border-color: #f39c12;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #f39c12;
+        }
+
+        footer p {
+            margin: 0;
         }
 
     </style>
@@ -350,7 +374,7 @@
         <p>&copy; 2024 Electromáscrédito - Todos los derechos reservados</p>
     </footer>
 
-    <!-- Burbujas decorativas -->
+    <!-- Burbujas decorativas grandes distribuidas por la página -->
     <div class="bubble bubble1"></div>
     <div class="bubble bubble2"></div>
     <div class="bubble bubble3"></div>
