@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Precios por Categoría</title>
+    <title>Productos por Categoría y Subcategoría</title>
 </head>
 <body>
 
-    <h1>Precios de productos por Categoría</h1>
+    <h1>Productos por Categoría y Subcategoría</h1>
 
-    <!-- Listas desplegables para Categoría y Subcategoría -->
-    <label for="categoria">Categoría:</label>
-    <select id="categoria">
-        <option value="">Selecciona una categoría</option>
+    <!-- Listas desplegables -->
+    <label for="categoriaSelect">Selecciona una Categoría:</label>
+    <select id="categoriaSelect">
+        <option value="">--Selecciona una Categoría--</option>
     </select>
 
-    <label for="subcategoria">Subcategoría:</label>
-    <select id="subcategoria">
-        <option value="">Selecciona una subcategoría</option>
+    <label for="subcategoriaSelect">Selecciona una Subcategoría:</label>
+    <select id="subcategoriaSelect">
+        <option value="">--Selecciona una Subcategoría--</option>
     </select>
 
-    <!-- Tabla para mostrar los productos filtrados -->
-    <table id="preciosTable" border="1">
+    <!-- Tabla para mostrar los productos -->
+    <table id="productosTable" border="1" style="margin-top: 20px;">
         <thead>
             <tr>
                 <th>Categoría</th>
@@ -32,42 +32,65 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Aquí se insertarán los datos del CSV filtrados -->
+            <!-- Los productos se mostrarán aquí -->
         </tbody>
     </table>
 
     <script>
-        let datosCSV = [];
+        let productos = []; // Para almacenar todos los productos
 
-        // Función para cargar y mostrar el archivo CSV
+        // Función para cargar y procesar el archivo CSV
         async function cargarCSV() {
             const response = await fetch('precio.csv');
             const data = await response.text();
             const rows = data.split('\n');
+            
+            let ultimaCategoria = "";
+            let ultimaSubcategoria = "";
 
-            // Procesar las filas del archivo CSV y crear un array de objetos
-            datosCSV = rows.map(row => {
+            // Procesar las filas del CSV
+            rows.forEach((row, index) => {
+                if (index === 0) return; // Saltar el encabezado
+
                 const cols = row.split(';');
-                return {
-                    categoria: cols[0],
-                    subcategoria: cols[1],
-                    codigo: cols[2],
-                    descripcion: cols[3],
-                    precio: cols[4]
-                };
+                let categoria = cols[0].trim();
+                let subcategoria = cols[1].trim();
+                const codigoSAP = cols[2].trim();
+                const descripcion = cols[3].trim();
+                const precio = cols[4]?.trim();
+
+                // Si la categoría está vacía, tomar la anterior
+                if (!categoria) {
+                    categoria = ultimaCategoria;
+                } else {
+                    ultimaCategoria = categoria;
+                }
+
+                // Si la subcategoría está vacía, tomar la anterior
+                if (!subcategoria) {
+                    subcategoria = ultimaSubcategoria;
+                } else {
+                    ultimaSubcategoria = subcategoria;
+                }
+
+                // Añadir el producto al array de productos
+                productos.push({
+                    categoria,
+                    subcategoria,
+                    codigoSAP,
+                    descripcion,
+                    precio
+                });
             });
 
-            // Llenar las listas desplegables
-            llenarListas();
+            // Llenar las categorías en el select
+            llenarCategorias();
         }
 
-        // Función para llenar las listas desplegables con categorías y subcategorías únicas
-        function llenarListas() {
-            const categorias = [...new Set(datosCSV.map(item => item.categoria))];
-            const subcategorias = [...new Set(datosCSV.map(item => item.subcategoria))];
-
-            const categoriaSelect = document.getElementById('categoria');
-            const subcategoriaSelect = document.getElementById('subcategoria');
+        // Función para llenar el select de categorías
+        function llenarCategorias() {
+            const categoriaSelect = document.getElementById('categoriaSelect');
+            const categorias = [...new Set(productos.map(p => p.categoria))]; // Obtener categorías únicas
 
             categorias.forEach(categoria => {
                 const option = document.createElement('option');
@@ -76,47 +99,65 @@
                 categoriaSelect.appendChild(option);
             });
 
+            // Agregar evento para cuando se selecciona una categoría
+            categoriaSelect.addEventListener('change', llenarSubcategorias);
+        }
+
+        // Función para llenar el select de subcategorías según la categoría seleccionada
+        function llenarSubcategorias() {
+            const subcategoriaSelect = document.getElementById('subcategoriaSelect');
+            const categoriaSeleccionada = document.getElementById('categoriaSelect').value;
+
+            // Limpiar el select de subcategorías
+            subcategoriaSelect.innerHTML = '<option value="">--Selecciona una Subcategoría--</option>';
+
+            // Filtrar subcategorías por categoría seleccionada
+            const subcategorias = [...new Set(productos
+                .filter(p => p.categoria === categoriaSeleccionada)
+                .map(p => p.subcategoria))]; // Obtener subcategorías únicas
+
+            // Llenar el select de subcategorías
             subcategorias.forEach(subcategoria => {
                 const option = document.createElement('option');
                 option.value = subcategoria;
                 option.textContent = subcategoria;
                 subcategoriaSelect.appendChild(option);
             });
+
+            // Agregar evento para cuando se selecciona una subcategoría
+            subcategoriaSelect.addEventListener('change', mostrarProductos);
         }
 
-        // Función para mostrar los datos filtrados en la tabla
-        function mostrarDatosFiltrados() {
-            const categoriaSeleccionada = document.getElementById('categoria').value;
-            const subcategoriaSeleccionada = document.getElementById('subcategoria').value;
-            const tbody = document.querySelector('#preciosTable tbody');
-            tbody.innerHTML = '';  // Limpiar la tabla
+        // Función para mostrar los productos según la subcategoría seleccionada
+        function mostrarProductos() {
+            const categoriaSeleccionada = document.getElementById('categoriaSelect').value;
+            const subcategoriaSeleccionada = document.getElementById('subcategoriaSelect').value;
+            const tbody = document.getElementById('productosTable').querySelector('tbody');
 
-            // Filtrar los datos con base en la categoría y subcategoría seleccionadas
-            const datosFiltrados = datosCSV.filter(item => {
-                return (categoriaSeleccionada === '' || item.categoria === categoriaSeleccionada) &&
-                       (subcategoriaSeleccionada === '' || item.subcategoria === subcategoriaSeleccionada);
-            });
+            // Limpiar la tabla de productos
+            tbody.innerHTML = '';
 
-            // Mostrar los datos filtrados en la tabla
-            datosFiltrados.forEach(item => {
+            // Filtrar los productos por categoría y subcategoría seleccionadas
+            const productosFiltrados = productos.filter(p => 
+                p.categoria === categoriaSeleccionada && p.subcategoria === subcategoriaSeleccionada
+            );
+
+            // Mostrar los productos en la tabla
+            productosFiltrados.forEach(producto => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${item.categoria}</td>
-                    <td>${item.subcategoria}</td>
-                    <td>${item.codigo}</td>
-                    <td>${item.descripcion}</td>
-                    <td>${item.precio}</td>
+                    <td>${producto.categoria}</td>
+                    <td>${producto.subcategoria}</td>
+                    <td>${producto.codigoSAP}</td>
+                    <td>${producto.descripcion}</td>
+                    <td>${producto.precio}</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        // Event listeners para actualizar la tabla cuando se cambien las listas desplegables
-        document.getElementById('categoria').addEventListener('change', mostrarDatosFiltrados);
-        document.getElementById('subcategoria').addEventListener('change', mostrarDatosFiltrados);
-
-        // Cargar el archivo CSV al cargar la página
-        window.onload = cargarCSV;
+        // Llamar a la función para cargar y procesar el CSV
+        cargarCSV();
     </script>
 
 </body>
