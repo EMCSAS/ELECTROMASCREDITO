@@ -7,12 +7,12 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #1b263b; /* Azul marino */
-            color: #fff; /* Blanco */
+            background-color: #1b263b;
+            color: #fff;
         }
         h1, h2 {
-            color: #f39c12; /* Naranja */
-            font-weight: bold; /* Negrita */
+            color: #f39c12;
+            font-weight: bold;
         }
         .container {
             background-color: #fff;
@@ -74,8 +74,6 @@
         .btn-custom:hover {
             background-color: #e67e22;
         }
-
-        /* Estilos para la sección de ingreso del número de teléfono */
         .phone-input-container {
             background-color: #fff;
             color: #333;
@@ -96,8 +94,6 @@
             border-radius: 5px;
             outline: none;
         }
-
-        /* Estilos para el botón de WhatsApp */
         .btn-whatsapp {
             background-color: #25D366;
             color: white;
@@ -112,12 +108,9 @@
         .btn-whatsapp:hover {
             background-color: #20b857;
         }
-
-        /* Estilos para la separación de las opciones */
         .radio-options label {
             margin-right: 20px;
         }
-
     </style>
 </head>
 <body>
@@ -136,7 +129,6 @@
                 <input type="text" class="form-control" id="productSelected" readonly>
             </div>
 
-            <!-- Botones de selección para el tipo de cliente -->
             <div class="mb-3">
                 <label class="form-label">Tipo de Cliente:</label>
                 <div class="radio-options">
@@ -145,7 +137,6 @@
                 </div>
             </div>
 
-            <!-- Botones de selección para el número de cuotas -->
             <div class="mb-3">
                 <label class="form-label">Número de Cuotas:</label>
                 <div id="installmentMonths" class="radio-options">
@@ -210,7 +201,6 @@
                 </tbody>
             </table>
 
-            <!-- Sección de ingreso del número de teléfono justo debajo de la tabla -->
             <div class="phone-input-container">
                 <label for="phoneNumber">Número telefónico:</label>
                 <div>
@@ -218,7 +208,6 @@
                 </div>
             </div>
 
-            <!-- Botón para compartir por WhatsApp al final de la tabla -->
             <a href="#" class="btn-whatsapp" id="whatsappButton" target="_blank" onclick="sendWhatsApp()">
                 Enviar por WhatsApp
             </a>
@@ -235,23 +224,21 @@
         let categorias = {};
         let pvcSelected = 0;
 
-        // Función para cargar el archivo CSV y almacenarlo en la variable productos
         function loadCSV(file) {
             fetch(file)
-                .then(response => response.text())  // Obtiene el contenido del archivo CSV como texto
+                .then(response => response.text())
                 .then(data => {
-                    const rows = data.split('\n'); // Obtener todas las filas del CSV
-                    let currentCategory = ''; // Variable para almacenar la categoría actual
-                    let currentSubcategory = ''; // Variable para almacenar la subcategoría actual
+                    const rows = data.split('\n');
+                    let currentCategory = '';
+                    let currentSubcategory = '';
 
-                    // Omitir la primera fila, que se asume es de referencia
                     rows.slice(1).forEach(row => {
-                        const columns = row.split(';');  // Dividir cada fila en columnas usando punto y coma como separador
-                        const categoria = columns[0]?.trim();  // Columna 1: Categoría
-                        const subcategoria = columns[1]?.trim();  // Columna 2: Subcategoría
-                        const codigoSAP = columns[2]?.trim();  // Columna 3: Código SAP
-                        const descripcion = columns[3]?.trim();  // Columna 4: Descripción del Material
-                        const pvc = columns[4] ? parseFloat(columns[4].replace(',', '.')) : null;  // Columna 5: PVC
+                        const columns = row.split(';');
+                        const categoria = columns[0]?.trim();
+                        const subcategoria = columns[1]?.trim();
+                        const codigoSAP = columns[2]?.trim();
+                        const descripcion = columns[3]?.trim();
+                        const pvc = columns[4] ? parseFloat(columns[4].replace(',', '.')) : null;
 
                         if (categoria) {
                             currentCategory = categoria;
@@ -264,25 +251,21 @@
                         }
 
                         if (pvc && currentCategory && currentSubcategory) {
-                            // Si hay PVC, agregar el producto a la subcategoría actual
                             categorias[currentCategory][currentSubcategory].push({ codigoSAP, descripcion, pvc });
                         }
                     });
-                    populateCatalog(); // Llama a la función para llenar la tabla del catálogo con los productos
+                    populateCatalog();
                 })
-                .catch(error => console.error('Error al cargar el archivo CSV:', error)); // Muestra un error si algo sale mal
+                .catch(error => console.error('Error al cargar el archivo CSV:', error));
         }
 
-        // Función para llenar las categorías, subcategorías y productos del catálogo
         function populateCatalog() {
             const accordionContainer = document.getElementById("catalogoAccordion");
-            accordionContainer.innerHTML = ''; // Limpiar el contenido previo
+            accordionContainer.innerHTML = '';
 
             Object.keys(categorias).forEach((categoria, categoryIndex) => {
-                // Crear el elemento de categoría (acordeón)
                 const accordionItem = document.createElement('div');
                 accordionItem.classList.add('accordion-item');
-                
                 accordionItem.innerHTML = `
                     <h2 class="accordion-header" id="heading${categoryIndex}">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${categoryIndex}" aria-expanded="false" aria-controls="collapse${categoryIndex}">
@@ -298,40 +281,43 @@
 
                 accordionContainer.appendChild(accordionItem);
 
-                // Poblar subcategorías dentro de cada categoría
                 const subcategoryContainer = document.getElementById(`subcategoryContainer${categoryIndex}`);
                 Object.keys(categorias[categoria]).forEach((subcategoria, subcategoryIndex) => {
-                    const subcategoryTable = document.createElement('div');
-                    subcategoryTable.innerHTML = `
-                        <h5>
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSubcategory${categoryIndex}${subcategoryIndex}" aria-expanded="false" aria-controls="collapseSubcategory${categoryIndex}${subcategoryIndex}">
-                                ${subcategoria}
-                            </button>
-                        </h5>
-                        <div id="collapseSubcategory${categoryIndex}${subcategoryIndex}" class="accordion-collapse collapse">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Producto</th>
-                                        <th>Código SAP</th>
-                                        <th>PVC</th>
-                                        <th>Contado</th>
-                                        <th>3 meses</th>
-                                        <th>6 meses</th>
-                                        <th>12 meses</th>
-                                        <th>Seleccionar</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="subcategoryBody${categoryIndex}${subcategoryIndex}">
-                                    <!-- Aquí se cargarán los productos de esta subcategoría -->
-                                </tbody>
-                            </table>
+                    const subcategoryAccordion = document.createElement('div');
+                    subcategoryAccordion.innerHTML = `
+                        <div class="accordion" id="subcategoryAccordion${categoryIndex}${subcategoryIndex}">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="subHeading${categoryIndex}${subcategoryIndex}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#subCollapse${categoryIndex}${subcategoryIndex}" aria-expanded="false" aria-controls="subCollapse${categoryIndex}${subcategoryIndex}">
+                                        ${subcategoria}
+                                    </button>
+                                </h2>
+                                <div id="subCollapse${categoryIndex}${subcategoryIndex}" class="accordion-collapse collapse" aria-labelledby="subHeading${categoryIndex}${subcategoryIndex}" data-bs-parent="#subcategoryAccordion${categoryIndex}${subcategoryIndex}">
+                                    <div class="accordion-body">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Producto</th>
+                                                    <th>Código SAP</th>
+                                                    <th>PVC</th>
+                                                    <th>Contado</th>
+                                                    <th>3 meses</th>
+                                                    <th>6 meses</th>
+                                                    <th>12 meses</th>
+                                                    <th>Seleccionar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="subcategoryBody${categoryIndex}${subcategoryIndex}">
+                                                <!-- Aquí se cargarán los productos de esta subcategoría -->
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     `;
+                    subcategoryContainer.appendChild(subcategoryAccordion);
 
-                    subcategoryContainer.appendChild(subcategoryTable);
-
-                    // Poblar productos dentro de cada subcategoría
                     const tbody = document.getElementById(`subcategoryBody${categoryIndex}${subcategoryIndex}`);
                     categorias[categoria][subcategoria].forEach(producto => {
                         const tr = document.createElement("tr");
@@ -351,7 +337,6 @@
             });
         }
 
-        // Función para seleccionar un producto desde la tabla
         function selectProduct(element) {
             const row = element.closest('tr');
             const productName = row.querySelector('td:nth-child(1)').textContent;
@@ -359,19 +344,15 @@
             document.getElementById('productSelected').value = productName;
             document.getElementById('productSelectedType').textContent = productName;
 
-            // Almacenar el precio PVC seleccionado para utilizar en los cálculos
             pvcSelected = pvc;
 
-            // Obtener el acordeón colapsado y contraerlo
             const accordionItem = element.closest('.accordion-collapse');
             const collapseInstance = bootstrap.Collapse.getOrCreateInstance(accordionItem);
-            collapseInstance.hide();  // Contraer el acordeón
+            collapseInstance.hide();
 
-            // Hacer scroll a la sección de simulación
             document.getElementById('calculatorForm').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Función para calcular las cuotas
         function calculateInstallments() {
             const downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
             const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
@@ -379,7 +360,6 @@
             const convenio = document.querySelector('input[name="convenio"]:checked').value;
             let creditPrice = 0;
 
-            // Utilidad progresiva según el número de meses
             if (months <= 3) {
                 creditPrice = pvcSelected * (1 + (0.25 + ((months - 1) * 0.075)));
             } else if (months > 3 && months <= 6) {
@@ -387,38 +367,30 @@
             } else if (months > 6 && months <= 12) {
                 creditPrice = pvcSelected * (1.61 + ((months - 7) * 0.065));
                 if (creditPrice > pvcSelected * 1.80) {
-                    creditPrice = pvcSelected * 1.80; // Limitar al 80%
+                    creditPrice = pvcSelected * 1.80;
                 }
             }
 
-            // Aplicar descuento si es mayor a 0%
             let discountAmount = 0;
             if (discountPercentage > 0) {
                 discountAmount = (creditPrice * discountPercentage) / 100;
-                creditPrice -= discountAmount; // Restar el descuento al precio a crédito
+                creditPrice -= discountAmount;
             }
 
-            // Ajuste del precio en base a la entrada y convenio
             if (convenio === 'no-convenio') {
                 if (downPaymentPercentage === 0) {
-                    creditPrice *= 1.05;  // Aumento del 5% si la entrada es 0%
+                    creditPrice *= 1.05;
                 } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 9) {
-                    // Reducción progresiva del recargo del 5% al 1% según la entrada
                     const extraCharge = 5 - ((downPaymentPercentage / 9) * 4);
-                    creditPrice *= (1 + extraCharge / 100);  // Aplicar recargo progresivo
+                    creditPrice *= (1 + extraCharge / 100);
                 } else if (downPaymentPercentage > 9 && downPaymentPercentage <= 11) {
-                    // No se hace ajuste en el precio si la entrada está entre 9% y 11%
                 } else if (downPaymentPercentage > 11 && downPaymentPercentage <= 90) {
-                    // Reducción progresiva hasta el 10% según el porcentaje de entrada
                     const discountReduction = ((downPaymentPercentage - 11) / (90 - 11)) * 10;
-                    creditPrice *= (1 - discountReduction / 100);  // Aplicar descuento progresivo
+                    creditPrice *= (1 - discountReduction / 100);
                 }
             }
 
-            // Calcular valor de la entrada
             const downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
-
-            // Calcular el valor financiado
             const financedAmount = creditPrice - downPaymentAmount;
             const monthlyPayment = financedAmount / months;
 
@@ -430,7 +402,6 @@
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
         }
 
-        // Función para reiniciar el formulario y los resultados
         function resetForm() {
             document.getElementById('calculatorForm').reset();
             document.getElementById('productSelectedType').textContent = '';
@@ -440,10 +411,9 @@
             document.getElementById('downPaymentAmountResult').textContent = '$0.00';
             document.getElementById('financingTimeResult').textContent = '';
             document.getElementById('discountResult').textContent = '$0.00';
-            document.getElementById('phoneNumber').value = ''; // Borrar el número de WhatsApp
+            document.getElementById('phoneNumber').value = '';
         }
 
-        // Función para enviar el mensaje de WhatsApp con el resumen en formato de tabla
         function sendWhatsApp() {
             const phoneNumber = document.getElementById('phoneNumber').value.trim();
             const product = document.getElementById('productSelectedType').textContent;
@@ -469,9 +439,8 @@
             document.getElementById('whatsappButton').href = whatsappUrl;
         }
 
-        // Cargar productos al iniciar
         document.addEventListener("DOMContentLoaded", function() {
-            loadCSV('./precio.csv'); // Cambia esto con tu URL correcta del archivo CSV
+            loadCSV('./precio.csv');
         });
     </script>
 </body>
