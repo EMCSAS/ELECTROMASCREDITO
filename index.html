@@ -243,24 +243,30 @@
                 .then(data => {
                     const rows = data.split('\n'); // Obtener todas las filas del CSV
                     let currentCategory = ''; // Variable para almacenar la categoría actual
+                    let currentSubcategory = ''; // Variable para almacenar la subcategoría actual
 
                     // Omitir la primera fila, que se asume es de referencia
                     rows.slice(1).forEach(row => {
                         const columns = row.split(';');  // Dividir cada fila en columnas usando punto y coma como separador
-                        const categoria = columns[0]?.trim();  // Columna 1: Categoría o vacío para productos
-                        const codigoSAP = columns[1]?.trim();  // Columna 2: Código SAP
-                        const descripcion = columns[2]?.trim();  // Columna 3: Descripción del Material
-                        const pvc = columns[3] ? parseFloat(columns[3].replace(',', '.')) : null;  // Columna 4: PVC
+                        const categoria = columns[0]?.trim();  // Columna 1: Categoría
+                        const subcategoria = columns[1]?.trim();  // Columna 2: Subcategoría
+                        const codigoSAP = columns[2]?.trim();  // Columna 3: Código SAP
+                        const descripcion = columns[3]?.trim();  // Columna 4: Descripción del Material
+                        const pvc = columns[4] ? parseFloat(columns[4].replace(',', '.')) : null;  // Columna 5: PVC
 
                         if (categoria) {
-                            // Si hay una categoría explícita, actualizar la categoría actual
                             currentCategory = categoria;
-                            categorias[currentCategory] = [];
+                            categorias[currentCategory] = categorias[currentCategory] || {};
                         }
 
-                        if (pvc && currentCategory) {
-                            // Si hay PVC, agregar el producto a la categoría actual
-                            categorias[currentCategory].push({ codigoSAP, descripcion, pvc });
+                        if (subcategoria) {
+                            currentSubcategory = subcategoria;
+                            categorias[currentCategory][currentSubcategory] = [];
+                        }
+
+                        if (pvc && currentCategory && currentSubcategory) {
+                            // Si hay PVC, agregar el producto a la subcategoría actual
+                            categorias[currentCategory][currentSubcategory].push({ codigoSAP, descripcion, pvc });
                         }
                     });
                     populateCatalog(); // Llama a la función para llenar la tabla del catálogo con los productos
@@ -268,62 +274,74 @@
                 .catch(error => console.error('Error al cargar el archivo CSV:', error)); // Muestra un error si algo sale mal
         }
 
-        // Función para llenar las categorías y productos del catálogo
+        // Función para llenar las categorías, subcategorías y productos del catálogo
         function populateCatalog() {
             const accordionContainer = document.getElementById("catalogoAccordion");
             accordionContainer.innerHTML = ''; // Limpiar el contenido previo
 
-            Object.keys(categorias).forEach((categoria, index) => {
+            Object.keys(categorias).forEach((categoria, categoryIndex) => {
                 // Crear el elemento de categoría (acordeón)
                 const accordionItem = document.createElement('div');
                 accordionItem.classList.add('accordion-item');
                 
                 accordionItem.innerHTML = `
-                    <h2 class="accordion-header" id="heading${index}">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${index}" aria-expanded="false" aria-controls="collapse${index}">
+                    <h2 class="accordion-header" id="heading${categoryIndex}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${categoryIndex}" aria-expanded="false" aria-controls="collapse${categoryIndex}">
                             ${categoria}
                         </button>
                     </h2>
-                    <div id="collapse${index}" class="accordion-collapse collapse" aria-labelledby="heading${index}" data-bs-parent="#catalogoAccordion">
-                        <div class="accordion-body">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Producto</th>
-                                        <th>Código SAP</th>
-                                        <th>PVC</th>
-                                        <th>Contado</th>
-                                        <th>3 meses</th>
-                                        <th>6 meses</th>
-                                        <th>12 meses</th>
-                                        <th>Seleccionar</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="catalogBody${index}">
-                                    <!-- Aquí se cargarán los productos de esta categoría -->
-                                </tbody>
-                            </table>
+                    <div id="collapse${categoryIndex}" class="accordion-collapse collapse" aria-labelledby="heading${categoryIndex}" data-bs-parent="#catalogoAccordion">
+                        <div class="accordion-body" id="subcategoryContainer${categoryIndex}">
+                            <!-- Aquí se cargarán las subcategorías -->
                         </div>
                     </div>
                 `;
 
                 accordionContainer.appendChild(accordionItem);
 
-                // Ahora poblar los productos dentro de esta categoría
-                const tbody = document.getElementById(`catalogBody${index}`);
-                categorias[categoria].forEach(producto => {
-                    const tr = document.createElement("tr");
-                    tr.innerHTML = `
-                        <td>${producto.descripcion}</td>
-                        <td>${producto.codigoSAP}</td>
-                        <td class="pvc">$${producto.pvc.toFixed(2)}</td>
-                        <td class="contado">$${(producto.pvc * 1.20).toFixed(2)}</td>
-                        <td class="tresMeses">$${(producto.pvc * 1.40).toFixed(2)}</td>
-                        <td class="seisMeses">$${(producto.pvc * 1.60).toFixed(2)}</td>
-                        <td class="doceMeses">$${(producto.pvc * 1.80).toFixed(2)}</td>
-                        <td><span class="select-product" onclick="selectProduct(this)">Seleccionar</span></td>
+                // Poblar subcategorías dentro de cada categoría
+                const subcategoryContainer = document.getElementById(`subcategoryContainer${categoryIndex}`);
+                Object.keys(categorias[categoria]).forEach((subcategoria, subcategoryIndex) => {
+                    const subcategoryTable = document.createElement('div');
+                    subcategoryTable.innerHTML = `
+                        <h5>${subcategoria}</h5>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Código SAP</th>
+                                    <th>PVC</th>
+                                    <th>Contado</th>
+                                    <th>3 meses</th>
+                                    <th>6 meses</th>
+                                    <th>12 meses</th>
+                                    <th>Seleccionar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subcategoryBody${categoryIndex}${subcategoryIndex}">
+                                <!-- Aquí se cargarán los productos de esta subcategoría -->
+                            </tbody>
+                        </table>
                     `;
-                    tbody.appendChild(tr);
+
+                    subcategoryContainer.appendChild(subcategoryTable);
+
+                    // Poblar productos dentro de cada subcategoría
+                    const tbody = document.getElementById(`subcategoryBody${categoryIndex}${subcategoryIndex}`);
+                    categorias[categoria][subcategoria].forEach(producto => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>${producto.descripcion}</td>
+                            <td>${producto.codigoSAP}</td>
+                            <td class="pvc">$${producto.pvc.toFixed(2)}</td>
+                            <td class="contado">$${(producto.pvc * 1.20).toFixed(2)}</td>
+                            <td class="tresMeses">$${(producto.pvc * 1.40).toFixed(2)}</td>
+                            <td class="seisMeses">$${(producto.pvc * 1.60).toFixed(2)}</td>
+                            <td class="doceMeses">$${(producto.pvc * 1.80).toFixed(2)}</td>
+                            <td><span class="select-product" onclick="selectProduct(this)">Seleccionar</span></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
                 });
             });
         }
