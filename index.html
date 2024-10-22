@@ -250,6 +250,16 @@
             margin: 0;
         }
 
+        /* Estilo de la tabla de amortización */
+        .amortization-table {
+            margin-top: 30px;
+        }
+
+        .amortization-table th, .amortization-table td {
+            padding: 10px;
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
@@ -346,16 +356,20 @@
                 </tbody>
             </table>
 
-            <div class="phone-input-container">
-                <label for="phoneNumber">Número telefónico:</label>
-                <div>
-                    <input type="tel" id="phoneNumber" placeholder="Ingrese su número" />
-                </div>
-            </div>
-
-            <a href="#" class="btn-whatsapp" id="whatsappButton" target="_blank" onclick="sendWhatsApp()">
-                Enviar por WhatsApp
-            </a>
+            <!-- Nueva tabla de amortización -->
+            <h3 class="text-center mt-5">Tabla de Amortización Francesa</h3>
+            <table class="table table-bordered amortization-table">
+                <thead>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Cuota</th>
+                        <th>Capital</th>
+                        <th>Interés</th>
+                        <th>Saldo Pendiente</th>
+                    </tr>
+                </thead>
+                <tbody id="amortizationTableBody"></tbody>
+            </table>
         </div>
     </div>
 
@@ -557,6 +571,9 @@
             document.getElementById('monthlyPaymentResult').textContent = `$${monthlyPayment.toFixed(2)}`;
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
+
+            // Generar tabla de amortización
+            generateAmortizationTable(financedAmount, 0.05, months);
         }
 
         function resetForm() {
@@ -569,31 +586,32 @@
             document.getElementById('financingTimeResult').textContent = '';
             document.getElementById('discountResult').textContent = '$0.00';
             document.getElementById('phoneNumber').value = '';
+            document.getElementById('amortizationTableBody').innerHTML = '';
         }
 
-        function sendWhatsApp() {
-            const phoneNumber = document.getElementById('phoneNumber').value.trim();
-            const product = document.getElementById('productSelectedType').textContent;
-            const creditPrice = document.getElementById('creditPriceResult').textContent;
-            const downPayment = document.getElementById('downPaymentAmountResult').textContent;
-            const financedAmount = document.getElementById('financedAmountResult').textContent;
-            const monthlyPayment = document.getElementById('monthlyPaymentResult').textContent;
-            const financingTime = document.getElementById('financingTimeResult').textContent;
-            const discount = document.getElementById('discountResult').textContent;
+        function generateAmortizationTable(principal, interestRate, months) {
+            let tableBody = document.getElementById('amortizationTableBody');
+            tableBody.innerHTML = ''; // Limpiar tabla antes de agregar nuevas filas
+            let remainingBalance = principal;
+            let monthlyPayment = (principal * interestRate) / (1 - Math.pow(1 + interestRate, -months));
 
-            const message = `
-                *ELECTROMÁSCRÉDITO*\n
-                Estimado cliente, su cotización para el producto *${product}* es el siguiente:\n
-                *Precio a crédito*: ${creditPrice}\n
-                *Entrada*: ${downPayment}\n
-                *Valor financiado*: ${financedAmount}\n
-                *Cuota mensual*: ${monthlyPayment}\n
-                *Tiempo de financiamiento*: ${financingTime}\n
-                *Ahorro EMC*: ${discount}
-            `;
+            for (let i = 1; i <= months; i++) {
+                const interest = remainingBalance * interestRate;
+                const capital = monthlyPayment - interest;
+                remainingBalance -= capital;
 
-            const whatsappUrl = `https://api.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
-            document.getElementById('whatsappButton').href = whatsappUrl;
+                // Crear una fila con los valores de cada mes
+                let row = `<tr>
+                    <td>${i}</td>
+                    <td>${monthlyPayment.toFixed(2)}</td>
+                    <td>${capital.toFixed(2)}</td>
+                    <td>${interest.toFixed(2)}</td>
+                    <td>${remainingBalance.toFixed(2)}</td>
+                </tr>`;
+
+                // Añadir la fila a la tabla
+                tableBody.innerHTML += row;
+            }
         }
 
         document.addEventListener("DOMContentLoaded", function() {
