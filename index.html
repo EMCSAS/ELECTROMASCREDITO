@@ -260,6 +260,12 @@
             text-align: center;
         }
 
+        /* Estilo adicional para la ganancia */
+        .gain-row {
+            background-color: #ff6347;
+            color: white;
+        }
+
     </style>
 </head>
 <body>
@@ -352,6 +358,10 @@
                     <tr class="discount-row">
                         <td>Ahorro EMC</td>
                         <td id="discountResult">$0.00</td>
+                    </tr>
+                    <tr class="gain-row">
+                        <td>Ganancia</td>
+                        <td id="gainResult">$0.00</td>
                     </tr>
                 </tbody>
             </table>
@@ -553,6 +563,11 @@
             const interestRate = 0.05; // 5% de tasa de interés mensual
             const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months)); // Fórmula corregida
 
+            // Cálculo de ganancia
+            const totalPaid = monthlyPayment * months;
+            const cashPrice = pvcSelected * 1.20; // Asumimos que el precio de contado es 120% del PVC
+            const gain = totalPaid - cashPrice;
+
             // Actualización de resultados en el simulador
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
             document.getElementById('discountResult').textContent = `$${discountAmount.toFixed(2)}`;
@@ -560,6 +575,7 @@
             document.getElementById('monthlyPaymentResult').textContent = `$${monthlyPayment.toFixed(2)}`;
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
+            document.getElementById('gainResult').textContent = `$${gain.toFixed(2)}`;
 
             // Generar tabla de amortización
             generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment);
@@ -574,6 +590,7 @@
             document.getElementById('downPaymentAmountResult').textContent = '$0.00';
             document.getElementById('financingTimeResult').textContent = '';
             document.getElementById('discountResult').textContent = '$0.00';
+            document.getElementById('gainResult').textContent = '$0.00';
             document.getElementById('amortizationTableBody').innerHTML = '';
         }
 
