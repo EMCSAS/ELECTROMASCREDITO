@@ -28,12 +28,6 @@
         .bubble2 { background-color: rgba(52, 152, 219, 0.7); width: 350px; height: 350px; top: 5%; right: 15%; }
         .bubble3 { background-color: rgba(46, 204, 113, 0.7); width: 300px; height: 300px; top: 50%; left: 5%; }
         .bubble4 { background-color: rgba(155, 89, 182, 0.7); width: 280px; height: 280px; bottom: 10%; right: 10%; }
-        .bubble5 { background-color: rgba(241, 196, 15, 0.7); width: 200px; height: 200px; bottom: 20%; left: 50%; }
-        .bubble6 { background-color: rgba(231, 76, 60, 0.7); width: 300px; height: 300px; top: 20%; right: 5%; }
-        .bubble7 { background-color: rgba(52, 73, 94, 0.7); width: 350px; height: 350px; bottom: 25%; left: 10%; }
-        .bubble8 { background-color: rgba(241, 148, 138, 0.7); width: 180px; height: 180px; bottom: 10%; left: 5%; }
-        .bubble9 { background-color: rgba(46, 204, 113, 0.7); width: 250px; height: 250px; top: 65%; right: 15%; }
-        .bubble10 { background-color: rgba(52, 152, 219, 0.7); width: 300px; height: 300px; top: 80%; left: 70%; }
 
         /* Barra de título naranja ocupando todo el ancho */
         .navbar {
@@ -392,12 +386,6 @@
     <div class="bubble bubble2"></div>
     <div class="bubble bubble3"></div>
     <div class="bubble bubble4"></div>
-    <div class="bubble bubble5"></div>
-    <div class="bubble bubble6"></div>
-    <div class="bubble bubble7"></div>
-    <div class="bubble bubble8"></div>
-    <div class="bubble bubble9"></div>
-    <div class="bubble bubble10"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -564,7 +552,7 @@
             const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months)); // Fórmula corregida
 
             // Cálculo de ganancia
-            const totalPaid = monthlyPayment * months;
+            const totalPaid = (monthlyPayment * months) + downPaymentAmount; // Incluye la entrada
             const cashPrice = pvcSelected * 1.20; // Asumimos que el precio de contado es 120% del PVC
             const gain = totalPaid - cashPrice;
 
