@@ -548,23 +548,12 @@
                 creditPrice -= discountAmount;
             }
 
-            if (convenio === 'no-convenio') {
-                if (downPaymentPercentage === 0) {
-                    creditPrice *= 1.05;
-                } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 9) {
-                    const extraCharge = 5 - ((downPaymentPercentage / 9) * 4);
-                    creditPrice *= (1 + extraCharge / 100);
-                } else if (downPaymentPercentage > 9 && downPaymentPercentage <= 11) {
-                } else if (downPaymentPercentage > 11 && downPaymentPercentage <= 90) {
-                    const discountReduction = ((downPaymentPercentage - 11) / (90 - 11)) * 10;
-                    creditPrice *= (1 - discountReduction / 100);
-                }
-            }
-
             const downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
             const financedAmount = creditPrice - downPaymentAmount;
-            const monthlyPayment = financedAmount / months;
+            const interestRate = 0.05; // 5% de tasa de interés mensual
+            const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months)); // Fórmula corregida
 
+            // Actualización de resultados en el simulador
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
             document.getElementById('discountResult').textContent = `$${discountAmount.toFixed(2)}`;
             document.getElementById('financedAmountResult').textContent = `$${financedAmount.toFixed(2)}`;
@@ -573,7 +562,7 @@
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
             // Generar tabla de amortización
-            generateAmortizationTable(financedAmount, 0.05, months);
+            generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment);
         }
 
         function resetForm() {
@@ -585,15 +574,13 @@
             document.getElementById('downPaymentAmountResult').textContent = '$0.00';
             document.getElementById('financingTimeResult').textContent = '';
             document.getElementById('discountResult').textContent = '$0.00';
-            document.getElementById('phoneNumber').value = '';
             document.getElementById('amortizationTableBody').innerHTML = '';
         }
 
-        function generateAmortizationTable(principal, interestRate, months) {
+        function generateAmortizationTable(principal, interestRate, months, monthlyPayment) {
             let tableBody = document.getElementById('amortizationTableBody');
-            tableBody.innerHTML = ''; // Limpiar tabla antes de agregar nuevas filas
+            tableBody.innerHTML = ''; // Limpiar la tabla antes de agregar nuevas filas
             let remainingBalance = principal;
-            let monthlyPayment = (principal * interestRate) / (1 - Math.pow(1 + interestRate, -months));
 
             for (let i = 1; i <= months; i++) {
                 const interest = remainingBalance * interestRate;
