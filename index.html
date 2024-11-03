@@ -289,10 +289,10 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Tipo de Cliente:</label>
+                <label class="form-label">Cliente:</label>
                 <div class="radio-options">
-                    <label><input type="radio" name="convenio" value="convenio"> Convenio</label>
-                    <label><input type="radio" name="convenio" value="no-convenio"> No Convenio</label>
+                    <label><input type="radio" name="convenio" value="convenio"> Con convenio</label>
+                    <label><input type="radio" name="convenio" value="no-convenio"> Sin convenio</label>
                 </div>
             </div>
 
@@ -315,15 +315,15 @@
             </div>
 
             <div class="mb-3">
-                <label for="downPaymentPercentage" class="form-label">Entrada (%):</label>
+                <label for="downPaymentPercentage" class="form-label">Entrada:</label>
                 <input type="number" class="form-control" id="downPaymentPercentage" value="0" min="0" max="100">
             </div>
             <div class="mb-3">
-                <label for="discount" class="form-label">Descuento por Cliente (%):</label>
+                <label for="discount" class="form-label">Descuento cliente (%):</label>
                 <input type="number" class="form-control" id="discount" value="0" required>
             </div>
-            <button type="button" class="btn-custom" onclick="calculateInstallments()">Calcular Cuotas</button>
-            <button type="button" class="btn-custom" onclick="resetForm()">Nueva Consulta</button>
+            <button type="button" class="btn-custom" onclick="calculateInstallments()">Calcular cuotas</button>
+            <button type="button" class="btn-custom" onclick="resetForm()">Nueva consulta</button>
         </form>
 
         <div class="mt-4">
@@ -359,12 +359,8 @@
                         <td id="financingTimeResult"></td>
                     </tr>
                     <tr class="discount-row">
-                        <td>Ahorro EMC</td>
+                        <td>Ahorro Electro</td>
                         <td id="discountResult">$0.00</td>
-                    </tr>
-                    <tr class="gain-row">
-                        <td>Ganancia</td>
-                        <td id="gainResult">$0.00</td>
                     </tr>
                 </tbody>
             </table>
