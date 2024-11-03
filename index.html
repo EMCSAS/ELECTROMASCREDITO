@@ -369,15 +369,6 @@
                     </tr>
                 </thead>
                 <tbody id="amortizationTableBody"></tbody>
-                <tfoot>
-                    <tr>
-                        <td><strong>Total</strong></td>
-                        <td id="totalMonthlyPayment"></td>
-                        <td id="totalCapital"></td>
-                        <td id="totalInterest"></td>
-                        <td></td>
-                    </tr>
-                </tfoot>
             </table>
         </div>
     </div>
@@ -607,23 +598,19 @@
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
-            generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment);
+            generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment, downPaymentAmount);
         }
 
-        function generateAmortizationTable(principal, interestRate, months, monthlyPayment) {
+        function generateAmortizationTable(principal, interestRate, months, monthlyPayment, downPaymentAmount) {
             let tableBody = document.getElementById('amortizationTableBody');
             tableBody.innerHTML = '';
             let remainingBalance = principal;
-            let totalCapital = 0;
-            let totalInterest = 0;
+            let totalPaymentSum = downPaymentAmount;  // Inicia con el monto de la entrada
 
             for (let i = 1; i <= months; i++) {
                 const interest = remainingBalance * interestRate;
                 const capital = monthlyPayment - interest;
                 remainingBalance -= capital;
-
-                totalCapital += capital;
-                totalInterest += interest;
 
                 let row = `<tr>
                     <td>${i}</td>
@@ -634,28 +621,14 @@
                 </tr>`;
 
                 tableBody.innerHTML += row;
+                totalPaymentSum += monthlyPayment; // Acumula el total de las cuotas
             }
 
-            // Mostrar sumatorias en el pie de la tabla
-            document.getElementById('totalMonthlyPayment').textContent = `$${(monthlyPayment * months).toFixed(2)}`;
-            document.getElementById('totalCapital').textContent = `$${totalCapital.toFixed(2)}`;
-            document.getElementById('totalInterest').textContent = `$${totalInterest.toFixed(2)}`;
-        }
-
-        function resetForm() {
-            document.getElementById('calculatorForm').reset();
-            document.getElementById('productSelected').value = '';
-            document.getElementById('productSelectedType').textContent = '';
-            document.getElementById('cashPriceResult').textContent = '$0.00';
-            document.getElementById('creditPriceResult').textContent = '$0.00';
-            document.getElementById('downPaymentAmountResult').textContent = '$0.00';
-            document.getElementById('financedAmountResult').textContent = '$0.00';
-            document.getElementById('monthlyPaymentResult').textContent = '$0.00';
-            document.getElementById('financingTimeResult').textContent = '';
-            document.getElementById('amortizationTableBody').innerHTML = '';
-            document.getElementById('totalMonthlyPayment').textContent = '';
-            document.getElementById('totalCapital').textContent = '';
-            document.getElementById('totalInterest').textContent = '';
+            // Agregar la fila de sumatoria total de las cuotas y la entrada
+            tableBody.innerHTML += `<tr style="font-weight:bold;">
+                <td colspan="4">Total (incluye entrada)</td>
+                <td>${totalPaymentSum.toFixed(2)}</td>
+            </tr>`;
         }
 
         document.addEventListener("DOMContentLoaded", function() {
