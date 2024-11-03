@@ -598,19 +598,22 @@
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
-            generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment, downPaymentAmount);
+            generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment);
         }
 
-        function generateAmortizationTable(principal, interestRate, months, monthlyPayment, downPaymentAmount) {
+        function generateAmortizationTable(principal, interestRate, months, monthlyPayment) {
             let tableBody = document.getElementById('amortizationTableBody');
             tableBody.innerHTML = '';
             let remainingBalance = principal;
-            let totalPaymentSum = downPaymentAmount;  // Inicia con el monto de la entrada
+            let totalCapital = 0, totalInterest = 0;
 
             for (let i = 1; i <= months; i++) {
                 const interest = remainingBalance * interestRate;
                 const capital = monthlyPayment - interest;
                 remainingBalance -= capital;
+
+                totalCapital += capital;
+                totalInterest += interest;
 
                 let row = `<tr>
                     <td>${i}</td>
@@ -621,13 +624,15 @@
                 </tr>`;
 
                 tableBody.innerHTML += row;
-                totalPaymentSum += monthlyPayment; // Acumula el total de las cuotas
             }
 
-            // Agregar la fila de sumatoria total de las cuotas y la entrada
-            tableBody.innerHTML += `<tr style="font-weight:bold;">
-                <td colspan="4">Total (incluye entrada)</td>
-                <td>${totalPaymentSum.toFixed(2)}</td>
+            // Fila de sumatoria al final
+            tableBody.innerHTML += `<tr style="font-weight: bold;">
+                <td>Total</td>
+                <td>${(monthlyPayment * months).toFixed(2)}</td>
+                <td>${totalCapital.toFixed(2)}</td>
+                <td>${totalInterest.toFixed(2)}</td>
+                <td>-</td>
             </tr>`;
         }
 
