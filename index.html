@@ -255,6 +255,7 @@
             padding: 10px;
             text-align: center;
         }
+
     </style>
 </head>
 <body>
@@ -323,7 +324,7 @@
         </form>
 
         <div class="mt-4">
-            <h2 class="text-center mt-4" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Resultado de Simulación</h2>
+            <h2 class="text-center mt-4" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Cotizador</h2>
             <table class="table table-bordered small-table">
                 <tbody>
                     <tr>
@@ -354,14 +355,10 @@
                         <td>Tiempo de financiamiento</td>
                         <td id="financingTimeResult"></td>
                     </tr>
-                    <tr class="discount-row">
-                        <td>Electro ahorro</td>
-                        <td id="discountResult">$0.00</td>
-                    </tr>
                 </tbody>
             </table>
 
-            <h2 class="text-center mt-5" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Tabla de Amortización Francesa</h2>
+            <h2 class="text-center mt-5" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Tabla de Amortización</h2>
             <table class="table table-bordered amortization-table">
                 <thead>
                     <tr>
@@ -391,13 +388,111 @@
             fetch(file)
                 .then(response => response.text())
                 .then(data => {
-                    // Cargar datos CSV y estructura del catálogo
+                    const rows = data.split('\n');
+                    let currentCategory = '';
+                    let currentSubcategory = '';
+
+                    rows.slice(1).forEach(row => {
+                        const columns = row.split(';');
+                        const categoria = columns[0]?.trim();
+                        const subcategoria = columns[1]?.trim();
+                        const codigoSAP = columns[2]?.trim();
+                        const descripcion = columns[3]?.trim();
+                        const pvc = columns[4] ? parseFloat(columns[4].replace(',', '.')) : null;
+
+                        if (categoria) {
+                            currentCategory = categoria;
+                            categorias[currentCategory] = categorias[currentCategory] || {};
+                        }
+
+                        if (subcategoria) {
+                            currentSubcategory = subcategoria;
+                            categorias[currentCategory][currentSubcategory] = [];
+                        }
+
+                        if (pvc && currentCategory && currentSubcategory) {
+                            categorias[currentCategory][currentSubcategory].push({ codigoSAP, descripcion, pvc });
+                        }
+                    });
+                    populateCatalog();
                 })
                 .catch(error => console.error('Error al cargar el archivo CSV:', error));
         }
 
         function populateCatalog() {
-            // Función para poblar el catálogo
+            const accordionContainer = document.getElementById("catalogoAccordion");
+            accordionContainer.innerHTML = '';
+
+            Object.keys(categorias).forEach((categoria, categoryIndex) => {
+                const accordionItem = document.createElement('div');
+                accordionItem.classList.add('accordion-item');
+                accordionItem.innerHTML = `
+                    <h2 class="accordion-header" id="heading${categoryIndex}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${categoryIndex}" aria-expanded="false" aria-controls="collapse${categoryIndex}">
+                            ${categoria}
+                        </button>
+                    </h2>
+                    <div id="collapse${categoryIndex}" class="accordion-collapse collapse" aria-labelledby="heading${categoryIndex}" data-bs-parent="#catalogoAccordion">
+                        <div class="accordion-body" id="subcategoryContainer${categoryIndex}">
+                        </div>
+                    </div>
+                `;
+
+                accordionContainer.appendChild(accordionItem);
+
+                const subcategoryContainer = document.getElementById(`subcategoryContainer${categoryIndex}`);
+                Object.keys(categorias[categoria]).forEach((subcategoria, subcategoryIndex) => {
+                    const subcategoryAccordion = document.createElement('div');
+                    subcategoryAccordion.innerHTML = `
+                        <div class="accordion" id="subcategoryAccordion${categoryIndex}${subcategoryIndex}">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="subHeading${categoryIndex}${subcategoryIndex}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#subCollapse${categoryIndex}${subcategoryIndex}" aria-expanded="false" aria-controls="subCollapse${categoryIndex}${subcategoryIndex}">
+                                        ${subcategoria}
+                                    </button>
+                                </h2>
+                                <div id="subCollapse${categoryIndex}${subcategoryIndex}" class="accordion-collapse collapse" aria-labelledby="subHeading${categoryIndex}${subcategoryIndex}" data-bs-parent="#subcategoryAccordion${categoryIndex}${subcategoryIndex}">
+                                    <div class="accordion-body">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Producto</th>
+                                                    <th>Código SAP</th>
+                                                    <th>PVC</th>
+                                                    <th class="contado">Contado</th>
+                                                    <th class="tresMeses">3 meses</th>
+                                                    <th class="seisMeses">6 meses</th>
+                                                    <th class="doceMeses">12 meses</th>
+                                                    <th>Seleccionar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="subcategoryBody${categoryIndex}${subcategoryIndex}">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    subcategoryContainer.appendChild(subcategoryAccordion);
+
+                    const tbody = document.getElementById(`subcategoryBody${categoryIndex}${subcategoryIndex}`);
+                    categorias[categoria][subcategoria].forEach(producto => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>${producto.descripcion}</td>
+                            <td>${producto.codigoSAP}</td>
+                            <td class="pvc">$${producto.pvc.toFixed(2)}</td>
+                            <td class="contado">$${(producto.pvc * 1.20).toFixed(2)}</td>
+                            <td class="tresMeses">$${(producto.pvc * 1.40).toFixed(2)}</td>
+                            <td class="seisMeses">$${(producto.pvc * 1.60).toFixed(2)}</td>
+                            <td class="doceMeses">$${(producto.pvc * 1.80).toFixed(2)}</td>
+                            <td><span class="select-product" onclick="selectProduct(this)">Seleccionar</span></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                });
+            });
         }
 
         function selectProduct(element) {
@@ -431,54 +526,45 @@
         }
 
         function calculateInstallments() {
-            const convenio = document.querySelector('input[name="convenio"]:checked').value;
             const selectedType = document.querySelector('input[name="entradaTipo"]:checked').value;
             let downPaymentAmount = 0;
-
-            // Precio contado (multiplica PVC por 1.20)
-            let cashPrice = pvcSelected * 1.20;
-
-            // Precio a crédito (según número de cuotas)
-            let months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
-            let creditMultiplier = 1.20 + (months - 1) * 0.06;
-            let creditPrice = pvcSelected * creditMultiplier;
+            const creditPrice = pvcSelected * 1.20; // Precio de crédito base calculado.
 
             if (selectedType === 'porcentaje') {
                 const downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
                 downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
-
-                // Aplicación de condiciones adicionales
-                if (convenio === "no-convenio") {
-                    if (downPaymentPercentage === 0) {
-                        creditPrice *= 1.10;
-                    } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 8) {
-                        creditPrice *= (1 + (8 - downPaymentPercentage) / 100);
-                    } else if (downPaymentPercentage > 8 && downPaymentPercentage <= 11) {
-                        creditPrice = creditPrice; // Sin ajuste
-                    } else if (downPaymentPercentage > 11 && downPaymentPercentage <= 30) {
-                        creditPrice *= (1 - (downPaymentPercentage - 11) * 0.05 / 19);
-                    } else if (downPaymentPercentage > 30 && downPaymentPercentage <= 50) {
-                        creditPrice *= (1 - (downPaymentPercentage - 31) * 0.048 / 19);
-                    } else if (downPaymentPercentage > 50 && downPaymentPercentage <= 90) {
-                        creditPrice *= (1 - (downPaymentPercentage - 51) * 0.089 / 39);
-                    }
-                }
             } else {
                 downPaymentAmount = parseFloat(document.getElementById('downPaymentAmount').value);
             }
 
             const financedAmount = creditPrice - downPaymentAmount;
             const interestRate = 0.05;
+            const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
             const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months));
 
-            document.getElementById('cashPriceResult').textContent = `$${cashPrice.toFixed(2)}`;
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
             document.getElementById('financedAmountResult').textContent = `$${financedAmount.toFixed(2)}`;
             document.getElementById('monthlyPaymentResult').textContent = `$${monthlyPayment.toFixed(2)}`;
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
+            document.getElementById('cashPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
             generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment);
+        }
+
+        function resetForm() {
+            document.getElementById('calculatorForm').reset();
+            document.getElementById('productSelectedType').textContent = '';
+            document.getElementById('creditPriceResult').textContent = '$0.00';
+            document.getElementById('financedAmountResult').textContent = '$0.00';
+            document.getElementById('monthlyPaymentResult').textContent = '$0.00';
+            document.getElementById('downPaymentAmountResult').textContent = '$0.00';
+            document.getElementById('financingTimeResult').textContent = '';
+            document.getElementById('discountResult').textContent = '$0.00';
+            document.getElementById('cashPriceResult').textContent = '$0.00';
+            document.getElementById('amortizationTableBody').innerHTML = '';
+            document.getElementById('percentageField').style.display = 'none';
+            document.getElementById('amountField').style.display = 'none';
         }
 
         function generateAmortizationTable(principal, interestRate, months, monthlyPayment) {
