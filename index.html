@@ -556,28 +556,27 @@
                 downPaymentPercentage = (downPaymentAmount / creditPrice) * 100;
             }
 
-            // Aplicación de condiciones adicionales para ajustar el precio según el porcentaje de entrada
+            // Aplicación de descuentos según el número de cuotas
+            let maxDiscount = 0;
+            if (months <= 3) {
+                maxDiscount = 0.10;
+            } else if (months <= 6) {
+                maxDiscount = 0.20;
+            } else if (months <= 12) {
+                maxDiscount = 0.40;
+            }
+
+            // Ajuste del precio según el descuento
             if (convenio === "no-convenio") {
-                if (downPaymentPercentage === 0) {
-                    creditPrice *= 1.10;
-                } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 8) {
-                    creditPrice *= (1 + (8 - downPaymentPercentage) / 100);
-                } else if (downPaymentPercentage > 8 && downPaymentPercentage <= 11) {
-                    creditPrice = creditPrice; // Sin ajuste
-                } else if (downPaymentPercentage > 11 && downPaymentPercentage <= 30) {
-                    creditPrice *= (1 - (downPaymentPercentage - 11) * 0.05 / 19);
-                } else if (downPaymentPercentage > 30 && downPaymentPercentage <= 50) {
-                    creditPrice *= (1 - (downPaymentPercentage - 31) * 0.048 / 19);
-                } else if (downPaymentPercentage > 50 && downPaymentPercentage <= 90) {
-                    creditPrice *= (1 - (downPaymentPercentage - 51) * 0.089 / 39);
+                if (downPaymentPercentage > 10) {
+                    const appliedDiscount = maxDiscount * ((downPaymentPercentage - 10) / 89); // Proporcional al porcentaje de entrada
+                    creditPrice *= (1 - Math.min(appliedDiscount, maxDiscount));
                 }
             }
 
-            // Ajustes finales para asegurar condiciones mínimas
-            if (creditPrice < cashPrice) {
-                creditPrice = cashPrice * 1.10; // El crédito debe ser al menos 10% mayor que el contado
-            } else if (creditPrice < cashPrice * 1.10) {
-                creditPrice = cashPrice * 1.10; // Asegura un mínimo de 10% sobre el contado
+            // Asegura que el crédito no sea menor al 110% del contado
+            if (creditPrice < cashPrice * 1.10) {
+                creditPrice = cashPrice * 1.10;
             }
 
             const financedAmount = creditPrice - downPaymentAmount;
