@@ -287,7 +287,16 @@
                 <div id="installmentMonths" class="radio-options">
                     <label><input type="radio" name="cuotas" value="1"> 1</label>
                     <label><input type="radio" name="cuotas" value="2"> 2</label>
-                    <!-- Agrega opciones de cuota hasta 12 -->
+                    <label><input type="radio" name="cuotas" value="3"> 3</label>
+                    <label><input type="radio" name="cuotas" value="4"> 4</label>
+                    <label><input type="radio" name="cuotas" value="5"> 5</label>
+                    <label><input type="radio" name="cuotas" value="6"> 6</label>
+                    <label><input type="radio" name="cuotas" value="7"> 7</label>
+                    <label><input type="radio" name="cuotas" value="8"> 8</label>
+                    <label><input type="radio" name="cuotas" value="9"> 9</label>
+                    <label><input type="radio" name="cuotas" value="10"> 10</label>
+                    <label><input type="radio" name="cuotas" value="11"> 11</label>
+                    <label><input type="radio" name="cuotas" value="12"> 12</label>
                 </div>
             </div>
 
@@ -382,13 +391,13 @@
             fetch(file)
                 .then(response => response.text())
                 .then(data => {
-                    // Lógica de carga de CSV aquí
+                    // Cargar datos CSV y estructura del catálogo
                 })
                 .catch(error => console.error('Error al cargar el archivo CSV:', error));
         }
 
         function populateCatalog() {
-            // Poblado de catálogo aquí
+            // Función para poblar el catálogo
         }
 
         function selectProduct(element) {
@@ -425,7 +434,14 @@
             const convenio = document.querySelector('input[name="convenio"]:checked').value;
             const selectedType = document.querySelector('input[name="entradaTipo"]:checked').value;
             let downPaymentAmount = 0;
-            let creditPrice = pvcSelected * 1.20; // Precio de crédito base
+
+            // Precio contado (multiplica PVC por 1.20)
+            let cashPrice = pvcSelected * 1.20;
+
+            // Precio a crédito (según número de cuotas)
+            let months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
+            let creditMultiplier = 1.20 + (months - 1) * 0.06;
+            let creditPrice = pvcSelected * creditMultiplier;
 
             if (selectedType === 'porcentaje') {
                 const downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
@@ -453,14 +469,13 @@
 
             const financedAmount = creditPrice - downPaymentAmount;
             const interestRate = 0.05;
-            const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
             const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months));
 
+            document.getElementById('cashPriceResult').textContent = `$${cashPrice.toFixed(2)}`;
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
             document.getElementById('financedAmountResult').textContent = `$${financedAmount.toFixed(2)}`;
             document.getElementById('monthlyPaymentResult').textContent = `$${monthlyPayment.toFixed(2)}`;
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
-            document.getElementById('cashPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
             generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment);
