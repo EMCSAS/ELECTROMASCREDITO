@@ -359,7 +359,7 @@
                         <td id="financingTimeResult"></td>
                     </tr>
                     <tr class="discount-row">
-                        <td>Ahorro Electro</td>
+                        <td>Electro ahorro</td>
                         <td id="discountResult">$0.00</td>
                     </tr>
                 </tbody>
@@ -555,11 +555,6 @@
             const financedAmount = creditPrice - downPaymentAmount;
             const interestRate = 0.05; // 5% de tasa de interés mensual
             const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months)); // Fórmula corregida
-
-            // Cálculo de ganancia
-            const totalPaid = (monthlyPayment * months) + downPaymentAmount; // Incluye la entrada
-            const cashPrice = pvcSelected * 1.20; // Asumimos que el precio de contado es 120% del PVC
-            const gain = totalPaid - cashPrice;
 
             // Actualización de resultados en el simulador
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
