@@ -575,9 +575,9 @@
 
             // Ajustes finales para asegurar condiciones mínimas
             if (creditPrice < cashPrice) {
-                creditPrice = cashPrice; // Asegura que el crédito no sea menor al precio contado
-            } else if (creditPrice < cashPrice * 1.05) {
-                creditPrice = cashPrice * 1.05; // Asegura un mínimo de 5% sobre el contado
+                creditPrice = cashPrice * 1.10; // El crédito debe ser al menos 10% mayor que el contado
+            } else if (creditPrice < cashPrice * 1.10) {
+                creditPrice = cashPrice * 1.10; // Asegura un mínimo de 10% sobre el contado
             }
 
             const financedAmount = creditPrice - downPaymentAmount;
