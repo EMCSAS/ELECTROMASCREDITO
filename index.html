@@ -6,7 +6,6 @@
     <title>Catálogo de productos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Estilo general del cuerpo */
         body {
             background-color: #1b263b;
             color: #fff;
@@ -16,7 +15,6 @@
             padding: 0;
         }
 
-        /* Burbujas decorativas estáticas */
         .bubble {
             position: absolute;
             border-radius: 50%;
@@ -29,7 +27,6 @@
         .bubble3 { background-color: rgba(46, 204, 113, 0.7); width: 300px; height: 300px; top: 50%; left: 5%; }
         .bubble4 { background-color: rgba(155, 89, 182, 0.7); width: 280px; height: 280px; bottom: 10%; right: 10%; }
 
-        /* Barra de título naranja ocupando todo el ancho */
         .navbar {
             background-color: #f39c12;
             color: #fff;
@@ -41,7 +38,6 @@
             margin: 50px 0;
         }
 
-        /* Título Bienvenido centrado */
         .navbar h1 {
             font-family: 'Georgia', serif;
             font-size: 3rem;
@@ -52,7 +48,6 @@
             margin: 0;
         }
 
-        /* Contenedor principal */
         .container {
             background-color: #fff;
             color: #333;
@@ -70,7 +65,6 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
 
-        /* Sección del Catálogo */
         h2 {
             text-align: center;
             margin-bottom: 20px;
@@ -101,21 +95,15 @@
             background-color: #e67e22;
         }
 
-        .accordion-body {
-            transition: all 0.3s ease;
-        }
-
         #calculatorResult {
             font-weight: bold;
             color: #f39c12;
         }
 
-        /* Ocultar columnas de precios */
         .table .contado, .table .tresMeses, .table .seisMeses, .table .doceMeses {
             display: none;
         }
 
-        /* Estilo de productos seleccionables */
         .select-product {
             cursor: pointer;
             color: #f39c12;
@@ -152,7 +140,6 @@
             color: #fff;
         }
 
-        /* Botón personalizado */
         .btn-custom {
             background-color: #f39c12;
             color: white;
@@ -171,89 +158,10 @@
             transform: scale(1.05);
         }
 
-        .phone-input-container {
-            background-color: #fff;
-            color: #333;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            width: fit-content;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .phone-input-container label {
-            margin-right: 10px;
-            font-weight: bold;
-        }
-
-        .phone-input-container input {
-            border: 1px solid #ccc;
-            padding: 5px 10px;
-            border-radius: 5px;
-            outline: none;
-        }
-
-        .btn-whatsapp {
-            background-color: #25D366;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-            font-size: 16px;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-whatsapp:hover {
-            background-color: #20b857;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transform: scale(1.05);
-        }
-
-        .radio-options label {
-            margin-right: 20px;
-        }
-
-        tr:hover {
-            background-color: #f7f7f7;
-        }
-
-        tr.selected {
-            background-color: #f39c12;
-            color: #fff;
-        }
-
-        .table tbody tr:hover {
-            background-color: #f39c12;
-            color: #fff;
-            transition: all 0.3s ease;
-        }
-
-        .phone-input-container input:hover {
-            border-color: #f39c12;
-        }
-
         footer {
             text-align: center;
             margin-top: 20px;
             color: #f39c12;
-        }
-
-        footer p {
-            margin: 0;
-        }
-
-        .amortization-table {
-            margin-top: 30px;
-        }
-
-        .amortization-table th, .amortization-table td {
-            padding: 10px;
-            text-align: center;
         }
     </style>
 </head>
@@ -264,7 +172,6 @@
 
     <div class="container mt-5">
         <h2 class="text-center mb-4">Catálogo de productos</h2>
-        
         <div class="accordion" id="catalogoAccordion"></div>
 
         <h2 class="text-center mt-4">Simulación</h2>
@@ -300,30 +207,12 @@
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label">Tipo de entrada:</label>
-                <div class="radio-options">
-                    <label><input type="radio" name="entradaTipo" value="porcentaje" onclick="toggleDownPaymentFields()"> Porcentaje</label>
-                    <label><input type="radio" name="entradaTipo" value="efectivo" onclick="toggleDownPaymentFields()"> Monto en efectivo</label>
-                </div>
-            </div>
-
-            <div class="mb-3" id="percentageField" style="display:none;">
-                <label for="downPaymentPercentage" class="form-label">Entrada (%):</label>
-                <input type="number" class="form-control" id="downPaymentPercentage" value="0" min="0" max="100">
-            </div>
-
-            <div class="mb-3" id="amountField" style="display:none;">
-                <label for="downPaymentAmount" class="form-label">Entrada (monto en efectivo):</label>
-                <input type="number" class="form-control" id="downPaymentAmount" value="0" min="0">
-            </div>
-
             <button type="button" class="btn-custom" onclick="calculateInstallments()">Calcular cuotas</button>
             <button type="button" class="btn-custom" onclick="resetForm()">Nueva consulta</button>
         </form>
 
         <div class="mt-4">
-            <h2 class="text-center mt-4" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Cotizador</h2>
+            <h2 class="text-center mt-4">Cotizador</h2>
             <table class="table table-bordered small-table">
                 <tbody>
                     <tr>
@@ -339,10 +228,6 @@
                         <td id="creditPriceResult">$0.00</td>
                     </tr>
                     <tr>
-                        <td>Entrada</td>
-                        <td id="downPaymentAmountResult">$0.00</td>
-                    </tr>
-                    <tr>
                         <td>Valor financiado</td>
                         <td id="financedAmountResult">$0.00</td>
                     </tr>
@@ -355,20 +240,6 @@
                         <td id="financingTimeResult"></td>
                     </tr>
                 </tbody>
-            </table>
-
-            <h2 class="text-center mt-5" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Tabla de Amortización</h2>
-            <table class="table table-bordered amortization-table">
-                <thead>
-                    <tr>
-                        <th>Mes</th>
-                        <th>Cuota</th>
-                        <th>Capital</th>
-                        <th>Interés</th>
-                        <th>Saldo Pendiente</th>
-                    </tr>
-                </thead>
-                <tbody id="amortizationTableBody"></tbody>
             </table>
         </div>
     </div>
@@ -510,31 +381,13 @@
             document.getElementById('calculatorForm').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function toggleDownPaymentFields() {
-            const percentageField = document.getElementById('percentageField');
-            const amountField = document.getElementById('amountField');
-            const selectedType = document.querySelector('input[name="entradaTipo"]:checked').value;
-
-            if (selectedType === 'porcentaje') {
-                percentageField.style.display = 'block';
-                amountField.style.display = 'none';
-            } else {
-                percentageField.style.display = 'none';
-                amountField.style.display = 'block';
-            }
-        }
-
         function calculateInstallments() {
             const convenio = document.querySelector('input[name="convenio"]:checked').value;
-            const selectedType = document.querySelector('input[name="entradaTipo"]:checked').value;
-            let downPaymentAmount = 0;
-
-            // Precio contado (multiplica PVC por 1.20)
-            let cashPrice = pvcSelected * 1.20;
-
-            // Precio a crédito con condiciones de multiplicador para 3, 6 y 12 meses
             const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
             let creditMultiplier;
+            
+            let cashPrice = pvcSelected * 1.20;
+
             if (months === 3) {
                 creditMultiplier = 1.40;
             } else if (months === 6) {
@@ -546,55 +399,13 @@
             }
 
             let creditPrice = pvcSelected * creditMultiplier;
-            let downPaymentPercentage = 0;
-
-            if (selectedType === 'porcentaje') {
-                downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
-                downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
-            } else {
-                downPaymentAmount = parseFloat(document.getElementById('downPaymentAmount').value);
-                downPaymentPercentage = (downPaymentAmount / creditPrice) * 100;
-            }
-
-            // Aplicación de recargos y descuentos según condiciones de entrada y convenio
-            if (convenio === "no-convenio") {
-                if (downPaymentPercentage === 0) {
-                    creditPrice *= 1.08; // Aumenta el precio en un 8% si no hay entrada
-                } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 8) {
-                    creditPrice *= (1 + downPaymentPercentage / 100); // Recargo proporcional de 1% a 8%
-                } else if (downPaymentPercentage >= 8.1 && downPaymentPercentage <= 11) {
-                    creditPrice = creditPrice; // No se aplica recargo
-                }
-            }
-
-            // Aplicación de descuentos según el número de cuotas
-            let maxDiscount = 0;
-            if (months <= 3) {
-                maxDiscount = 0.10;
-            } else if (months <= 6) {
-                maxDiscount = 0.20;
-            } else if (months <= 12) {
-                maxDiscount = 0.40;
-            }
-
-            if (convenio === "no-convenio" && downPaymentPercentage > 10) {
-                const appliedDiscount = maxDiscount * ((downPaymentPercentage - 10) / 89); 
-                creditPrice *= (1 - Math.min(appliedDiscount, maxDiscount));
-            }
-
-            // Asegura que el crédito no sea menor al 110% del contado
-            if (creditPrice < cashPrice * 1.10) {
-                creditPrice = cashPrice * 1.10;
-            }
-
-            const financedAmount = creditPrice - downPaymentAmount;
+            const financedAmount = creditPrice;
             const monthlyPayment = financedAmount / months;
 
             document.getElementById('cashPriceResult').textContent = `$${cashPrice.toFixed(2)}`;
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
             document.getElementById('financedAmountResult').textContent = `$${financedAmount.toFixed(2)}`;
             document.getElementById('monthlyPaymentResult').textContent = `$${monthlyPayment.toFixed(2)}`;
-            document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
             generateAmortizationTable(financedAmount, months, monthlyPayment);
@@ -625,7 +436,6 @@
                 tableBody.innerHTML += row;
             }
 
-            // Fila de sumatoria al final
             tableBody.innerHTML += `<tr style="font-weight: bold;">
                 <td>Total</td>
                 <td>${(monthlyPayment * months).toFixed(2)}</td>
