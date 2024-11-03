@@ -588,8 +588,7 @@
             }
 
             const financedAmount = creditPrice - downPaymentAmount;
-            const interestRate = 0.05;
-            const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months));
+            const monthlyPayment = financedAmount / months;
 
             document.getElementById('cashPriceResult').textContent = `$${cashPrice.toFixed(2)}`;
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
@@ -598,22 +597,21 @@
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
-            generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment);
+            generateAmortizationTable(financedAmount, months, monthlyPayment);
         }
 
-        function generateAmortizationTable(principal, interestRate, months, monthlyPayment) {
+        function generateAmortizationTable(principal, months, monthlyPayment) {
             let tableBody = document.getElementById('amortizationTableBody');
             tableBody.innerHTML = '';
             let remainingBalance = principal;
             let totalCapital = 0, totalInterest = 0;
 
             for (let i = 1; i <= months; i++) {
-                const interest = remainingBalance * interestRate;
-                const capital = monthlyPayment - interest;
+                const capital = monthlyPayment;
+                const interest = 0;
                 remainingBalance -= capital;
 
                 totalCapital += capital;
-                totalInterest += interest;
 
                 let row = `<tr>
                     <td>${i}</td>
