@@ -38,7 +38,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            margin: 50px 0; /* Separación de la parte superior y de la tabla */
+            margin: 50px 0;
         }
 
         /* Título Bienvenido centrado */
@@ -63,7 +63,7 @@
             z-index: 2;
             position: relative;
             width: 80%;
-            margin: 0 auto 50px; /* Separación de la franja naranja */
+            margin: 0 auto 50px;
         }
 
         .container:hover {
@@ -218,7 +218,6 @@
             margin-right: 20px;
         }
 
-        /* Efectos hover para filas de la tabla */
         tr:hover {
             background-color: #f7f7f7;
         }
@@ -238,7 +237,6 @@
             border-color: #f39c12;
         }
 
-        /* Footer */
         footer {
             text-align: center;
             margin-top: 20px;
@@ -249,7 +247,6 @@
             margin: 0;
         }
 
-        /* Estilo de la tabla de amortización */
         .amortization-table {
             margin-top: 30px;
         }
@@ -262,20 +259,16 @@
     </style>
 </head>
 <body>
-    <!-- Franja Naranja ocupando todo el ancho de la página -->
     <div class="navbar">
         <h1>Bienvenido a Electromáscrédito</h1>
     </div>
 
-    <!-- Contenedor principal -->
     <div class="container mt-5">
         <h2 class="text-center mb-4">Catálogo de productos</h2>
         
-        <!-- Contenido dinámico del catálogo -->
         <div class="accordion" id="catalogoAccordion"></div>
 
         <h2 class="text-center mt-4">Simulador</h2>
-        <!-- Formulario del simulador -->
         <form id="calculatorForm">
             <div class="mb-3">
                 <label for="productSelected" class="form-label">Producto seleccionado:</label>
@@ -309,9 +302,23 @@
             </div>
 
             <div class="mb-3">
+                <label class="form-label">Tipo de entrada:</label>
+                <div class="radio-options">
+                    <label><input type="radio" name="entradaTipo" value="porcentaje" onclick="toggleDownPaymentFields()"> Porcentaje</label>
+                    <label><input type="radio" name="entradaTipo" value="efectivo" onclick="toggleDownPaymentFields()"> Monto en efectivo</label>
+                </div>
+            </div>
+
+            <div class="mb-3" id="percentageField" style="display:none;">
                 <label for="downPaymentPercentage" class="form-label">Entrada (%):</label>
                 <input type="number" class="form-control" id="downPaymentPercentage" value="0" min="0" max="100">
             </div>
+
+            <div class="mb-3" id="amountField" style="display:none;">
+                <label for="downPaymentAmount" class="form-label">Entrada (monto en efectivo):</label>
+                <input type="number" class="form-control" id="downPaymentAmount" value="0" min="0">
+            </div>
+
             <div class="mb-3">
                 <label for="discount" class="form-label">Descuento cliente (%):</label>
                 <input type="number" class="form-control" id="discount" value="0" required>
@@ -321,9 +328,7 @@
         </form>
 
         <div class="mt-4">
-            <!-- Título de la tabla de resultados -->
             <h3 class="text-center mt-4">Resultado de Simulación</h3>
-            <!-- Tabla de resultados -->
             <table class="table table-bordered small-table">
                 <tbody>
                     <tr>
@@ -361,7 +366,6 @@
                 </tbody>
             </table>
 
-            <!-- Nueva tabla de amortización -->
             <h3 class="text-center mt-5">Tabla de Amortización Francesa</h3>
             <table class="table table-bordered amortization-table">
                 <thead>
@@ -381,12 +385,6 @@
     <footer>
         <p>&copy; 2024 Electromáscrédito - Todos los derechos reservados</p>
     </footer>
-
-    <!-- Burbujas decorativas grandes distribuidas por la página -->
-    <div class="bubble bubble1"></div>
-    <div class="bubble bubble2"></div>
-    <div class="bubble bubble3"></div>
-    <div class="bubble bubble4"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -444,7 +442,6 @@
                     </h2>
                     <div id="collapse${categoryIndex}" class="accordion-collapse collapse" aria-labelledby="heading${categoryIndex}" data-bs-parent="#catalogoAccordion">
                         <div class="accordion-body" id="subcategoryContainer${categoryIndex}">
-                            <!-- Aquí se cargarán las subcategorías -->
                         </div>
                     </div>
                 `;
@@ -478,7 +475,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="subcategoryBody${categoryIndex}${subcategoryIndex}">
-                                                <!-- Aquí se cargarán los productos de esta subcategoría -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -523,45 +519,44 @@
             document.getElementById('calculatorForm').scrollIntoView({ behavior: 'smooth' });
         }
 
+        function toggleDownPaymentFields() {
+            const percentageField = document.getElementById('percentageField');
+            const amountField = document.getElementById('amountField');
+            const selectedType = document.querySelector('input[name="entradaTipo"]:checked').value;
+
+            if (selectedType === 'porcentaje') {
+                percentageField.style.display = 'block';
+                amountField.style.display = 'none';
+            } else {
+                percentageField.style.display = 'none';
+                amountField.style.display = 'block';
+            }
+        }
+
         function calculateInstallments() {
-            const downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
-            const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
-            const discountPercentage = parseFloat(document.getElementById('discount').value);
-            const convenio = document.querySelector('input[name="convenio"]:checked').value;
-            let creditPrice = 0;
+            const selectedType = document.querySelector('input[name="entradaTipo"]:checked').value;
+            let downPaymentAmount = 0;
+            const creditPrice = pvcSelected * 1.20; // Precio de crédito base calculado.
 
-            if (months <= 3) {
-                creditPrice = pvcSelected * (1 + (0.25 + ((months - 1) * 0.075)));
-            } else if (months > 3 && months <= 6) {
-                creditPrice = pvcSelected * (1.40 + ((months - 4) * 0.10));
-            } else if (months > 6 && months <= 12) {
-                creditPrice = pvcSelected * (1.61 + ((months - 7) * 0.065));
-                if (creditPrice > pvcSelected * 1.80) {
-                    creditPrice = pvcSelected * 1.80;
-                }
+            if (selectedType === 'porcentaje') {
+                const downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
+                downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
+            } else {
+                downPaymentAmount = parseFloat(document.getElementById('downPaymentAmount').value);
             }
 
-            let discountAmount = 0;
-            if (discountPercentage > 0) {
-                discountAmount = (creditPrice * discountPercentage) / 100;
-                creditPrice -= discountAmount;
-            }
-
-            const downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
             const financedAmount = creditPrice - downPaymentAmount;
-            const interestRate = 0.05; // 5% de tasa de interés mensual
-            const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months)); // Fórmula corregida
+            const interestRate = 0.05;
+            const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
+            const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months));
 
-            // Actualización de resultados en el simulador
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
-            document.getElementById('discountResult').textContent = `$${discountAmount.toFixed(2)}`;
             document.getElementById('financedAmountResult').textContent = `$${financedAmount.toFixed(2)}`;
             document.getElementById('monthlyPaymentResult').textContent = `$${monthlyPayment.toFixed(2)}`;
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
+            document.getElementById('cashPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
-            document.getElementById('cashPriceResult').textContent = `$${(pvcSelected * 1.20).toFixed(2)}`; // Mostrar precio de contado
 
-            // Generar tabla de amortización
             generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment);
         }
 
@@ -574,13 +569,15 @@
             document.getElementById('downPaymentAmountResult').textContent = '$0.00';
             document.getElementById('financingTimeResult').textContent = '';
             document.getElementById('discountResult').textContent = '$0.00';
-            document.getElementById('cashPriceResult').textContent = '$0.00'; // Reiniciar precio de contado
+            document.getElementById('cashPriceResult').textContent = '$0.00';
             document.getElementById('amortizationTableBody').innerHTML = '';
+            document.getElementById('percentageField').style.display = 'none';
+            document.getElementById('amountField').style.display = 'none';
         }
 
         function generateAmortizationTable(principal, interestRate, months, monthlyPayment) {
             let tableBody = document.getElementById('amortizationTableBody');
-            tableBody.innerHTML = ''; // Limpiar la tabla antes de agregar nuevas filas
+            tableBody.innerHTML = '';
             let remainingBalance = principal;
 
             for (let i = 1; i <= months; i++) {
@@ -588,7 +585,6 @@
                 const capital = monthlyPayment - interest;
                 remainingBalance -= capital;
 
-                // Crear una fila con los valores de cada mes
                 let row = `<tr>
                     <td>${i}</td>
                     <td>${monthlyPayment.toFixed(2)}</td>
@@ -597,7 +593,6 @@
                     <td>${remainingBalance.toFixed(2)}</td>
                 </tr>`;
 
-                // Añadir la fila a la tabla
                 tableBody.innerHTML += row;
             }
         }
