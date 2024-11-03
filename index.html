@@ -371,10 +371,10 @@
                 <tbody id="amortizationTableBody"></tbody>
                 <tfoot>
                     <tr>
-                        <th>Total</th>
-                        <td id="totalMonthlyPayment">$0.00</td>
-                        <td id="totalCapital">$0.00</td>
-                        <td id="totalInterest">$0.00</td>
+                        <td><strong>Total</strong></td>
+                        <td id="totalMonthlyPayment"></td>
+                        <td id="totalCapital"></td>
+                        <td id="totalInterest"></td>
                         <td></td>
                     </tr>
                 </tfoot>
@@ -636,10 +636,26 @@
                 tableBody.innerHTML += row;
             }
 
-            // Actualizar los totales en el pie de la tabla
+            // Mostrar sumatorias en el pie de la tabla
             document.getElementById('totalMonthlyPayment').textContent = `$${(monthlyPayment * months).toFixed(2)}`;
             document.getElementById('totalCapital').textContent = `$${totalCapital.toFixed(2)}`;
             document.getElementById('totalInterest').textContent = `$${totalInterest.toFixed(2)}`;
+        }
+
+        function resetForm() {
+            document.getElementById('calculatorForm').reset();
+            document.getElementById('productSelected').value = '';
+            document.getElementById('productSelectedType').textContent = '';
+            document.getElementById('cashPriceResult').textContent = '$0.00';
+            document.getElementById('creditPriceResult').textContent = '$0.00';
+            document.getElementById('downPaymentAmountResult').textContent = '$0.00';
+            document.getElementById('financedAmountResult').textContent = '$0.00';
+            document.getElementById('monthlyPaymentResult').textContent = '$0.00';
+            document.getElementById('financingTimeResult').textContent = '';
+            document.getElementById('amortizationTableBody').innerHTML = '';
+            document.getElementById('totalMonthlyPayment').textContent = '';
+            document.getElementById('totalCapital').textContent = '';
+            document.getElementById('totalInterest').textContent = '';
         }
 
         document.addEventListener("DOMContentLoaded", function() {
