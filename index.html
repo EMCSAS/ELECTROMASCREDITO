@@ -504,11 +504,6 @@
                             `<td>${producto.descripcion}</td>
                             <td>${producto.codigoSAP}</td>
                             <td class="pvc">$${producto.pvc.toFixed(2)}</td>
-                            <td class="contado">$${(producto.pvc * 1.20).toFixed(2)}</td>
-                            <td class="tresMeses">$${(producto.pvc * 1.40).toFixed(2)}</td>
-                            <td class="seisMeses">$${(producto.pvc * 1.60).toFixed(2)}</td>
-                            <td class="doceMeses">$${(producto.pvc * 1.80).toFixed(2)}</td>
-                            <td><span class="select-product" onclick="selectProduct(this)">Seleccionar</span></td>`;
                         tbody.appendChild(tr);
                     });
                 });
