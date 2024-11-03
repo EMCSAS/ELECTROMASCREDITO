@@ -369,6 +369,15 @@
                     </tr>
                 </thead>
                 <tbody id="amortizationTableBody"></tbody>
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <td id="totalMonthlyPayment">$0.00</td>
+                        <td id="totalCapital">$0.00</td>
+                        <td id="totalInterest">$0.00</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </div>
@@ -605,11 +614,16 @@
             let tableBody = document.getElementById('amortizationTableBody');
             tableBody.innerHTML = '';
             let remainingBalance = principal;
+            let totalCapital = 0;
+            let totalInterest = 0;
 
             for (let i = 1; i <= months; i++) {
                 const interest = remainingBalance * interestRate;
                 const capital = monthlyPayment - interest;
                 remainingBalance -= capital;
+
+                totalCapital += capital;
+                totalInterest += interest;
 
                 let row = `<tr>
                     <td>${i}</td>
@@ -621,6 +635,11 @@
 
                 tableBody.innerHTML += row;
             }
+
+            // Actualizar los totales en el pie de la tabla
+            document.getElementById('totalMonthlyPayment').textContent = `$${(monthlyPayment * months).toFixed(2)}`;
+            document.getElementById('totalCapital').textContent = `$${totalCapital.toFixed(2)}`;
+            document.getElementById('totalInterest').textContent = `$${totalInterest.toFixed(2)}`;
         }
 
         document.addEventListener("DOMContentLoaded", function() {
