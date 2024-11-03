@@ -537,28 +537,31 @@
             let creditMultiplier = 1.20 + (months - 1) * 0.06;
             let creditPrice = pvcSelected * creditMultiplier;
 
-            if (selectedType === 'porcentaje') {
-                const downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
-                downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
+            let downPaymentPercentage = 0;
 
-                // Aplicación de condiciones adicionales
-                if (convenio === "no-convenio") {
-                    if (downPaymentPercentage === 0) {
-                        creditPrice *= 1.10;
-                    } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 8) {
-                        creditPrice *= (1 + (8 - downPaymentPercentage) / 100);
-                    } else if (downPaymentPercentage > 8 && downPaymentPercentage <= 11) {
-                        creditPrice = creditPrice; // Sin ajuste
-                    } else if (downPaymentPercentage > 11 && downPaymentPercentage <= 30) {
-                        creditPrice *= (1 - (downPaymentPercentage - 11) * 0.05 / 19);
-                    } else if (downPaymentPercentage > 30 && downPaymentPercentage <= 50) {
-                        creditPrice *= (1 - (downPaymentPercentage - 31) * 0.048 / 19);
-                    } else if (downPaymentPercentage > 50 && downPaymentPercentage <= 90) {
-                        creditPrice *= (1 - (downPaymentPercentage - 51) * 0.089 / 39);
-                    }
-                }
+            if (selectedType === 'porcentaje') {
+                downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
+                downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
             } else {
                 downPaymentAmount = parseFloat(document.getElementById('downPaymentAmount').value);
+                downPaymentPercentage = (downPaymentAmount / creditPrice) * 100;
+            }
+
+            // Aplicación de condiciones adicionales
+            if (convenio === "no-convenio") {
+                if (downPaymentPercentage === 0) {
+                    creditPrice *= 1.05;
+                } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 8) {
+                    creditPrice *= (1 + (8 - downPaymentPercentage) / 100);
+                } else if (downPaymentPercentage > 8 && downPaymentPercentage <= 11) {
+                    creditPrice = creditPrice; // Sin ajuste
+                } else if (downPaymentPercentage > 11 && downPaymentPercentage <= 30) {
+                    creditPrice *= (1 - (downPaymentPercentage - 11) * 0.05 / 19);
+                } else if (downPaymentPercentage > 30 && downPaymentPercentage <= 50) {
+                    creditPrice *= (1 - (downPaymentPercentage - 31) * 0.048 / 19);
+                } else if (downPaymentPercentage > 50 && downPaymentPercentage <= 99) {
+                    creditPrice *= (1 - (downPaymentPercentage - 51) * 0.089 / 39);
+                }
             }
 
             const financedAmount = creditPrice - downPaymentAmount;
