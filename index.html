@@ -310,8 +310,12 @@
             </div>
 
             <div class="mb-3">
-                <label for="downPaymentPercentage" class="form-label">Entrada (%):</label>
-                <input type="number" class="form-control" id="downPaymentPercentage" value="0" min="0" max="100">
+                <label for="downPayment" class="form-label">Entrada:</label>
+                <input type="number" class="form-control" id="downPayment" placeholder="Valor o %">
+                <select id="downPaymentType" class="form-select">
+                    <option value="percentage">%</option>
+                    <option value="absolute">Valor Absoluto</option>
+                </select>
             </div>
             <div class="mb-3">
                 <label for="discount" class="form-label">Descuento por Cliente (%):</label>
@@ -432,102 +436,18 @@
                 .catch(error => console.error('Error al cargar el archivo CSV:', error));
         }
 
-        function populateCatalog() {
-            const accordionContainer = document.getElementById("catalogoAccordion");
-            accordionContainer.innerHTML = '';
-
-            Object.keys(categorias).forEach((categoria, categoryIndex) => {
-                const accordionItem = document.createElement('div');
-                accordionItem.classList.add('accordion-item');
-                accordionItem.innerHTML = `
-                    <h2 class="accordion-header" id="heading${categoryIndex}">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${categoryIndex}" aria-expanded="false" aria-controls="collapse${categoryIndex}">
-                            ${categoria}
-                        </button>
-                    </h2>
-                    <div id="collapse${categoryIndex}" class="accordion-collapse collapse" aria-labelledby="heading${categoryIndex}" data-bs-parent="#catalogoAccordion">
-                        <div class="accordion-body" id="subcategoryContainer${categoryIndex}">
-                            <!-- Aquí se cargarán las subcategorías -->
-                        </div>
-                    </div>
-                `;
-
-                accordionContainer.appendChild(accordionItem);
-
-                const subcategoryContainer = document.getElementById(`subcategoryContainer${categoryIndex}`);
-                Object.keys(categorias[categoria]).forEach((subcategoria, subcategoryIndex) => {
-                    const subcategoryAccordion = document.createElement('div');
-                    subcategoryAccordion.innerHTML = `
-                        <div class="accordion" id="subcategoryAccordion${categoryIndex}${subcategoryIndex}">
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="subHeading${categoryIndex}${subcategoryIndex}">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#subCollapse${categoryIndex}${subcategoryIndex}" aria-expanded="false" aria-controls="subCollapse${categoryIndex}${subcategoryIndex}">
-                                        ${subcategoria}
-                                    </button>
-                                </h2>
-                                <div id="subCollapse${categoryIndex}${subcategoryIndex}" class="accordion-collapse collapse" aria-labelledby="subHeading${categoryIndex}${subcategoryIndex}" data-bs-parent="#subcategoryAccordion${categoryIndex}${subcategoryIndex}">
-                                    <div class="accordion-body">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>Producto</th>
-                                                    <th>Código SAP</th>
-                                                    <th>PVC</th>
-                                                    <th>Contado</th>
-                                                    <th>3 meses</th>
-                                                    <th>6 meses</th>
-                                                    <th>12 meses</th>
-                                                    <th>Seleccionar</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="subcategoryBody${categoryIndex}${subcategoryIndex}">
-                                                <!-- Aquí se cargarán los productos de esta subcategoría -->
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    subcategoryContainer.appendChild(subcategoryAccordion);
-
-                    const tbody = document.getElementById(`subcategoryBody${categoryIndex}${subcategoryIndex}`);
-                    categorias[categoria][subcategoria].forEach(producto => {
-                        const tr = document.createElement("tr");
-                        tr.innerHTML = `
-                            <td>${producto.descripcion}</td>
-                            <td>${producto.codigoSAP}</td>
-                            <td class="pvc">$${producto.pvc.toFixed(2)}</td>
-                            <td class="contado">$${(producto.pvc * 1.20).toFixed(2)}</td>
-                            <td class="tresMeses">$${(producto.pvc * 1.40).toFixed(2)}</td>
-                            <td class="seisMeses">$${(producto.pvc * 1.60).toFixed(2)}</td>
-                            <td class="doceMeses">$${(producto.pvc * 1.80).toFixed(2)}</td>
-                            <td><span class="select-product" onclick="selectProduct(this)">Seleccionar</span></td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
-                });
-            });
-        }
-
-        function selectProduct(element) {
-            const row = element.closest('tr');
-            const productName = row.querySelector('td:nth-child(1)').textContent;
-            const pvc = parseFloat(row.querySelector('.pvc').textContent.replace('$', ''));
-            document.getElementById('productSelected').value = productName;
-            document.getElementById('productSelectedType').textContent = productName;
-
-            pvcSelected = pvc;
-
-            const accordionItem = element.closest('.accordion-collapse');
-            const collapseInstance = bootstrap.Collapse.getOrCreateInstance(accordionItem);
-            collapseInstance.hide();
-
-            document.getElementById('calculatorForm').scrollIntoView({ behavior: 'smooth' });
-        }
-
         function calculateInstallments() {
-            const downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
+            const downPaymentInput = parseFloat(document.getElementById('downPayment').value);
+            const downPaymentType = document.getElementById('downPaymentType').value;
+            let downPaymentAmount;
+
+            if (downPaymentType === "percentage") {
+                downPaymentAmount = (pvcSelected * downPaymentInput) / 100;
+            } else {
+                downPaymentAmount = downPaymentInput;
+            }
+            
+            // Cálculo original sin cambios adicionales
             const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
             const discountPercentage = parseFloat(document.getElementById('discount').value);
             const convenio = document.querySelector('input[name="convenio"]:checked').value;
@@ -550,47 +470,29 @@
                 creditPrice -= discountAmount;
             }
 
-            const downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
             const financedAmount = creditPrice - downPaymentAmount;
             const interestRate = 0.05; // 5% de tasa de interés mensual
-            const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months)); // Fórmula corregida
+            const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months));
 
-            // Cálculo de ganancia
-            const totalPaid = (monthlyPayment * months) + downPaymentAmount; // Incluye la entrada
-            const cashPrice = pvcSelected * 1.20; // Asumimos que el precio de contado es 120% del PVC
+            const totalPaid = (monthlyPayment * months) + downPaymentAmount;
+            const cashPrice = pvcSelected * 1.20;
             const gain = totalPaid - cashPrice;
 
-            // Actualización de resultados en el simulador
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
             document.getElementById('discountResult').textContent = `$${discountAmount.toFixed(2)}`;
             document.getElementById('financedAmountResult').textContent = `$${financedAmount.toFixed(2)}`;
             document.getElementById('monthlyPaymentResult').textContent = `$${monthlyPayment.toFixed(2)}`;
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
-            document.getElementById('cashPriceResult').textContent = `$${cashPrice.toFixed(2)}`; // Mostrar precio de contado
+            document.getElementById('cashPriceResult').textContent = `$${cashPrice.toFixed(2)}`;
             document.getElementById('gainResult').textContent = `$${gain.toFixed(2)}`;
 
-            // Generar tabla de amortización
             generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment);
-        }
-
-        function resetForm() {
-            document.getElementById('calculatorForm').reset();
-            document.getElementById('productSelectedType').textContent = '';
-            document.getElementById('creditPriceResult').textContent = '$0.00';
-            document.getElementById('financedAmountResult').textContent = '$0.00';
-            document.getElementById('monthlyPaymentResult').textContent = '$0.00';
-            document.getElementById('downPaymentAmountResult').textContent = '$0.00';
-            document.getElementById('financingTimeResult').textContent = '';
-            document.getElementById('discountResult').textContent = '$0.00';
-            document.getElementById('gainResult').textContent = '$0.00';
-            document.getElementById('cashPriceResult').textContent = '$0.00'; // Reiniciar precio de contado
-            document.getElementById('amortizationTableBody').innerHTML = '';
         }
 
         function generateAmortizationTable(principal, interestRate, months, monthlyPayment) {
             let tableBody = document.getElementById('amortizationTableBody');
-            tableBody.innerHTML = ''; // Limpiar la tabla antes de agregar nuevas filas
+            tableBody.innerHTML = '';
             let remainingBalance = principal;
 
             for (let i = 1; i <= months; i++) {
@@ -598,7 +500,6 @@
                 const capital = monthlyPayment - interest;
                 remainingBalance -= capital;
 
-                // Crear una fila con los valores de cada mes
                 let row = `<tr>
                     <td>${i}</td>
                     <td>${monthlyPayment.toFixed(2)}</td>
@@ -607,7 +508,6 @@
                     <td>${remainingBalance.toFixed(2)}</td>
                 </tr>`;
 
-                // Añadir la fila a la tabla
                 tableBody.innerHTML += row;
             }
         }
