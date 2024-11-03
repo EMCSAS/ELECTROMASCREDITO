@@ -38,7 +38,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            margin: 50px 0; /* Separación de la parte superior y de la tabla */
+            margin: 50px 0;
         }
 
         /* Título Bienvenido centrado */
@@ -63,7 +63,7 @@
             z-index: 2;
             position: relative;
             width: 80%;
-            margin: 0 auto 50px; /* Separación de la franja naranja */
+            margin: 0 auto 50px;
         }
 
         .container:hover {
@@ -133,15 +133,6 @@
             padding: 5px;
         }
 
-        .small-table td:first-child {
-            white-space: nowrap;
-            width: 30%;
-        }
-
-        .small-table td:nth-child(2) {
-            text-align: left;
-        }
-
         .discount-row {
             background-color: #28a745;
             color: #fff;
@@ -166,49 +157,6 @@
             transform: scale(1.05);
         }
 
-        .phone-input-container {
-            background-color: #fff;
-            color: #333;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            width: fit-content;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .phone-input-container label {
-            margin-right: 10px;
-            font-weight: bold;
-        }
-
-        .phone-input-container input {
-            border: 1px solid #ccc;
-            padding: 5px 10px;
-            border-radius: 5px;
-            outline: none;
-        }
-
-        .btn-whatsapp {
-            background-color: #25D366;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-            font-size: 16px;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-whatsapp:hover {
-            background-color: #20b857;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transform: scale(1.05);
-        }
-
         .radio-options label {
             margin-right: 20px;
         }
@@ -227,10 +175,6 @@
             background-color: #f39c12;
             color: #fff;
             transition: all 0.3s ease;
-        }
-
-        .phone-input-container input:hover {
-            border-color: #f39c12;
         }
 
         /* Footer */
@@ -254,11 +198,6 @@
             text-align: center;
         }
 
-        /* Estilo adicional para la ganancia */
-        .gain-row {
-            background-color: #000080; /* Azul marino */
-            color: white;
-        }
     </style>
 </head>
 <body>
@@ -331,11 +270,9 @@
                     <tr><td>Cuota mensual</td><td id="monthlyPaymentResult">$0.00</td></tr>
                     <tr><td>Tiempo de financiamiento</td><td id="financingTimeResult"></td></tr>
                     <tr class="discount-row"><td>Ahorro EMC</td><td id="discountResult">$0.00</td></tr>
-                    <tr class="gain-row"><td>Ganancia</td><td id="gainResult">$0.00</td></tr>
                 </tbody>
             </table>
 
-            <!-- Nueva tabla de amortización -->
             <h3 class="text-center mt-5">Tabla de Amortización Francesa</h3>
             <table class="table table-bordered amortization-table">
                 <thead>
