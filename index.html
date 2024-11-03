@@ -38,7 +38,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            margin: 50px 0;
+            margin: 50px 0; /* Separación de la parte superior y de la tabla */
         }
 
         /* Título Bienvenido centrado */
@@ -63,7 +63,7 @@
             z-index: 2;
             position: relative;
             width: 80%;
-            margin: 0 auto 50px;
+            margin: 0 auto 50px; /* Separación de la franja naranja */
         }
 
         .container:hover {
@@ -133,6 +133,15 @@
             padding: 5px;
         }
 
+        .small-table td:first-child {
+            white-space: nowrap;
+            width: 30%;
+        }
+
+        .small-table td:nth-child(2) {
+            text-align: left;
+        }
+
         .discount-row {
             background-color: #28a745;
             color: #fff;
@@ -157,6 +166,49 @@
             transform: scale(1.05);
         }
 
+        .phone-input-container {
+            background-color: #fff;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            width: fit-content;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .phone-input-container label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .phone-input-container input {
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #20b857;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
+        }
+
         .radio-options label {
             margin-right: 20px;
         }
@@ -175,6 +227,10 @@
             background-color: #f39c12;
             color: #fff;
             transition: all 0.3s ease;
+        }
+
+        .phone-input-container input:hover {
+            border-color: #f39c12;
         }
 
         /* Footer */
@@ -198,15 +254,29 @@
             text-align: center;
         }
 
+        /* Estilo adicional para la ganancia */
+        .gain-row {
+            background-color: #000080; /* Azul marino */
+            color: white;
+        }
+
     </style>
 </head>
 <body>
-    <div class="navbar"><h1>Bienvenido a Electromáscrédito</h1></div>
+    <!-- Franja Naranja ocupando todo el ancho de la página -->
+    <div class="navbar">
+        <h1>Bienvenido a Electromáscrédito</h1>
+    </div>
+
+    <!-- Contenedor principal -->
     <div class="container mt-5">
         <h2 class="text-center mb-4">Catálogo de productos</h2>
+        
+        <!-- Contenido dinámico del catálogo -->
         <div class="accordion" id="catalogoAccordion"></div>
 
         <h2 class="text-center mt-4">Simulador</h2>
+        <!-- Formulario del simulador -->
         <form id="calculatorForm">
             <div class="mb-3">
                 <label for="productSelected" class="form-label">Producto Seleccionado:</label>
@@ -240,16 +310,8 @@
             </div>
 
             <div class="mb-3">
-                <label for="downPaymentType" class="form-label">Tipo de Entrada:</label>
-                <select id="downPaymentType" class="form-select">
-                    <option value="percentage">Porcentaje</option>
-                    <option value="amount">Monto</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
                 <label for="downPaymentPercentage" class="form-label">Entrada (%):</label>
-                <input type="number" class="form-control" id="downPaymentPercentage" value="0" min="0" max="100" readonly>
+                <input type="number" class="form-control" id="downPaymentPercentage" value="0" min="0" max="100">
             </div>
             <div class="mb-3">
                 <label for="discount" class="form-label">Descuento por Cliente (%):</label>
@@ -260,36 +322,77 @@
         </form>
 
         <div class="mt-4">
+            <!-- Tabla de resultados -->
             <table class="table table-bordered small-table">
                 <tbody>
-                    <tr><td>Tipo de Producto</td><td id="productSelectedType"></td></tr>
-                    <tr><td>Precio a crédito</td><td id="creditPriceResult">$0.00</td></tr>
-                    <tr><td>Entrada</td><td id="downPaymentAmountResult">$0.00</td></tr>
-                    <tr><td>Precio de Contado</td><td id="cashPriceResult">$0.00</td></tr>
-                    <tr><td>Valor financiado</td><td id="financedAmountResult">$0.00</td></tr>
-                    <tr><td>Cuota mensual</td><td id="monthlyPaymentResult">$0.00</td></tr>
-                    <tr><td>Tiempo de financiamiento</td><td id="financingTimeResult"></td></tr>
-                    <tr class="discount-row"><td>Ahorro EMC</td><td id="discountResult">$0.00</td></tr>
+                    <tr>
+                        <td>Tipo de Producto</td>
+                        <td id="productSelectedType"></td>
+                    </tr>
+                    <tr>
+                        <td>Precio a crédito</td>
+                        <td id="creditPriceResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Entrada</td>
+                        <td id="downPaymentAmountResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Precio de Contado</td>
+                        <td id="cashPriceResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Valor financiado</td>
+                        <td id="financedAmountResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Cuota mensual</td>
+                        <td id="monthlyPaymentResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Tiempo de financiamiento</td>
+                        <td id="financingTimeResult"></td>
+                    </tr>
+                    <tr class="discount-row">
+                        <td>Ahorro EMC</td>
+                        <td id="discountResult">$0.00</td>
+                    </tr>
+                    <tr class="gain-row">
+                        <td>Ganancia</td>
+                        <td id="gainResult">$0.00</td>
+                    </tr>
                 </tbody>
             </table>
 
+            <!-- Nueva tabla de amortización -->
             <h3 class="text-center mt-5">Tabla de Amortización Francesa</h3>
             <table class="table table-bordered amortization-table">
                 <thead>
-                    <tr><th>Mes</th><th>Cuota</th><th>Capital</th><th>Interés</th><th>Saldo Pendiente</th></tr>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Cuota</th>
+                        <th>Capital</th>
+                        <th>Interés</th>
+                        <th>Saldo Pendiente</th>
+                    </tr>
                 </thead>
                 <tbody id="amortizationTableBody"></tbody>
             </table>
         </div>
     </div>
 
-    <footer><p>&copy; 2024 Electromáscrédito - Todos los derechos reservados</p></footer>
+    <footer>
+        <p>&copy; 2024 Electromáscrédito - Todos los derechos reservados</p>
+    </footer>
+
+    <!-- Burbujas decorativas grandes distribuidas por la página -->
     <div class="bubble bubble1"></div>
     <div class="bubble bubble2"></div>
     <div class="bubble bubble3"></div>
     <div class="bubble bubble4"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         let categorias = {};
         let pvcSelected = 0;
@@ -301,6 +404,7 @@
                     const rows = data.split('\n');
                     let currentCategory = '';
                     let currentSubcategory = '';
+
                     rows.slice(1).forEach(row => {
                         const columns = row.split(';');
                         const categoria = columns[0]?.trim();
@@ -313,10 +417,12 @@
                             currentCategory = categoria;
                             categorias[currentCategory] = categorias[currentCategory] || {};
                         }
+
                         if (subcategoria) {
                             currentSubcategory = subcategoria;
                             categorias[currentCategory][currentSubcategory] = [];
                         }
+
                         if (pvc && currentCategory && currentSubcategory) {
                             categorias[currentCategory][currentSubcategory].push({ codigoSAP, descripcion, pvc });
                         }
@@ -329,6 +435,7 @@
         function populateCatalog() {
             const accordionContainer = document.getElementById("catalogoAccordion");
             accordionContainer.innerHTML = '';
+
             Object.keys(categorias).forEach((categoria, categoryIndex) => {
                 const accordionItem = document.createElement('div');
                 accordionItem.classList.add('accordion-item');
@@ -342,7 +449,9 @@
                         <div class="accordion-body" id="subcategoryContainer${categoryIndex}">
                             <!-- Aquí se cargarán las subcategorías -->
                         </div>
-                    </div>`;
+                    </div>
+                `;
+
                 accordionContainer.appendChild(accordionItem);
 
                 const subcategoryContainer = document.getElementById(`subcategoryContainer${categoryIndex}`);
@@ -360,14 +469,26 @@
                                     <div class="accordion-body">
                                         <table class="table table-bordered">
                                             <thead>
-                                                <tr><th>Producto</th><th>Código SAP</th><th>PVC</th><th>Contado</th><th>3 meses</th><th>6 meses</th><th>12 meses</th><th>Seleccionar</th></tr>
+                                                <tr>
+                                                    <th>Producto</th>
+                                                    <th>Código SAP</th>
+                                                    <th>PVC</th>
+                                                    <th>Contado</th>
+                                                    <th>3 meses</th>
+                                                    <th>6 meses</th>
+                                                    <th>12 meses</th>
+                                                    <th>Seleccionar</th>
+                                                </tr>
                                             </thead>
-                                            <tbody id="subcategoryBody${categoryIndex}${subcategoryIndex}"></tbody>
+                                            <tbody id="subcategoryBody${categoryIndex}${subcategoryIndex}">
+                                                <!-- Aquí se cargarán los productos de esta subcategoría -->
+                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
-                        </div>`;
+                        </div>
+                    `;
                     subcategoryContainer.appendChild(subcategoryAccordion);
 
                     const tbody = document.getElementById(`subcategoryBody${categoryIndex}${subcategoryIndex}`);
@@ -381,7 +502,8 @@
                             <td class="tresMeses">$${(producto.pvc * 1.40).toFixed(2)}</td>
                             <td class="seisMeses">$${(producto.pvc * 1.60).toFixed(2)}</td>
                             <td class="doceMeses">$${(producto.pvc * 1.80).toFixed(2)}</td>
-                            <td><span class="select-product" onclick="selectProduct(this)">Seleccionar</span></td>`;
+                            <td><span class="select-product" onclick="selectProduct(this)">Seleccionar</span></td>
+                        `;
                         tbody.appendChild(tr);
                     });
                 });
@@ -394,32 +516,61 @@
             const pvc = parseFloat(row.querySelector('.pvc').textContent.replace('$', ''));
             document.getElementById('productSelected').value = productName;
             document.getElementById('productSelectedType').textContent = productName;
+
             pvcSelected = pvc;
+
             const accordionItem = element.closest('.accordion-collapse');
             const collapseInstance = bootstrap.Collapse.getOrCreateInstance(accordionItem);
             collapseInstance.hide();
+
             document.getElementById('calculatorForm').scrollIntoView({ behavior: 'smooth' });
         }
 
         function calculateInstallments() {
-            const downPaymentType = document.getElementById('downPaymentType').value;
+            const downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
             const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
-            const downPaymentPercentage = months <= 6 ? 20 : 30;
-            document.getElementById('downPaymentPercentage').value = downPaymentPercentage;
+            const discountPercentage = parseFloat(document.getElementById('discount').value);
+            const convenio = document.querySelector('input[name="convenio"]:checked').value;
+            let creditPrice = 0;
 
-            let downPaymentAmount = downPaymentType === 'percentage' ? (pvcSelected * downPaymentPercentage) / 100 : downPaymentPercentage;
-            document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
+            if (months <= 3) {
+                creditPrice = pvcSelected * (1 + (0.25 + ((months - 1) * 0.075)));
+            } else if (months > 3 && months <= 6) {
+                creditPrice = pvcSelected * (1.40 + ((months - 4) * 0.10));
+            } else if (months > 6 && months <= 12) {
+                creditPrice = pvcSelected * (1.61 + ((months - 7) * 0.065));
+                if (creditPrice > pvcSelected * 1.80) {
+                    creditPrice = pvcSelected * 1.80;
+                }
+            }
 
-            let creditPrice = pvcSelected * (1 + 0.25 + ((months - 1) * 0.075));
+            let discountAmount = 0;
+            if (discountPercentage > 0) {
+                discountAmount = (creditPrice * discountPercentage) / 100;
+                creditPrice -= discountAmount;
+            }
+
+            const downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
             const financedAmount = creditPrice - downPaymentAmount;
-            const interestRate = 0.05;
-            const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months));
+            const interestRate = 0.05; // 5% de tasa de interés mensual
+            const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months)); // Fórmula corregida
 
+            // Cálculo de ganancia
+            const totalPaid = (monthlyPayment * months) + downPaymentAmount; // Incluye la entrada
+            const cashPrice = pvcSelected * 1.20; // Asumimos que el precio de contado es 120% del PVC
+            const gain = totalPaid - cashPrice;
+
+            // Actualización de resultados en el simulador
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
+            document.getElementById('discountResult').textContent = `$${discountAmount.toFixed(2)}`;
             document.getElementById('financedAmountResult').textContent = `$${financedAmount.toFixed(2)}`;
             document.getElementById('monthlyPaymentResult').textContent = `$${monthlyPayment.toFixed(2)}`;
+            document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
+            document.getElementById('cashPriceResult').textContent = `$${cashPrice.toFixed(2)}`; // Mostrar precio de contado
+            document.getElementById('gainResult').textContent = `$${gain.toFixed(2)}`;
 
+            // Generar tabla de amortización
             generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment);
         }
 
@@ -433,20 +584,30 @@
             document.getElementById('financingTimeResult').textContent = '';
             document.getElementById('discountResult').textContent = '$0.00';
             document.getElementById('gainResult').textContent = '$0.00';
-            document.getElementById('cashPriceResult').textContent = '$0.00';
+            document.getElementById('cashPriceResult').textContent = '$0.00'; // Reiniciar precio de contado
             document.getElementById('amortizationTableBody').innerHTML = '';
         }
 
         function generateAmortizationTable(principal, interestRate, months, monthlyPayment) {
             let tableBody = document.getElementById('amortizationTableBody');
-            tableBody.innerHTML = '';
+            tableBody.innerHTML = ''; // Limpiar la tabla antes de agregar nuevas filas
             let remainingBalance = principal;
 
             for (let i = 1; i <= months; i++) {
                 const interest = remainingBalance * interestRate;
                 const capital = monthlyPayment - interest;
                 remainingBalance -= capital;
-                let row = `<tr><td>${i}</td><td>${monthlyPayment.toFixed(2)}</td><td>${capital.toFixed(2)}</td><td>${interest.toFixed(2)}</td><td>${remainingBalance.toFixed(2)}</td></tr>`;
+
+                // Crear una fila con los valores de cada mes
+                let row = `<tr>
+                    <td>${i}</td>
+                    <td>${monthlyPayment.toFixed(2)}</td>
+                    <td>${capital.toFixed(2)}</td>
+                    <td>${interest.toFixed(2)}</td>
+                    <td>${remainingBalance.toFixed(2)}</td>
+                </tr>`;
+
+                // Añadir la fila a la tabla
                 tableBody.innerHTML += row;
             }
         }
