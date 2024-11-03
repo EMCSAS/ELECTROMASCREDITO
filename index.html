@@ -607,11 +607,12 @@
             let totalCapital = 0, totalInterest = 0;
 
             for (let i = 1; i <= months; i++) {
-                const capital = monthlyPayment;
-                const interest = 0;
+                const capital = principal / months;
+                const interest = monthlyPayment - capital;
                 remainingBalance -= capital;
 
                 totalCapital += capital;
+                totalInterest += interest;
 
                 let row = `<tr>
                     <td>${i}</td>
