@@ -284,20 +284,20 @@
         <!-- Formulario del simulador -->
         <form id="calculatorForm">
             <div class="mb-3">
-                <label for="productSelected" class="form-label">Producto Seleccionado:</label>
+                <label for="productSelected" class="form-label">Producto seleccionado:</label>
                 <input type="text" class="form-control" id="productSelected" readonly>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Tipo de Cliente:</label>
+                <label class="form-label">Cliente:</label>
                 <div class="radio-options">
-                    <label><input type="radio" name="convenio" value="convenio"> Convenio</label>
-                    <label><input type="radio" name="convenio" value="no-convenio"> No Convenio</label>
+                    <label><input type="radio" name="convenio" value="convenio"> Con convenio</label>
+                    <label><input type="radio" name="convenio" value="no-convenio"> Sin convenio</label>
                 </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Número de Cuotas:</label>
+                <label class="form-label">Número de cuotas:</label>
                 <div id="installmentMonths" class="radio-options">
                     <label><input type="radio" name="cuotas" value="1"> 1</label>
                     <label><input type="radio" name="cuotas" value="2"> 2</label>
@@ -319,7 +319,7 @@
                 <input type="number" class="form-control" id="downPaymentPercentage" value="0" min="0" max="100">
             </div>
             <div class="mb-3">
-                <label for="discount" class="form-label">Descuento por Cliente (%):</label>
+                <label for="discount" class="form-label">Descuento cliente (%):</label>
                 <input type="number" class="form-control" id="discount" value="0" required>
             </div>
             <button type="button" class="btn-custom" onclick="calculateInstallments()">Calcular Cuotas</button>
