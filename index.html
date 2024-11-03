@@ -171,25 +171,6 @@
             transform: scale(1.05);
         }
 
-        .btn-whatsapp {
-            background-color: #25D366;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-            font-size: 16px;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-whatsapp:hover {
-            background-color: #20b857;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transform: scale(1.05);
-        }
-
         .phone-input-container {
             background-color: #fff;
             color: #333;
@@ -212,6 +193,25 @@
             padding: 5px 10px;
             border-radius: 5px;
             outline: none;
+        }
+
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #20b857;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
         }
 
         .radio-options label {
@@ -356,8 +356,6 @@
                     </tr>
                 </tbody>
             </table>
-
-            <button class="btn-whatsapp" onclick="sendWhatsApp()">Enviar por WhatsApp</button>
 
             <h2 class="text-center mt-5" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Tabla de Amortización</h2>
             <table class="table table-bordered amortization-table">
@@ -601,28 +599,6 @@
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
             generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment);
-        }
-
-        function sendWhatsApp() {
-            const productType = document.getElementById('productSelectedType').textContent;
-            const cashPrice = document.getElementById('cashPriceResult').textContent;
-            const creditPrice = document.getElementById('creditPriceResult').textContent;
-            const downPayment = document.getElementById('downPaymentAmountResult').textContent;
-            const financedAmount = document.getElementById('financedAmountResult').textContent;
-            const monthlyPayment = document.getElementById('monthlyPaymentResult').textContent;
-            const financingTime = document.getElementById('financingTimeResult').textContent;
-
-            const message = `Cotización de Electromáscrédito:%0A%0A` +
-                            `Producto: ${productType}%0A` +
-                            `Precio de contado: ${cashPrice}%0A` +
-                            `Precio a crédito: ${creditPrice}%0A` +
-                            `Entrada: ${downPayment}%0A` +
-                            `Valor financiado: ${financedAmount}%0A` +
-                            `Cuota mensual: ${monthlyPayment}%0A` +
-                            `Tiempo de financiamiento: ${financingTime}`;
-
-            const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
         }
 
         function generateAmortizationTable(principal, interestRate, months, monthlyPayment) {
