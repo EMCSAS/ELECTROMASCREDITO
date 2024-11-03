@@ -259,12 +259,6 @@
             text-align: center;
         }
 
-        /* Estilo adicional para la ganancia */
-        .gain-row {
-            background-color: #000080; /* Azul marino */
-            color: white;
-        }
-
     </style>
 </head>
 <body>
@@ -327,7 +321,7 @@
         </form>
 
         <div class="mt-4">
-            <!-- SIMULADOR -->
+            <!-- Tabla de resultados -->
             <table class="table table-bordered small-table">
                 <tbody>
                     <tr>
@@ -556,11 +550,6 @@
             const interestRate = 0.05; // 5% de tasa de interés mensual
             const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months)); // Fórmula corregida
 
-            // Cálculo de ganancia
-            const totalPaid = (monthlyPayment * months) + downPaymentAmount; // Incluye la entrada
-            const cashPrice = pvcSelected * 1.20; // Asumimos que el precio de contado es 120% del PVC
-            const gain = totalPaid - cashPrice;
-
             // Actualización de resultados en el simulador
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
             document.getElementById('discountResult').textContent = `$${discountAmount.toFixed(2)}`;
@@ -568,8 +557,7 @@
             document.getElementById('monthlyPaymentResult').textContent = `$${monthlyPayment.toFixed(2)}`;
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
-            document.getElementById('cashPriceResult').textContent = `$${cashPrice.toFixed(2)}`; // Mostrar precio de contado
-            document.getElementById('gainResult').textContent = `$${gain.toFixed(2)}`;
+            document.getElementById('cashPriceResult').textContent = `$${(pvcSelected * 1.20).toFixed(2)}`; // Mostrar precio de contado
 
             // Generar tabla de amortización
             generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment);
@@ -584,7 +572,6 @@
             document.getElementById('downPaymentAmountResult').textContent = '$0.00';
             document.getElementById('financingTimeResult').textContent = '';
             document.getElementById('discountResult').textContent = '$0.00';
-            document.getElementById('gainResult').textContent = '$0.00';
             document.getElementById('cashPriceResult').textContent = '$0.00'; // Reiniciar precio de contado
             document.getElementById('amortizationTableBody').innerHTML = '';
         }
