@@ -532,11 +532,20 @@
             // Precio contado (multiplica PVC por 1.20)
             let cashPrice = pvcSelected * 1.20;
 
-            // Precio a crédito (según número de cuotas)
-            let months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
-            let creditMultiplier = 1.20 + (months - 1) * 0.06;
-            let creditPrice = pvcSelected * creditMultiplier;
+            // Precio a crédito con condiciones de multiplicador para 3, 6 y 12 meses
+            const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
+            let creditMultiplier;
+            if (months === 3) {
+                creditMultiplier = 1.40;
+            } else if (months === 6) {
+                creditMultiplier = 1.60;
+            } else if (months === 12) {
+                creditMultiplier = 1.80;
+            } else {
+                creditMultiplier = 1.20 + (months - 1) * 0.06;
+            }
 
+            let creditPrice = pvcSelected * creditMultiplier;
             let downPaymentPercentage = 0;
 
             if (selectedType === 'porcentaje') {
@@ -547,10 +556,10 @@
                 downPaymentPercentage = (downPaymentAmount / creditPrice) * 100;
             }
 
-            // Aplicación de condiciones adicionales
+            // Aplicación de condiciones adicionales para ajustar el precio según el porcentaje de entrada
             if (convenio === "no-convenio") {
                 if (downPaymentPercentage === 0) {
-                    creditPrice *= 1.05;
+                    creditPrice *= 1.10;
                 } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 8) {
                     creditPrice *= (1 + (8 - downPaymentPercentage) / 100);
                 } else if (downPaymentPercentage > 8 && downPaymentPercentage <= 11) {
@@ -559,9 +568,16 @@
                     creditPrice *= (1 - (downPaymentPercentage - 11) * 0.05 / 19);
                 } else if (downPaymentPercentage > 30 && downPaymentPercentage <= 50) {
                     creditPrice *= (1 - (downPaymentPercentage - 31) * 0.048 / 19);
-                } else if (downPaymentPercentage > 50 && downPaymentPercentage <= 99) {
+                } else if (downPaymentPercentage > 50 && downPaymentPercentage <= 90) {
                     creditPrice *= (1 - (downPaymentPercentage - 51) * 0.089 / 39);
                 }
+            }
+
+            // Ajustes finales para asegurar condiciones mínimas
+            if (creditPrice < cashPrice) {
+                creditPrice = cashPrice; // Asegura que el crédito no sea menor al precio contado
+            } else if (creditPrice < cashPrice * 1.05) {
+                creditPrice = cashPrice * 1.05; // Asegura un mínimo de 5% sobre el contado
             }
 
             const financedAmount = creditPrice - downPaymentAmount;
