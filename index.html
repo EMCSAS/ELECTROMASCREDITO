@@ -190,6 +190,53 @@
             transform: scale(1.05);
         }
 
+        .phone-input-container {
+            background-color: #fff;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            width: fit-content;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .phone-input-container label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        .phone-input-container input {
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .radio-options label {
+            margin-right: 20px;
+        }
+
+        tr:hover {
+            background-color: #f7f7f7;
+        }
+
+        tr.selected {
+            background-color: #f39c12;
+            color: #fff;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f39c12;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .phone-input-container input:hover {
+            border-color: #f39c12;
+        }
+
         footer {
             text-align: center;
             margin-top: 20px;
@@ -480,15 +527,80 @@
         }
 
         function calculateInstallments() {
-            // Código existente para calcular las cuotas y mostrar resultados en la tabla
+            const convenio = document.querySelector('input[name="convenio"]:checked').value;
+            const selectedType = document.querySelector('input[name="entradaTipo"]:checked').value;
+            let downPaymentAmount = 0;
 
-            // Actualiza los resultados en los campos
+            // Precio contado (multiplica PVC por 1.20)
+            let cashPrice = pvcSelected * 1.20;
+
+            // Precio a crédito con condiciones de multiplicador para 3, 6 y 12 meses
+            const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
+            let creditMultiplier;
+            if (months === 3) {
+                creditMultiplier = 1.40;
+            } else if (months === 6) {
+                creditMultiplier = 1.60;
+            } else if (months === 12) {
+                creditMultiplier = 1.80;
+            } else {
+                creditMultiplier = 1.20 + (months - 1) * 0.06;
+            }
+
+            let creditPrice = pvcSelected * creditMultiplier;
+            let downPaymentPercentage = 0;
+
+            if (selectedType === 'porcentaje') {
+                downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
+                downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
+            } else {
+                downPaymentAmount = parseFloat(document.getElementById('downPaymentAmount').value);
+                downPaymentPercentage = (downPaymentAmount / creditPrice) * 100;
+            }
+
+            // Aplicación de recargos y descuentos según condiciones de entrada y convenio
+            if (convenio === "no-convenio") {
+                if (downPaymentPercentage === 0) {
+                    creditPrice *= 1.08; // Aumenta el precio en un 8% si no hay entrada
+                } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 8) {
+                    creditPrice *= (1 + downPaymentPercentage / 100); // Recargo proporcional de 1% a 8%
+                } else if (downPaymentPercentage >= 8.1 && downPaymentPercentage <= 11) {
+                    creditPrice = creditPrice; // No se aplica recargo
+                }
+            }
+
+            // Aplicación de descuentos según el número de cuotas
+            let maxDiscount = 0;
+            if (months <= 3) {
+                maxDiscount = 0.10;
+            } else if (months <= 6) {
+                maxDiscount = 0.20;
+            } else if (months <= 12) {
+                maxDiscount = 0.40;
+            }
+
+            if (convenio === "no-convenio" && downPaymentPercentage > 10) {
+                const appliedDiscount = maxDiscount * ((downPaymentPercentage - 10) / 89); 
+                creditPrice *= (1 - Math.min(appliedDiscount, maxDiscount));
+            }
+
+            // Asegura que el crédito no sea menor al 110% del contado
+            if (creditPrice < cashPrice * 1.10) {
+                creditPrice = cashPrice * 1.10;
+            }
+
+            const financedAmount = creditPrice - downPaymentAmount;
+            const interestRate = 0.05;
+            const monthlyPayment = (financedAmount * interestRate) / (1 - Math.pow(1 + interestRate, -months));
+
             document.getElementById('cashPriceResult').textContent = `$${cashPrice.toFixed(2)}`;
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
             document.getElementById('financedAmountResult').textContent = `$${financedAmount.toFixed(2)}`;
             document.getElementById('monthlyPaymentResult').textContent = `$${monthlyPayment.toFixed(2)}`;
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
+
+            generateAmortizationTable(financedAmount, interestRate, months, monthlyPayment);
         }
 
         function sendWhatsApp() {
@@ -512,7 +624,29 @@
             const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
         }
-        
+
+        function generateAmortizationTable(principal, interestRate, months, monthlyPayment) {
+            let tableBody = document.getElementById('amortizationTableBody');
+            tableBody.innerHTML = '';
+            let remainingBalance = principal;
+
+            for (let i = 1; i <= months; i++) {
+                const interest = remainingBalance * interestRate;
+                const capital = monthlyPayment - interest;
+                remainingBalance -= capital;
+
+                let row = `<tr>
+                    <td>${i}</td>
+                    <td>${monthlyPayment.toFixed(2)}</td>
+                    <td>${capital.toFixed(2)}</td>
+                    <td>${interest.toFixed(2)}</td>
+                    <td>${remainingBalance.toFixed(2)}</td>
+                </tr>`;
+
+                tableBody.innerHTML += row;
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             loadCSV('./precio.csv');
         });
