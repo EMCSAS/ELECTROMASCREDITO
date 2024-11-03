@@ -556,6 +556,17 @@
                 downPaymentPercentage = (downPaymentAmount / creditPrice) * 100;
             }
 
+            // Aplicación de recargos y descuentos según condiciones de entrada y convenio
+            if (convenio === "no-convenio") {
+                if (downPaymentPercentage === 0) {
+                    creditPrice *= 1.08; // Aumenta el precio en un 8% si no hay entrada
+                } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 8) {
+                    creditPrice *= (1 + downPaymentPercentage / 100); // Recargo proporcional de 1% a 8%
+                } else if (downPaymentPercentage >= 8.1 && downPaymentPercentage <= 11) {
+                    creditPrice = creditPrice; // No se aplica recargo
+                }
+            }
+
             // Aplicación de descuentos según el número de cuotas
             let maxDiscount = 0;
             if (months <= 3) {
@@ -566,12 +577,9 @@
                 maxDiscount = 0.40;
             }
 
-            // Ajuste del precio según el descuento
-            if (convenio === "no-convenio") {
-                if (downPaymentPercentage > 10) {
-                    const appliedDiscount = maxDiscount * ((downPaymentPercentage - 10) / 89); // Proporcional al porcentaje de entrada
-                    creditPrice *= (1 - Math.min(appliedDiscount, maxDiscount));
-                }
+            if (convenio === "no-convenio" && downPaymentPercentage > 10) {
+                const appliedDiscount = maxDiscount * ((downPaymentPercentage - 10) / 89); 
+                creditPrice *= (1 - Math.min(appliedDiscount, maxDiscount));
             }
 
             // Asegura que el crédito no sea menor al 110% del contado
