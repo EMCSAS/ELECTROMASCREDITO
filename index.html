@@ -26,8 +26,8 @@
         .bubble2 { background-color: rgba(52, 152, 219, 0.7); width: 350px; height: 350px; top: 5%; right: 15%; }
         .bubble3 { background-color: rgba(46, 204, 113, 0.7); width: 300px; height: 300px; top: 50%; left: 5%; }
         .bubble4 { background-color: rgba(155, 89, 182, 0.7); width: 280px; height: 280px; bottom: 10%; right: 10%; }
-        
-        /* Barra de título naranja ocupando todo el ancho */
+
+        /* Barra de título */
         .navbar {
             background-color: #f39c12;
             color: #fff;
@@ -39,7 +39,7 @@
             margin: 50px 0;
         }
         
-        /* Título Bienvenido centrado */
+        /* Título Bienvenido */
         .navbar h1 {
             font-family: 'Georgia', serif;
             font-size: 3rem;
@@ -90,66 +90,6 @@
             text-align: center;
         }
         
-        .accordion-button:not(.collapsed) {
-            background-color: #f39c12;
-            color: #fff;
-        }
-        
-        .accordion-button.collapsed:hover {
-            background-color: #e67e22;
-        }
-        
-        .accordion-body {
-            transition: all 0.3s ease;
-        }
-        
-        #calculatorResult {
-            font-weight: bold;
-            color: #f39c12;
-        }
-        
-        /* Ocultar columnas de precios */
-        .table .contado, .table .tresMeses, .table .seisMeses, .table .doceMeses {
-            display: none;
-        }
-        
-        /* Estilo de productos seleccionables */
-        .select-product {
-            cursor: pointer;
-            color: #f39c12;
-            text-decoration: underline;
-            transition: color 0.3s ease, text-shadow 0.3s ease;
-        }
-        
-        .select-product:hover {
-            color: #e67e22;
-            text-shadow: 0px 0px 8px #e67e22;
-        }
-        
-        .small-table {
-            font-size: 1rem;
-            width: 60%;
-            margin: 0 auto;
-        }
-        
-        .small-table th, .small-table td {
-            padding: 5px;
-        }
-        
-        .small-table td:first-child {
-            white-space: nowrap;
-            width: 30%;
-        }
-        
-        .small-table td:nth-child(2) {
-            text-align: left;
-        }
-        
-        .discount-row {
-            background-color: #28a745;
-            color: #fff;
-        }
-        
         /* Botón personalizado */
         .btn-custom {
             background-color: #f39c12;
@@ -180,19 +120,7 @@
             width: fit-content;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        
-        .phone-input-container label {
-            margin-right: 10px;
-            font-weight: bold;
-        }
-        
-        .phone-input-container input {
-            border: 1px solid #ccc;
-            padding: 5px 10px;
-            border-radius: 5px;
-            outline: none;
-        }
-        
+
         .btn-whatsapp {
             background-color: #25D366;
             color: white;
@@ -211,30 +139,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             transform: scale(1.05);
         }
-        
-        .radio-options label {
-            margin-right: 20px;
-        }
-        
-        tr:hover {
-            background-color: #f7f7f7;
-        }
-        
-        tr.selected {
-            background-color: #f39c12;
-            color: #fff;
-        }
-        
-        .table tbody tr:hover {
-            background-color: #f39c12;
-            color: #fff;
-            transition: all 0.3s ease;
-        }
-        
-        .phone-input-container input:hover {
-            border-color: #f39c12;
-        }
-        
+
         footer {
             text-align: center;
             margin-top: 20px;
@@ -244,11 +149,7 @@
         footer p {
             margin: 0;
         }
-        
-        .amortization-table {
-            margin-top: 30px;
-        }
-        
+
         .amortization-table th, .amortization-table td {
             padding: 10px;
             text-align: center;
@@ -270,50 +171,6 @@
             <div class="mb-3">
                 <label for="productSelected" class="form-label">Producto seleccionado:</label>
                 <input type="text" class="form-control" id="productSelected" readonly>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Cliente:</label>
-                <div class="radio-options">
-                    <label><input type="radio" name="convenio" value="convenio"> Con convenio</label>
-                    <label><input type="radio" name="convenio" value="no-convenio"> Sin convenio</label>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Número de cuotas:</label>
-                <div id="installmentMonths" class="radio-options">
-                    <label><input type="radio" name="cuotas" value="1"> 1</label>
-                    <label><input type="radio" name="cuotas" value="2"> 2</label>
-                    <label><input type="radio" name="cuotas" value="3"> 3</label>
-                    <label><input type="radio" name="cuotas" value="4"> 4</label>
-                    <label><input type="radio" name="cuotas" value="5"> 5</label>
-                    <label><input type="radio" name="cuotas" value="6"> 6</label>
-                    <label><input type="radio" name="cuotas" value="7"> 7</label>
-                    <label><input type="radio" name="cuotas" value="8"> 8</label>
-                    <label><input type="radio" name="cuotas" value="9"> 9</label>
-                    <label><input type="radio" name="cuotas" value="10"> 10</label>
-                    <label><input type="radio" name="cuotas" value="11"> 11</label>
-                    <label><input type="radio" name="cuotas" value="12"> 12</label>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Tipo de entrada:</label>
-                <div class="radio-options">
-                    <label><input type="radio" name="entradaTipo" value="porcentaje" onclick="toggleDownPaymentFields()"> Porcentaje</label>
-                    <label><input type="radio" name="entradaTipo" value="efectivo" onclick="toggleDownPaymentFields()"> Monto en efectivo</label>
-                </div>
-            </div>
-
-            <div class="mb-3" id="percentageField" style="display:none;">
-                <label for="downPaymentPercentage" class="form-label">Entrada (%):</label>
-                <input type="number" class="form-control" id="downPaymentPercentage" value="0" min="0" max="100">
-            </div>
-
-            <div class="mb-3" id="amountField" style="display:none;">
-                <label for="downPaymentAmount" class="form-label">Entrada (monto en efectivo):</label>
-                <input type="number" class="form-control" id="downPaymentAmount" value="0" min="0">
             </div>
 
             <button type="button" class="btn-custom" onclick="calculateInstallments()">Calcular cuotas</button>
@@ -359,7 +216,7 @@
                 <label for="phoneNumber">Número de teléfono:</label>
                 <input type="tel" id="phoneNumber" placeholder="Ej. +593012345678" required>
             </div>
-            <a href="#" id="whatsappLink" class="btn-whatsapp" target="_blank">Enviar por WhatsApp</a>
+            <a href="#" id="whatsappLink" class="btn-whatsapp">Enviar por WhatsApp</a>
 
             <h2 class="text-center mt-5" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Tabla de Amortización</h2>
             <table class="table table-bordered amortization-table">
@@ -528,21 +385,6 @@
             }
         }
 
-        function resetForm() {
-            document.getElementById("calculatorForm").reset(); // Resetea los valores del formulario
-            document.getElementById("productSelected").value = "";
-            document.getElementById("productSelectedType").textContent = "";
-            document.getElementById("cashPriceResult").textContent = "$0.00";
-            document.getElementById("creditPriceResult").textContent = "$0.00";
-            document.getElementById("financedAmountResult").textContent = "$0.00";
-            document.getElementById("monthlyPaymentResult").textContent = "$0.00";
-            document.getElementById("downPaymentAmountResult").textContent = "$0.00";
-            document.getElementById("financingTimeResult").textContent = "";
-            document.getElementById("phoneNumber").value = "";
-            document.getElementById("whatsappLink").href = "#";
-            document.getElementById("amortizationTableBody").innerHTML = ""; // Limpia la tabla de amortización
-        }
-
         function calculateInstallments() {
             const convenio = document.querySelector('input[name="convenio"]:checked').value;
             const selectedType = document.querySelector('input[name="entradaTipo"]:checked').value;
@@ -581,22 +423,16 @@
             }
 
             let maxDiscount = 0;
-            if (months <= 3) {
-                maxDiscount = 0.5;
-            } else if (months <= 6) {
-                maxDiscount = 0.10;
-            } else if (months <= 12) {
-                maxDiscount = 0.15;
-            }
+            if (months <= 3) maxDiscount = 0.5;
+            else if (months <= 6) maxDiscount = 0.10;
+            else if (months <= 12) maxDiscount = 0.15;
 
             if (convenio === "no-convenio" && downPaymentPercentage > 10) {
                 const appliedDiscount = maxDiscount * ((downPaymentPercentage - 10) / 89); 
                 creditPrice *= (1 - Math.min(appliedDiscount, maxDiscount));
             }
 
-            if (creditPrice < cashPrice * 1.10) {
-                creditPrice = cashPrice * 1.10;
-            }
+            if (creditPrice < cashPrice * 1.10) creditPrice = cashPrice * 1.10;
 
             const financedAmount = creditPrice - downPaymentAmount;
             const monthlyPayment = financedAmount / months;
@@ -608,7 +444,7 @@
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
-            const phoneNumber = document.getElementById("phoneNumber").value;
+            const phoneNumber = document.getElementById("phoneNumber").value.replace(/[^0-9]/g, ''); 
             const whatsappMessage = `Estimado cliente la cotización para el producto ${document.getElementById('productSelected').value} es:\n
             Precio de contado: ${document.getElementById('cashPriceResult').textContent}\n
             Precio a crédito: ${document.getElementById('creditPriceResult').textContent}\n
@@ -626,6 +462,14 @@
             tableBody.innerHTML = '';
             let remainingBalance = financedAmount;
             let capitalIncremental = pvcSelected / months;
+
+            tableBody.innerHTML += `<tr>
+                <td>0</td>
+                <td>-</td>
+                <td>${downPaymentAmount.toFixed(2)}</td>
+                <td>-</td>
+                <td>${(remainingBalance + downPaymentAmount).toFixed(2)}</td>
+            </tr>`;
 
             for (let i = 1; i <= months; i++) {
                 let capitalPayment = capitalIncremental * i;
