@@ -318,13 +318,6 @@
 
             <button type="button" class="btn-custom" onclick="calculateInstallments()">Calcular cuotas</button>
             <button type="button" class="btn-custom" onclick="resetForm()">Nueva consulta</button>
-
-            <!-- Agregamos el campo de teléfono y botón de WhatsApp en el formulario del cotizador -->
-            <div class="phone-input-container">
-                <label for="phoneNumber">Número de teléfono:</label>
-                <input type="tel" id="phoneNumber" placeholder="Ej. +521234567890" required>
-            </div>
-            <a href="#" id="whatsappLink" class="btn-whatsapp">Enviar por WhatsApp</a>
         </form>
 
         <div class="mt-4">
@@ -361,6 +354,12 @@
                     </tr>
                 </tbody>
             </table>
+
+            <div class="phone-input-container">
+                <label for="phoneNumber">Número de teléfono:</label>
+                <input type="tel" id="phoneNumber" placeholder="Ej. +593012345678" required>
+            </div>
+            <a href="#" id="whatsappLink" class="btn-whatsapp">Enviar por WhatsApp</a>
 
             <h2 class="text-center mt-5" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Tabla de Amortización</h2>
             <table class="table table-bordered amortization-table">
