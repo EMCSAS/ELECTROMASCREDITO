@@ -169,49 +169,6 @@
             transform: scale(1.05);
         }
         
-        .phone-input-container {
-            background-color: #fff;
-            color: #333;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            width: fit-content;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        
-        .phone-input-container label {
-            margin-right: 10px;
-            font-weight: bold;
-        }
-        
-        .phone-input-container input {
-            border: 1px solid #ccc;
-            padding: 5px 10px;
-            border-radius: 5px;
-            outline: none;
-        }
-        
-        .btn-whatsapp {
-            background-color: #25D366;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-            font-size: 16px;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-whatsapp:hover {
-            background-color: #20b857;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transform: scale(1.05);
-        }
-        
         .radio-options label {
             margin-right: 20px;
         }
@@ -229,10 +186,6 @@
             background-color: #f39c12;
             color: #fff;
             transition: all 0.3s ease;
-        }
-        
-        .phone-input-container input:hover {
-            border-color: #f39c12;
         }
         
         footer {
@@ -354,12 +307,6 @@
                     </tr>
                 </tbody>
             </table>
-
-            <div class="phone-input-container">
-                <label for="phoneNumber">Número de teléfono:</label>
-                <input type="tel" id="phoneNumber" placeholder="Ej. +593012345678" required>
-            </div>
-            <a href="#" id="whatsappLink" class="btn-whatsapp">Enviar por WhatsApp</a>
 
             <h2 class="text-center mt-5" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Tabla de Amortización</h2>
             <table class="table table-bordered amortization-table">
@@ -601,17 +548,6 @@
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
-            // URL para WhatsApp con el mensaje de cotización
-            const phoneNumber = document.getElementById("phoneNumber").value;
-            const whatsappMessage = `Estimado cliente la cotización para el producto ${document.getElementById('productSelected').value} es:\n
-            Precio de contado: ${document.getElementById('cashPriceResult').textContent}\n
-            Precio a crédito: ${document.getElementById('creditPriceResult').textContent}\n
-            Entrada: ${document.getElementById('downPaymentAmountResult').textContent}\n
-            Cuota mensual: ${document.getElementById('monthlyPaymentResult').textContent}\n
-            Tiempo de financiamiento: ${document.getElementById('financingTimeResult').textContent}\n`;
-
-            document.getElementById("whatsappLink").href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
-
             generateAmortizationTable(financedAmount, months, monthlyPayment, downPaymentAmount);
         }
 
@@ -656,6 +592,20 @@
         document.addEventListener("DOMContentLoaded", function() {
             loadCSV('./precio.csv');
         });
+        
+        // Función para reiniciar el formulario
+        function resetForm() {
+            document.getElementById("calculatorForm").reset();
+            document.getElementById("productSelected").value = "";
+            document.getElementById("productSelectedType").textContent = "";
+            document.getElementById("cashPriceResult").textContent = "$0.00";
+            document.getElementById("creditPriceResult").textContent = "$0.00";
+            document.getElementById("downPaymentAmountResult").textContent = "$0.00";
+            document.getElementById("financedAmountResult").textContent = "$0.00";
+            document.getElementById("monthlyPaymentResult").textContent = "$0.00";
+            document.getElementById("financingTimeResult").textContent = "";
+            document.getElementById("amortizationTableBody").innerHTML = "";
+        }
     </script>
 </body>
 </html>
