@@ -619,9 +619,9 @@
             let tableBody = document.getElementById('amortizationTableBody');
             tableBody.innerHTML = '';
             let remainingBalance = financedAmount;
-            let capitalIncremental = pvcSelected / months;
-            let interestDecremental = (monthlyPayment - capitalIncremental) / months;
+            let capitalIncremental = financedAmount / months;
 
+            // Entrada inicial
             tableBody.innerHTML += `<tr>
                 <td>0</td>
                 <td>-</td>
@@ -630,27 +630,31 @@
                 <td>${(remainingBalance + downPaymentAmount).toFixed(2)}</td>
             </tr>`;
 
+            // Calculo de cada mes
             for (let i = 1; i <= months; i++) {
-                let capitalPayment = capitalIncremental * i;
-                let interestPayment = Math.max(monthlyPayment - capitalPayment, interestDecremental * (months - i + 1));
+                let interestPayment = (remainingBalance * 0.05).toFixed(2); // 5% asumido como interés
+                let capitalPayment = monthlyPayment - interestPayment;
                 remainingBalance -= capitalPayment;
 
-                let row = `<tr>
+                tableBody.innerHTML += `<tr>
                     <td>${i}</td>
                     <td>${monthlyPayment.toFixed(2)}</td>
                     <td>${capitalPayment.toFixed(2)}</td>
-                    <td>${interestPayment.toFixed(2)}</td>
+                    <td>${interestPayment}</td>
                     <td>${remainingBalance.toFixed(2)}</td>
                 </tr>`;
-                tableBody.innerHTML += row;
             }
-            tableBody.innerHTML += `<tr style="font-weight: bold;">
-                <td>Total</td>
-                <td>${(monthlyPayment * months).toFixed(2)}</td>
-                <td>${(capitalIncremental * months).toFixed(2)}</td>
-                <td>${((monthlyPayment - capitalIncremental) * months).toFixed(2)}</td>
-                <td>-</td>
-            </tr>`;
+        }
+
+        // Lógica adicional para calcular valores y desplegar tabla
+        function calculateInstallments() {
+            // Lógica para calcular financedAmount, months, y monthlyPayment
+            let financedAmount = 200;  // Ejemplo
+            let months = 3;  // Ejemplo
+            let monthlyPayment = financedAmount / months;
+
+            // Llamar a la función de generación de tabla
+            generateAmortizationTable(financedAmount, months, monthlyPayment, 0);
         }
 
         document.addEventListener("DOMContentLoaded", function() {
