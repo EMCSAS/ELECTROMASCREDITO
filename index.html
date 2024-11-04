@@ -553,40 +553,9 @@
                 downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
             } else {
                 downPaymentAmount = parseFloat(document.getElementById('downPaymentAmount').value);
-                downPaymentPercentage = (downPaymentAmount / creditPrice) * 100;
             }
 
-            // Aplicación de recargos y descuentos según condiciones de entrada y convenio
-            if (convenio === "no-convenio") {
-                if (downPaymentPercentage === 0) {
-                    creditPrice *= 1.08; // Aumenta el precio en un 8% si no hay entrada
-                } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 8) {
-                    creditPrice *= (1 + downPaymentPercentage / 100); // Recargo proporcional de 1% a 8%
-                } else if (downPaymentPercentage >= 8.1 && downPaymentPercentage <= 11) {
-                    creditPrice = creditPrice; // No se aplica recargo
-                }
-            }
-
-            // Aplicación de descuentos según el número de cuotas
-            let maxDiscount = 0;
-            if (months <= 3) {
-                maxDiscount = 0.10;
-            } else if (months <= 6) {
-                maxDiscount = 0.20;
-            } else if (months <= 12) {
-                maxDiscount = 0.40;
-            }
-
-            if (convenio === "no-convenio" && downPaymentPercentage > 10) {
-                const appliedDiscount = maxDiscount * ((downPaymentPercentage - 10) / 89); 
-                creditPrice *= (1 - Math.min(appliedDiscount, maxDiscount));
-            }
-
-            // Asegura que el crédito no sea menor al 110% del contado
-            if (creditPrice < cashPrice * 1.10) {
-                creditPrice = cashPrice * 1.10;
-            }
-
+            // Ajustar el monto financiado restando la entrada
             const financedAmount = creditPrice - downPaymentAmount;
             const monthlyPayment = financedAmount / months;
 
@@ -604,18 +573,17 @@
             let tableBody = document.getElementById('amortizationTableBody');
             tableBody.innerHTML = '';
             let remainingBalance = financedAmount;
-
-            // Cada cuota amortiza una parte del capital (PVC dividido entre el plazo) y la diferencia es el interés
-            const capitalAmortizedPerMonth = pvcSelected / months;
+            const interestRate = 0.02;  // Suponiendo una tasa de interés mensual del 2%
 
             for (let i = 1; i <= months; i++) {
-                const interest = monthlyPayment - capitalAmortizedPerMonth;
-                remainingBalance -= capitalAmortizedPerMonth;
+                const interest = remainingBalance * interestRate;
+                const capital = monthlyPayment - interest;
+                remainingBalance -= capital;
 
                 let row = `<tr>
                     <td>${i}</td>
                     <td>${monthlyPayment.toFixed(2)}</td>
-                    <td>${capitalAmortizedPerMonth.toFixed(2)}</td>
+                    <td>${capital.toFixed(2)}</td>
                     <td>${interest.toFixed(2)}</td>
                     <td>${remainingBalance.toFixed(2)}</td>
                 </tr>`;
@@ -627,8 +595,8 @@
             tableBody.innerHTML += `<tr style="font-weight: bold;">
                 <td>Total</td>
                 <td>${(monthlyPayment * months).toFixed(2)}</td>
-                <td>${(capitalAmortizedPerMonth * months).toFixed(2)}</td>
-                <td>${((monthlyPayment - capitalAmortizedPerMonth) * months).toFixed(2)}</td>
+                <td>${(financedAmount).toFixed(2)}</td>
+                <td>${((monthlyPayment * months) - financedAmount).toFixed(2)}</td>
                 <td>-</td>
             </tr>`;
         }
