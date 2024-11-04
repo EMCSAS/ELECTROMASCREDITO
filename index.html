@@ -318,6 +318,13 @@
 
             <button type="button" class="btn-custom" onclick="calculateInstallments()">Calcular cuotas</button>
             <button type="button" class="btn-custom" onclick="resetForm()">Nueva consulta</button>
+
+            <!-- Agregamos el campo de teléfono y botón de WhatsApp en el formulario del cotizador -->
+            <div class="phone-input-container">
+                <label for="phoneNumber">Número de teléfono:</label>
+                <input type="tel" id="phoneNumber" placeholder="Ej. +521234567890" required>
+            </div>
+            <a href="#" id="whatsappLink" class="btn-whatsapp">Enviar por WhatsApp</a>
         </form>
 
         <div class="mt-4">
@@ -595,6 +602,18 @@
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
+            // URL para WhatsApp con el mensaje de cotización
+            const phoneNumber = document.getElementById("phoneNumber").value;
+            const whatsappMessage = `Hola, te envío la cotización:\n
+            Producto: ${document.getElementById('productSelected').value}\n
+            Precio de contado: ${document.getElementById('cashPriceResult').textContent}\n
+            Precio a crédito: ${document.getElementById('creditPriceResult').textContent}\n
+            Entrada: ${document.getElementById('downPaymentAmountResult').textContent}\n
+            Cuota mensual: ${document.getElementById('monthlyPaymentResult').textContent}\n
+            Tiempo de financiamiento: ${document.getElementById('financingTimeResult').textContent}\n`;
+
+            document.getElementById("whatsappLink").href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+
             generateAmortizationTable(financedAmount, months, monthlyPayment, downPaymentAmount);
         }
 
@@ -602,8 +621,9 @@
             let tableBody = document.getElementById('amortizationTableBody');
             tableBody.innerHTML = '';
             let remainingBalance = financedAmount;
+            let capitalIncremental = pvcSelected / months;
+            let interestDecremental = (monthlyPayment - capitalIncremental) / months;
 
-            // Agregar la entrada como primer registro en la tabla
             tableBody.innerHTML += `<tr>
                 <td>0</td>
                 <td>-</td>
@@ -612,30 +632,25 @@
                 <td>${(remainingBalance + downPaymentAmount).toFixed(2)}</td>
             </tr>`;
 
-            // Cada cuota amortiza una parte del capital (PVC dividido entre el plazo) y la diferencia es el interés
-            const capitalAmortizedPerMonth = pvcSelected / months;
-
             for (let i = 1; i <= months; i++) {
-                const interest = monthlyPayment - capitalAmortizedPerMonth;
-                remainingBalance -= capitalAmortizedPerMonth;
+                let capitalPayment = capitalIncremental * i;
+                let interestPayment = Math.max(monthlyPayment - capitalPayment, interestDecremental * (months - i + 1));
+                remainingBalance -= capitalPayment;
 
                 let row = `<tr>
                     <td>${i}</td>
                     <td>${monthlyPayment.toFixed(2)}</td>
-                    <td>${capitalAmortizedPerMonth.toFixed(2)}</td>
-                    <td>${interest.toFixed(2)}</td>
+                    <td>${capitalPayment.toFixed(2)}</td>
+                    <td>${interestPayment.toFixed(2)}</td>
                     <td>${remainingBalance.toFixed(2)}</td>
                 </tr>`;
-
                 tableBody.innerHTML += row;
             }
-
-            // Fila de sumatoria al final
             tableBody.innerHTML += `<tr style="font-weight: bold;">
                 <td>Total</td>
                 <td>${(monthlyPayment * months).toFixed(2)}</td>
-                <td>${(capitalAmortizedPerMonth * months).toFixed(2)}</td>
-                <td>${((monthlyPayment - capitalAmortizedPerMonth) * months).toFixed(2)}</td>
+                <td>${(capitalIncremental * months).toFixed(2)}</td>
+                <td>${((monthlyPayment - capitalIncremental) * months).toFixed(2)}</td>
                 <td>-</td>
             </tr>`;
         }
