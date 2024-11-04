@@ -568,11 +568,11 @@
             // Aplicación de descuentos según el número de cuotas
             let maxDiscount = 0;
             if (months <= 3) {
-                maxDiscount = 0.10;
+                maxDiscount = 0.5;
             } else if (months <= 6) {
-                maxDiscount = 0.20;
+                maxDiscount = 0.10;
             } else if (months <= 12) {
-                maxDiscount = 0.40;
+                maxDiscount = 0.15;
             }
 
             if (convenio === "no-convenio" && downPaymentPercentage > 10) {
