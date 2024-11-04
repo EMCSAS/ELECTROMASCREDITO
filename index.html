@@ -3,31 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de productos y Tabla de Amortización</title>
+    <title>Catálogo de productos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Estilos de la página */
+        /* Estilo general del cuerpo */
         body {
             background-color: #1b263b;
             color: #fff;
             font-family: 'Arial', sans-serif;
+            position: relative;
             margin: 0;
             padding: 0;
-            position: relative;
         }
+        /* Burbujas decorativas estáticas */
         .bubble {
             position: absolute;
             border-radius: 50%;
             z-index: 1;
             opacity: 0.3;
         }
-        /* Colores y tamaños de burbujas decorativas */
         .bubble1 { background-color: rgba(243, 156, 18, 0.7); width: 250px; height: 250px; top: 10%; left: 10%; }
         .bubble2 { background-color: rgba(52, 152, 219, 0.7); width: 350px; height: 350px; top: 5%; right: 15%; }
         .bubble3 { background-color: rgba(46, 204, 113, 0.7); width: 300px; height: 300px; top: 50%; left: 5%; }
         .bubble4 { background-color: rgba(155, 89, 182, 0.7); width: 280px; height: 280px; bottom: 10%; right: 10%; }
-
-        /* Barra de título */
+        
+        /* Barra de título naranja ocupando todo el ancho */
         .navbar {
             background-color: #f39c12;
             color: #fff;
@@ -38,12 +38,15 @@
             width: 100%;
             margin: 50px 0;
         }
+        
+        /* Título Bienvenido centrado */
         .navbar h1 {
             font-family: 'Georgia', serif;
             font-size: 3rem;
             letter-spacing: 2px;
             color: #fff;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            text-align: center;
             margin: 0;
         }
         
@@ -65,7 +68,7 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
         
-        /* Estilos de sección */
+        /* Sección del Catálogo */
         h2 {
             text-align: center;
             margin-bottom: 20px;
@@ -75,16 +78,76 @@
             font-family: 'Verdana', sans-serif;
         }
         
-        /* Estilos de tabla */
         .table {
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             overflow: hidden;
         }
+        
         .table th, .table td {
             vertical-align: middle;
             padding: 15px;
             text-align: center;
+        }
+        
+        .accordion-button:not(.collapsed) {
+            background-color: #f39c12;
+            color: #fff;
+        }
+        
+        .accordion-button.collapsed:hover {
+            background-color: #e67e22;
+        }
+        
+        .accordion-body {
+            transition: all 0.3s ease;
+        }
+        
+        #calculatorResult {
+            font-weight: bold;
+            color: #f39c12;
+        }
+        
+        /* Ocultar columnas de precios */
+        .table .contado, .table .tresMeses, .table .seisMeses, .table .doceMeses {
+            display: none;
+        }
+        
+        /* Estilo de productos seleccionables */
+        .select-product {
+            cursor: pointer;
+            color: #f39c12;
+            text-decoration: underline;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+        
+        .select-product:hover {
+            color: #e67e22;
+            text-shadow: 0px 0px 8px #e67e22;
+        }
+        
+        .small-table {
+            font-size: 1rem;
+            width: 60%;
+            margin: 0 auto;
+        }
+        
+        .small-table th, .small-table td {
+            padding: 5px;
+        }
+        
+        .small-table td:first-child {
+            white-space: nowrap;
+            width: 30%;
+        }
+        
+        .small-table td:nth-child(2) {
+            text-align: left;
+        }
+        
+        .discount-row {
+            background-color: #28a745;
+            color: #fff;
         }
         
         /* Botón personalizado */
@@ -99,13 +162,37 @@
             margin-right: 10px;
             transition: all 0.3s ease;
         }
+        
         .btn-custom:hover {
             background-color: #e67e22;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             transform: scale(1.05);
         }
         
-        /* WhatsApp button */
+        .phone-input-container {
+            background-color: #fff;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            width: fit-content;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .phone-input-container label {
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .phone-input-container input {
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            border-radius: 5px;
+            outline: none;
+        }
+        
         .btn-whatsapp {
             background-color: #25D366;
             color: white;
@@ -118,10 +205,34 @@
             margin-top: 20px;
             transition: all 0.3s ease;
         }
+        
         .btn-whatsapp:hover {
             background-color: #20b857;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             transform: scale(1.05);
+        }
+        
+        .radio-options label {
+            margin-right: 20px;
+        }
+        
+        tr:hover {
+            background-color: #f7f7f7;
+        }
+        
+        tr.selected {
+            background-color: #f39c12;
+            color: #fff;
+        }
+        
+        .table tbody tr:hover {
+            background-color: #f39c12;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        
+        .phone-input-container input:hover {
+            border-color: #f39c12;
         }
         
         footer {
@@ -129,26 +240,38 @@
             margin-top: 20px;
             color: #f39c12;
         }
+        
+        footer p {
+            margin: 0;
+        }
+        
+        .amortization-table {
+            margin-top: 30px;
+        }
+        
+        .amortization-table th, .amortization-table td {
+            padding: 10px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <!-- Barra de título -->
     <div class="navbar">
         <h1>Bienvenido a Electromáscrédito</h1>
     </div>
 
-    <!-- Contenedor del catálogo de productos -->
     <div class="container mt-5">
-        <h2>Catálogo de productos</h2>
+        <h2 class="text-center mb-4">Catálogo de productos</h2>
+        
         <div class="accordion" id="catalogoAccordion"></div>
 
-        <!-- Simulador de financiación -->
-        <h2>Simulación</h2>
+        <h2 class="text-center mt-4">Simulación</h2>
         <form id="calculatorForm">
             <div class="mb-3">
                 <label for="productSelected" class="form-label">Producto seleccionado:</label>
                 <input type="text" class="form-control" id="productSelected" readonly>
             </div>
+
             <div class="mb-3">
                 <label class="form-label">Cliente:</label>
                 <div class="radio-options">
@@ -156,70 +279,110 @@
                     <label><input type="radio" name="convenio" value="no-convenio"> Sin convenio</label>
                 </div>
             </div>
+
             <div class="mb-3">
                 <label class="form-label">Número de cuotas:</label>
                 <div id="installmentMonths" class="radio-options">
                     <label><input type="radio" name="cuotas" value="1"> 1</label>
+                    <label><input type="radio" name="cuotas" value="2"> 2</label>
+                    <label><input type="radio" name="cuotas" value="3"> 3</label>
+                    <label><input type="radio" name="cuotas" value="4"> 4</label>
+                    <label><input type="radio" name="cuotas" value="5"> 5</label>
+                    <label><input type="radio" name="cuotas" value="6"> 6</label>
+                    <label><input type="radio" name="cuotas" value="7"> 7</label>
+                    <label><input type="radio" name="cuotas" value="8"> 8</label>
+                    <label><input type="radio" name="cuotas" value="9"> 9</label>
+                    <label><input type="radio" name="cuotas" value="10"> 10</label>
+                    <label><input type="radio" name="cuotas" value="11"> 11</label>
                     <label><input type="radio" name="cuotas" value="12"> 12</label>
                 </div>
             </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tipo de entrada:</label>
+                <div class="radio-options">
+                    <label><input type="radio" name="entradaTipo" value="porcentaje" onclick="toggleDownPaymentFields()"> Porcentaje</label>
+                    <label><input type="radio" name="entradaTipo" value="efectivo" onclick="toggleDownPaymentFields()"> Monto en efectivo</label>
+                </div>
+            </div>
+
+            <div class="mb-3" id="percentageField" style="display:none;">
+                <label for="downPaymentPercentage" class="form-label">Entrada (%):</label>
+                <input type="number" class="form-control" id="downPaymentPercentage" value="0" min="0" max="100">
+            </div>
+
+            <div class="mb-3" id="amountField" style="display:none;">
+                <label for="downPaymentAmount" class="form-label">Entrada (monto en efectivo):</label>
+                <input type="number" class="form-control" id="downPaymentAmount" value="0" min="0">
+            </div>
+
             <button type="button" class="btn-custom" onclick="calculateInstallments()">Calcular cuotas</button>
+            <button type="button" class="btn-custom" onclick="resetForm()">Nueva consulta</button>
         </form>
 
-        <!-- Cotizador de financiamiento -->
         <div class="mt-4">
-            <h2>Cotizador</h2>
+            <h2 class="text-center mt-4" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Cotizador</h2>
             <table class="table table-bordered small-table">
                 <tbody>
-                    <tr><td>Tipo de producto</td><td id="productSelectedType"></td></tr>
-                    <tr><td>Precio de contado</td><td id="cashPriceResult">$0.00</td></tr>
-                    <tr><td>Precio a crédito</td><td id="creditPriceResult">$0.00</td></tr>
-                    <tr><td>Cuota mensual</td><td id="monthlyPaymentResult">$0.00</td></tr>
+                    <tr>
+                        <td>Tipo de producto</td>
+                        <td id="productSelectedType"></td>
+                    </tr>
+                    <tr>
+                        <td>Precio de contado</td>
+                        <td id="cashPriceResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Precio a crédito</td>
+                        <td id="creditPriceResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Entrada</td>
+                        <td id="downPaymentAmountResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Valor financiado</td>
+                        <td id="financedAmountResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Cuota mensual</td>
+                        <td id="monthlyPaymentResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Tiempo de financiamiento</td>
+                        <td id="financingTimeResult"></td>
+                    </tr>
                 </tbody>
             </table>
+
+            <div class="phone-input-container">
+                <label for="phoneNumber">Número de teléfono:</label>
+                <input type="tel" id="phoneNumber" placeholder="Ej. +593012345678" required>
+            </div>
             <a href="#" id="whatsappLink" class="btn-whatsapp">Enviar por WhatsApp</a>
 
-            <!-- Tabla de Amortización -->
-            <h2>Tabla de Amortización</h2>
+            <h2 class="text-center mt-5" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Tabla de Amortización</h2>
             <table class="table table-bordered amortization-table">
                 <thead>
-                    <tr><th>Mes</th><th>Cuota</th><th>Capital</th><th>Interés</th><th>Saldo Pendiente</th></tr>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Cuota</th>
+                        <th>Capital</th>
+                        <th>Interés</th>
+                        <th>Saldo Pendiente</th>
+                    </tr>
                 </thead>
                 <tbody id="amortizationTableBody"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- Generador de Tabla de Amortización -->
-    <div class="container mt-5">
-        <h2>Generador de Tabla de Amortización</h2>
-        <form id="amortizationForm">
-            <label for="precioCredito">Precio a Crédito:</label>
-            <input type="number" id="precioCredito" required><br><br>
-            <label for="entrada">Entrada:</label>
-            <input type="number" id="entrada" required><br><br>
-            <label for="tasaInteres">Tasa de Interés Anual (%):</label>
-            <input type="number" id="tasaInteres" step="0.01" required><br><br>
-            <label for="plazoMeses">Plazo (meses):</label>
-            <input type="number" id="plazoMeses" required><br><br>
-            <button type="button" onclick="generarTabla()">Generar Tabla</button>
-        </form>
+    <footer>
+        <p>&copy; 2024 Electromáscrédito - Todos los derechos reservados</p>
+    </footer>
 
-        <!-- Tabla generada -->
-        <h3>Tabla de Amortización</h3>
-        <table id="tablaAmortizacion">
-            <thead>
-                <tr><th>Plazo</th><th>Fecha</th><th>Valor Financiado</th><th>CUOTA</th><th>INTERES</th><th>CAPITAL</th><th>SALDO PENDIENTE</th></tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-
-    <!-- Pie de página -->
-    <footer><p>&copy; 2024 Electromáscrédito - Todos los derechos reservados</p></footer>
-
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         let categorias = {};
         let pvcSelected = 0;
@@ -277,7 +440,61 @@
                         </div>
                     </div>
                 `;
+
                 accordionContainer.appendChild(accordionItem);
+
+                const subcategoryContainer = document.getElementById(`subcategoryContainer${categoryIndex}`);
+                Object.keys(categorias[categoria]).forEach((subcategoria, subcategoryIndex) => {
+                    const subcategoryAccordion = document.createElement('div');
+                    subcategoryAccordion.innerHTML = `
+                        <div class="accordion" id="subcategoryAccordion${categoryIndex}${subcategoryIndex}">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="subHeading${categoryIndex}${subcategoryIndex}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#subCollapse${categoryIndex}${subcategoryIndex}" aria-expanded="false" aria-controls="subCollapse${categoryIndex}${subcategoryIndex}">
+                                        ${subcategoria}
+                                    </button>
+                                </h2>
+                                <div id="subCollapse${categoryIndex}${subcategoryIndex}" class="accordion-collapse collapse" aria-labelledby="subHeading${categoryIndex}${subcategoryIndex}" data-bs-parent="#subcategoryAccordion${categoryIndex}${subcategoryIndex}">
+                                    <div class="accordion-body">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Producto</th>
+                                                    <th>Código SAP</th>
+                                                    <th>PVC</th>
+                                                    <th class="contado">Contado</th>
+                                                    <th class="tresMeses">3 meses</th>
+                                                    <th class="seisMeses">6 meses</th>
+                                                    <th class="doceMeses">12 meses</th>
+                                                    <th>Seleccionar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="subcategoryBody${categoryIndex}${subcategoryIndex}">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    subcategoryContainer.appendChild(subcategoryAccordion);
+
+                    const tbody = document.getElementById(`subcategoryBody${categoryIndex}${subcategoryIndex}`);
+                    categorias[categoria][subcategoria].forEach(producto => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>${producto.descripcion}</td>
+                            <td>${producto.codigoSAP}</td>
+                            <td class="pvc">$${producto.pvc.toFixed(2)}</td>
+                            <td class="contado">$${(producto.pvc * 1.20).toFixed(2)}</td>
+                            <td class="tresMeses">$${(producto.pvc * 1.40).toFixed(2)}</td>
+                            <td class="seisMeses">$${(producto.pvc * 1.60).toFixed(2)}</td>
+                            <td class="doceMeses">$${(producto.pvc * 1.80).toFixed(2)}</td>
+                            <td><span class="select-product" onclick="selectProduct(this)">Seleccionar</span></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                });
             });
         }
 
@@ -297,23 +514,272 @@
             document.getElementById('calculatorForm').scrollIntoView({ behavior: 'smooth' });
         }
 
+        function toggleDownPaymentFields() {
+            const percentageField = document.getElementById('percentageField');
+            const amountField = document.getElementById('amountField');
+            const selectedType = document.querySelector('input[name="entradaTipo"]:checked').value;
+
+            if (selectedType === 'porcentaje') {
+                percentageField.style.display = 'block';
+                amountField.style.display = 'none';
+            } else {
+                percentageField.style.display = 'none';
+                amountField.style.display = 'block';
+            }
+        }
+
         function calculateInstallments() {
             const convenio = document.querySelector('input[name="convenio"]:checked').value;
             const selectedType = document.querySelector('input[name="entradaTipo"]:checked').value;
             let downPaymentAmount = 0;
-            let cashPrice = pvcSelected * 1.20;
-            const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
 
-            // Lógica de cálculo omitida para brevedad
+            // Precio contado (multiplica PVC por 1.20)
+            let cashPrice = pvcSelected * 1.20;
+
+            // Precio a crédito con condiciones de multiplicador para 3, 6 y 12 meses
+            const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
+            let creditMultiplier;
+            if (months === 3) {
+                creditMultiplier = 1.40;
+            } else if (months === 6) {
+                creditMultiplier = 1.60;
+            } else if (months === 12) {
+                creditMultiplier = 1.80;
+            } else {
+                creditMultiplier = 1.20 + (months - 1) * 0.06;
+            }
+
+            let creditPrice = pvcSelected * creditMultiplier;
+            let downPaymentPercentage = 0;
+
+            if (selectedType === 'porcentaje') {
+                downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
+                downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
+            } else {
+                downPaymentAmount = parseFloat(document.getElementById('downPaymentAmount').value);
+                downPaymentPercentage = (downPaymentAmount / creditPrice) * 100;
+            }
+
+            // Aplicación de recargos y descuentos según condiciones de entrada y convenio
+            if (convenio === "no-convenio") {
+                if (downPaymentPercentage === 0) {
+                    creditPrice *= 1.08; // Aumenta el precio en un 8% si no hay entrada
+                } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 8) {
+                    creditPrice *= (1 + downPaymentPercentage / 100); // Recargo proporcional de 1% a 8%
+                } else if (downPaymentPercentage >= 8.1 && downPaymentPercentage <= 11) {
+                    creditPrice = creditPrice; // No se aplica recargo
+                }
+            }
+
+            // Aplicación de descuentos según el número de cuotas
+            let maxDiscount = 0;
+            if (months <= 3) {
+                maxDiscount = 0.5;
+            } else if (months <= 6) {
+                maxDiscount = 0.10;
+            } else if (months <= 12) {
+                maxDiscount = 0.15;
+            }
+
+            if (convenio === "no-convenio" && downPaymentPercentage > 10) {
+                const appliedDiscount = maxDiscount * ((downPaymentPercentage - 10) / 89); 
+                creditPrice *= (1 - Math.min(appliedDiscount, maxDiscount));
+            }
+
+            // Asegura que el crédito no sea menor al 110% del contado
+            if (creditPrice < cashPrice * 1.10) {
+                creditPrice = cashPrice * 1.10;
+            }
+
+            const financedAmount = creditPrice - downPaymentAmount;
+            const monthlyPayment = financedAmount / months;
+
+            document.getElementById('cashPriceResult').textContent = `$${cashPrice.toFixed(2)}`;
+            document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
+            document.getElementById('financedAmountResult').textContent = `$${financedAmount.toFixed(2)}`;
+            document.getElementById('monthlyPaymentResult').textContent = `$${monthlyPayment.toFixed(2)}`;
+            document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
+            document.getElementById('financingTimeResult').textContent = `${months} meses`;
+
+            // URL para WhatsApp con el mensaje de cotización
+            const phoneNumber = document.getElementById("phoneNumber").value;
+            const whatsappMessage = `Estimado cliente la cotización para el producto ${document.getElementById('productSelected').value} es:\n
+            Precio de contado: ${document.getElementById('cashPriceResult').textContent}\n
+            Precio a crédito: ${document.getElementById('creditPriceResult').textContent}\n
+            Entrada: ${document.getElementById('downPaymentAmountResult').textContent}\n
+            Cuota mensual: ${document.getElementById('monthlyPaymentResult').textContent}\n
+            Tiempo de financiamiento: ${document.getElementById('financingTimeResult').textContent}\n`;
+
+            document.getElementById("whatsappLink").href = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+
+            generateAmortizationTable(financedAmount, months, monthlyPayment, downPaymentAmount);
+        }
+
+        function generateAmortizationTable(financedAmount, months, monthlyPayment, downPaymentAmount) {
+            let tableBody = document.getElementById('amortizationTableBody');
+            tableBody.innerHTML = '';
+            let remainingBalance = financedAmount;
+            let capitalIncremental = pvcSelected / months;
+            let interestDecremental = (monthlyPayment - capitalIncremental) / months;
+
+            tableBody.innerHTML += `<tr>
+                <td>0</td>
+                <td>-</td>
+                <td>${downPaymentAmount.toFixed(2)}</td>
+                <td>-</td>
+                <td>${(remainingBalance + downPaymentAmount).toFixed(2)}</td>
+            </tr>`;
+
+            for (let i = 1; i <= months; i++) {
+                let capitalPayment = capitalIncremental * i;
+                let interestPayment = Math.max(monthlyPayment - capitalPayment, interestDecremental * (months - i + 1));
+                remainingBalance -= capitalPayment;
+
+                let row = `<tr>
+                    <td>${i}</td>
+                    <td>${monthlyPayment.toFixed(2)}</td>
+                    <td>${capitalPayment.toFixed(2)}</td>
+                    <td>${interestPayment.toFixed(2)}</td>
+                    <td>${remainingBalance.toFixed(2)}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            }
+            tableBody.innerHTML += `<tr style="font-weight: bold;">
+                <td>Total</td>
+                <td>${(monthlyPayment * months).toFixed(2)}</td>
+                <td>${(capitalIncremental * months).toFixed(2)}</td>
+                <td>${((monthlyPayment - capitalIncremental) * months).toFixed(2)}</td>
+                <td>-</td>
+            </tr>`;
         }
 
         document.addEventListener("DOMContentLoaded", function() {
             loadCSV('./precio.csv');
         });
-
-        function generarTabla() {
-            // Lógica de generación de la tabla de amortización omitida para brevedad
-        }
     </script>
+</body>
+</html>
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Amortización</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Generador de Tabla de Amortización</h2>
+
+<form id="amortizationForm">
+    <label for="precioCredito">Precio a Crédito:</label>
+    <input type="number" id="precioCredito" required><br><br>
+
+    <label for="entrada">Entrada:</label>
+    <input type="number" id="entrada" required><br><br>
+
+    <label for="tasaInteres">Tasa de Interés Anual (%):</label>
+    <input type="number" id="tasaInteres" step="0.01" required><br><br>
+
+    <label for="plazoMeses">Plazo (meses):</label>
+    <input type="number" id="plazoMeses" required><br><br>
+
+    <button type="button" onclick="generarTabla()">Generar Tabla</button>
+</form>
+
+<h3>Tabla de Amortización</h3>
+<table id="tablaAmortizacion">
+    <thead>
+        <tr>
+            <th>Plazo</th>
+            <th>Fecha</th>
+            <th>Valor Financiado</th>
+            <th>CUOTA</th>
+            <th>INTERES</th>
+            <th>CAPITAL</th>
+            <th>SALDO PENDIENTE</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    function generarTabla() {
+        // Obtener valores del formulario
+        const precioCredito = parseFloat(document.getElementById('precioCredito').value);
+        const entrada = parseFloat(document.getElementById('entrada').value);
+        const tasaInteresAnual = parseFloat(document.getElementById('tasaInteres').value) / 100;
+        const plazoMeses = parseInt(document.getElementById('plazoMeses').value);
+
+        const tasaInteresMensual = tasaInteresAnual / 12;
+        let valorFinanciado = precioCredito - entrada;
+        const cuota = valorFinanciado / plazoMeses;
+
+        // Limpiar la tabla
+        const tablaCuerpo = document.getElementById('tablaAmortizacion').querySelector('tbody');
+        tablaCuerpo.innerHTML = '';
+
+        // Fecha inicial
+        const fechaInicial = new Date();
+
+        // Fila inicial (Plazo 0)
+        let saldoPendiente = valorFinanciado;
+        let row = tablaCuerpo.insertRow();
+        row.insertCell(0).textContent = 0;
+        row.insertCell(1).textContent = fechaInicial.toLocaleDateString();
+        row.insertCell(2).textContent = '';  // Sin valor financiado en la entrada
+        row.insertCell(3).textContent = '';  // Sin cuota en la entrada
+        row.insertCell(4).textContent = '';  // Sin interés en la entrada
+        row.insertCell(5).textContent = entrada.toFixed(2);  // Capital es la entrada inicial
+        row.insertCell(6).textContent = saldoPendiente.toFixed(2);
+
+        // Generar filas de amortización para cada mes
+        for (let mes = 1; mes <= plazoMeses; mes++) {
+            const interes = saldoPendiente * tasaInteresMensual;
+            const capital = cuota - interes;
+            saldoPendiente -= capital;
+
+            const fechaPago = new Date(fechaInicial);
+            fechaPago.setMonth(fechaPago.getMonth() + mes);
+
+            row = tablaCuerpo.insertRow();
+            row.insertCell(0).textContent = mes;
+            row.insertCell(1).textContent = fechaPago.toLocaleDateString();
+            row.insertCell(2).textContent = valorFinanciado.toFixed(2);
+            row.insertCell(3).textContent = cuota.toFixed(2);
+            row.insertCell(4).textContent = interes.toFixed(2);
+            row.insertCell(5).textContent = capital.toFixed(2);
+            row.insertCell(6).textContent = saldoPendiente.toFixed(2);
+        }
+
+        // Fila de totales
+        row = tablaCuerpo.insertRow();
+        row.insertCell(0).textContent = 'Total';
+        row.insertCell(1).textContent = '';
+        row.insertCell(2).textContent = valorFinanciado.toFixed(2);
+        row.insertCell(3).textContent = (cuota * plazoMeses).toFixed(2);
+        row.insertCell(4).textContent = (cuota * plazoMeses - saldoPendiente - entrada).toFixed(2);
+        row.insertCell(5).textContent = (valorFinanciado - saldoPendiente).toFixed(2);
+        row.insertCell(6).textContent = '0.00';
+    }
+</script>
+
 </body>
 </html>
