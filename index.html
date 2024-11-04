@@ -529,43 +529,35 @@
             const selectedType = document.querySelector('input[name="entradaTipo"]:checked').value;
             let downPaymentAmount = 0;
 
-            // Precio contado (multiplica PVC por 1.20)
-            let cashPrice = pvcSelected * 1.20;
+            // Precio contado y base del crédito usando PVC directamente
+            const capital = pvcSelected;
 
-            // Precio a crédito con condiciones de multiplicador para 3, 6 y 12 meses
-            const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
-            let creditMultiplier;
-            if (months === 3) {
-                creditMultiplier = 1.40;
-            } else if (months === 6) {
-                creditMultiplier = 1.60;
-            } else if (months === 12) {
-                creditMultiplier = 1.80;
-            } else {
-                creditMultiplier = 1.20 + (months - 1) * 0.06;
-            }
+            let creditPrice = capital * 1.20;  // Ajuste inicial de crédito
 
-            let creditPrice = pvcSelected * creditMultiplier;
-            let downPaymentPercentage = 0;
-
+            // Calcular el monto de la entrada
             if (selectedType === 'porcentaje') {
-                downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
-                downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
+                const downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value) / 100;
+                downPaymentAmount = creditPrice * downPaymentPercentage;
             } else {
                 downPaymentAmount = parseFloat(document.getElementById('downPaymentAmount').value);
             }
 
-            // Ajustar el monto financiado restando la entrada
+            // Monto financiado después de aplicar entrada
             const financedAmount = creditPrice - downPaymentAmount;
+            const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
+
+            // Calcular cuota mensual en función del monto financiado
             const monthlyPayment = financedAmount / months;
 
-            document.getElementById('cashPriceResult').textContent = `$${cashPrice.toFixed(2)}`;
+            // Mostrar resultados
+            document.getElementById('cashPriceResult').textContent = `$${capital.toFixed(2)}`;
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
+            document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financedAmountResult').textContent = `$${financedAmount.toFixed(2)}`;
             document.getElementById('monthlyPaymentResult').textContent = `$${monthlyPayment.toFixed(2)}`;
-            document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
+            // Generar la tabla de amortización
             generateAmortizationTable(financedAmount, months, monthlyPayment);
         }
 
@@ -573,7 +565,7 @@
             let tableBody = document.getElementById('amortizationTableBody');
             tableBody.innerHTML = '';
             let remainingBalance = financedAmount;
-            const interestRate = 0.02;  // Suponiendo una tasa de interés mensual del 2%
+            const interestRate = 0.02;  // Tasa de interés mensual
 
             for (let i = 1; i <= months; i++) {
                 const interest = remainingBalance * interestRate;
@@ -591,11 +583,11 @@
                 tableBody.innerHTML += row;
             }
 
-            // Fila de sumatoria al final
+            // Agregar fila final con totales
             tableBody.innerHTML += `<tr style="font-weight: bold;">
                 <td>Total</td>
                 <td>${(monthlyPayment * months).toFixed(2)}</td>
-                <td>${(financedAmount).toFixed(2)}</td>
+                <td>${financedAmount.toFixed(2)}</td>
                 <td>${((monthlyPayment * months) - financedAmount).toFixed(2)}</td>
                 <td>-</td>
             </tr>`;
