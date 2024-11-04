@@ -285,17 +285,8 @@
             <div class="mb-3">
                 <label class="form-label">Número de cuotas:</label>
                 <div id="installmentMonths" class="radio-options">
-                    <label><input type="radio" name="cuotas" value="1"> 1</label>
-                    <label><input type="radio" name="cuotas" value="2"> 2</label>
                     <label><input type="radio" name="cuotas" value="3"> 3</label>
-                    <label><input type="radio" name="cuotas" value="4"> 4</label>
-                    <label><input type="radio" name="cuotas" value="5"> 5</label>
                     <label><input type="radio" name="cuotas" value="6"> 6</label>
-                    <label><input type="radio" name="cuotas" value="7"> 7</label>
-                    <label><input type="radio" name="cuotas" value="8"> 8</label>
-                    <label><input type="radio" name="cuotas" value="9"> 9</label>
-                    <label><input type="radio" name="cuotas" value="10"> 10</label>
-                    <label><input type="radio" name="cuotas" value="11"> 11</label>
                     <label><input type="radio" name="cuotas" value="12"> 12</label>
                 </div>
             </div>
@@ -572,9 +563,9 @@
             if (months <= 3) {
                 maxDiscount = 0.10;
             } else if (months <= 6) {
-                maxDiscount = 0.15;
-            } else if (months <= 12) {
                 maxDiscount = 0.20;
+            } else if (months <= 12) {
+                maxDiscount = 0.40;
             }
 
             if (convenio === "no-convenio" && downPaymentPercentage > 10) {
@@ -588,7 +579,7 @@
             }
 
             const financedAmount = creditPrice - downPaymentAmount;
-            const monthlyPayment = creditPrice / months;
+            const monthlyPayment = financedAmount / months;
 
             document.getElementById('cashPriceResult').textContent = `$${cashPrice.toFixed(2)}`;
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
@@ -600,24 +591,22 @@
             generateAmortizationTable(financedAmount, months, monthlyPayment);
         }
 
-        function generateAmortizationTable(principal, months, monthlyPayment) {
+        function generateAmortizationTable(financedAmount, months, monthlyPayment) {
             let tableBody = document.getElementById('amortizationTableBody');
             tableBody.innerHTML = '';
-            let remainingBalance = pvcSelected;
-            let totalCapital = 0, totalInterest = 0;
-            const capital = pvcSelected / months; // Capital fijo basado en PVC
+            let remainingBalance = financedAmount;
+
+            // Cada cuota amortiza una parte del capital (PVC dividido entre el plazo) y la diferencia es el interés
+            const capitalAmortizedPerMonth = pvcSelected / months;
 
             for (let i = 1; i <= months; i++) {
-                const interest = monthlyPayment - capital; // Interés calculado como la diferencia de la cuota y el capital
-                remainingBalance -= capital;
-
-                totalCapital += capital;
-                totalInterest += interest;
+                const interest = monthlyPayment - capitalAmortizedPerMonth;
+                remainingBalance -= capitalAmortizedPerMonth;
 
                 let row = `<tr>
                     <td>${i}</td>
                     <td>${monthlyPayment.toFixed(2)}</td>
-                    <td>${capital.toFixed(2)}</td>
+                    <td>${capitalAmortizedPerMonth.toFixed(2)}</td>
                     <td>${interest.toFixed(2)}</td>
                     <td>${remainingBalance.toFixed(2)}</td>
                 </tr>`;
@@ -629,8 +618,8 @@
             tableBody.innerHTML += `<tr style="font-weight: bold;">
                 <td>Total</td>
                 <td>${(monthlyPayment * months).toFixed(2)}</td>
-                <td>${totalCapital.toFixed(2)}</td>
-                <td>${totalInterest.toFixed(2)}</td>
+                <td>${(capitalAmortizedPerMonth * months).toFixed(2)}</td>
+                <td>${((monthlyPayment - capitalAmortizedPerMonth) * months).toFixed(2)}</td>
                 <td>-</td>
             </tr>`;
         }
