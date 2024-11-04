@@ -588,7 +588,7 @@
             }
 
             const financedAmount = creditPrice - downPaymentAmount;
-            const monthlyPayment = financedAmount / months;
+            const monthlyPayment = creditPrice / months;
 
             document.getElementById('cashPriceResult').textContent = `$${cashPrice.toFixed(2)}`;
             document.getElementById('creditPriceResult').textContent = `$${creditPrice.toFixed(2)}`;
@@ -603,13 +603,12 @@
         function generateAmortizationTable(principal, months, monthlyPayment) {
             let tableBody = document.getElementById('amortizationTableBody');
             tableBody.innerHTML = '';
-            let remainingBalance = principal;
+            let remainingBalance = pvcSelected;
             let totalCapital = 0, totalInterest = 0;
-            const interestRate = 0.02; // 2% de interés mensual, ajustable según necesidades.
+            const capital = pvcSelected / months; // Capital fijo basado en PVC
 
             for (let i = 1; i <= months; i++) {
-                const interest = remainingBalance * interestRate;
-                const capital = monthlyPayment - interest;
+                const interest = monthlyPayment - capital; // Interés calculado como la diferencia de la cuota y el capital
                 remainingBalance -= capital;
 
                 totalCapital += capital;
