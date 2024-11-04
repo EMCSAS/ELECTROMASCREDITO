@@ -6,7 +6,6 @@
     <title>Catálogo de productos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Estilo general del cuerpo */
         body {
             background-color: #1b263b;
             color: #fff;
@@ -16,7 +15,6 @@
             padding: 0;
         }
 
-        /* Burbujas decorativas estáticas */
         .bubble {
             position: absolute;
             border-radius: 50%;
@@ -29,7 +27,6 @@
         .bubble3 { background-color: rgba(46, 204, 113, 0.7); width: 300px; height: 300px; top: 50%; left: 5%; }
         .bubble4 { background-color: rgba(155, 89, 182, 0.7); width: 280px; height: 280px; bottom: 10%; right: 10%; }
 
-        /* Barra de título naranja ocupando todo el ancho */
         .navbar {
             background-color: #f39c12;
             color: #fff;
@@ -41,7 +38,6 @@
             margin: 50px 0;
         }
 
-        /* Título Bienvenido centrado */
         .navbar h1 {
             font-family: 'Georgia', serif;
             font-size: 3rem;
@@ -52,7 +48,6 @@
             margin: 0;
         }
 
-        /* Contenedor principal */
         .container {
             background-color: #fff;
             color: #333;
@@ -70,7 +65,6 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
 
-        /* Sección del Catálogo */
         h2 {
             text-align: center;
             margin-bottom: 20px;
@@ -101,31 +95,13 @@
             background-color: #e67e22;
         }
 
-        .accordion-body {
-            transition: all 0.3s ease;
-        }
-
         #calculatorResult {
             font-weight: bold;
             color: #f39c12;
         }
 
-        /* Ocultar columnas de precios */
         .table .contado, .table .tresMeses, .table .seisMeses, .table .doceMeses {
             display: none;
-        }
-
-        /* Estilo de productos seleccionables */
-        .select-product {
-            cursor: pointer;
-            color: #f39c12;
-            text-decoration: underline;
-            transition: color 0.3s ease, text-shadow 0.3s ease;
-        }
-
-        .select-product:hover {
-            color: #e67e22;
-            text-shadow: 0px 0px 8px #e67e22;
         }
 
         .small-table {
@@ -152,7 +128,6 @@
             color: #fff;
         }
 
-        /* Botón personalizado */
         .btn-custom {
             background-color: #f39c12;
             color: white;
@@ -169,72 +144,6 @@
             background-color: #e67e22;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             transform: scale(1.05);
-        }
-
-        .phone-input-container {
-            background-color: #fff;
-            color: #333;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            width: fit-content;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .phone-input-container label {
-            margin-right: 10px;
-            font-weight: bold;
-        }
-
-        .phone-input-container input {
-            border: 1px solid #ccc;
-            padding: 5px 10px;
-            border-radius: 5px;
-            outline: none;
-        }
-
-        .btn-whatsapp {
-            background-color: #25D366;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            display: inline-flex;
-            align-items: center;
-            text-decoration: none;
-            font-size: 16px;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-whatsapp:hover {
-            background-color: #20b857;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            transform: scale(1.05);
-        }
-
-        .radio-options label {
-            margin-right: 20px;
-        }
-
-        tr:hover {
-            background-color: #f7f7f7;
-        }
-
-        tr.selected {
-            background-color: #f39c12;
-            color: #fff;
-        }
-
-        .table tbody tr:hover {
-            background-color: #f39c12;
-            color: #fff;
-            transition: all 0.3s ease;
-        }
-
-        .phone-input-container input:hover {
-            border-color: #f39c12;
         }
 
         footer {
@@ -323,7 +232,7 @@
         </form>
 
         <div class="mt-4">
-            <h2 class="text-center mt-4" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Cotizador</h2>
+            <h2 class="text-center mt-4" style="color: #f39c12;">Cotizador</h2>
             <table class="table table-bordered small-table">
                 <tbody>
                     <tr>
@@ -357,7 +266,7 @@
                 </tbody>
             </table>
 
-            <h2 class="text-center mt-5" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Tabla de Amortización</h2>
+            <h2 class="text-center mt-5" style="color: #f39c12;">Tabla de Amortización</h2>
             <table class="table table-bordered amortization-table">
                 <thead>
                     <tr>
@@ -387,10 +296,9 @@
             fetch(file)
                 .then(response => response.text())
                 .then(data => {
-                    const rows = data.split('\n');
+                    const rows = data.split('\\n');
                     let currentCategory = '';
                     let currentSubcategory = '';
-
                     rows.slice(1).forEach(row => {
                         const columns = row.split(';');
                         const categoria = columns[0]?.trim();
@@ -398,17 +306,14 @@
                         const codigoSAP = columns[2]?.trim();
                         const descripcion = columns[3]?.trim();
                         const pvc = columns[4] ? parseFloat(columns[4].replace(',', '.')) : null;
-
                         if (categoria) {
                             currentCategory = categoria;
                             categorias[currentCategory] = categorias[currentCategory] || {};
                         }
-
                         if (subcategoria) {
                             currentSubcategory = subcategoria;
                             categorias[currentCategory][currentSubcategory] = [];
                         }
-
                         if (pvc && currentCategory && currentSubcategory) {
                             categorias[currentCategory][currentSubcategory].push({ codigoSAP, descripcion, pvc });
                         }
@@ -421,7 +326,6 @@
         function populateCatalog() {
             const accordionContainer = document.getElementById("catalogoAccordion");
             accordionContainer.innerHTML = '';
-
             Object.keys(categorias).forEach((categoria, categoryIndex) => {
                 const accordionItem = document.createElement('div');
                 accordionItem.classList.add('accordion-item');
@@ -436,9 +340,7 @@
                         </div>
                     </div>
                 `;
-
                 accordionContainer.appendChild(accordionItem);
-
                 const subcategoryContainer = document.getElementById(`subcategoryContainer${categoryIndex}`);
                 Object.keys(categorias[categoria]).forEach((subcategoria, subcategoryIndex) => {
                     const subcategoryAccordion = document.createElement('div');
@@ -474,14 +376,14 @@
                         </div>
                     `;
                     subcategoryContainer.appendChild(subcategoryAccordion);
-
                     const tbody = document.getElementById(`subcategoryBody${categoryIndex}${subcategoryIndex}`);
                     categorias[categoria][subcategoria].forEach(producto => {
                         const tr = document.createElement("tr");
                         tr.innerHTML = `
                             <td>${producto.descripcion}</td>
                             <td>${producto.codigoSAP}</td>
-                            <td class="pvc">$${producto.pvc.toFixed(2)}</td>
+                            <td class="pvc">$${producto.p
+                            .pvc.toFixed(2)}</td>
                             <td class="contado">$${(producto.pvc * 1.20).toFixed(2)}</td>
                             <td class="tresMeses">$${(producto.pvc * 1.40).toFixed(2)}</td>
                             <td class="seisMeses">$${(producto.pvc * 1.60).toFixed(2)}</td>
@@ -529,10 +431,7 @@
             const selectedType = document.querySelector('input[name="entradaTipo"]:checked').value;
             let downPaymentAmount = 0;
 
-            // Precio contado (multiplica PVC por 1.20)
             let cashPrice = pvcSelected * 1.20;
-
-            // Precio a crédito con condiciones de multiplicador para 3, 6 y 12 meses
             const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
             let creditMultiplier;
             if (months === 3) {
@@ -556,18 +455,14 @@
                 downPaymentPercentage = (downPaymentAmount / creditPrice) * 100;
             }
 
-            // Aplicación de recargos y descuentos según condiciones de entrada y convenio
             if (convenio === "no-convenio") {
                 if (downPaymentPercentage === 0) {
-                    creditPrice *= 1.08; // Aumenta el precio en un 8% si no hay entrada
+                    creditPrice *= 1.08;
                 } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 8) {
-                    creditPrice *= (1 + downPaymentPercentage / 100); // Recargo proporcional de 1% a 8%
-                } else if (downPaymentPercentage >= 8.1 && downPaymentPercentage <= 11) {
-                    creditPrice = creditPrice; // No se aplica recargo
+                    creditPrice *= (1 + downPaymentPercentage / 100);
                 }
             }
 
-            // Aplicación de descuentos según el número de cuotas
             let maxDiscount = 0;
             if (months <= 3) {
                 maxDiscount = 0.10;
@@ -578,11 +473,10 @@
             }
 
             if (convenio === "no-convenio" && downPaymentPercentage > 10) {
-                const appliedDiscount = maxDiscount * ((downPaymentPercentage - 10) / 89); 
+                const appliedDiscount = maxDiscount * ((downPaymentPercentage - 10) / 89);
                 creditPrice *= (1 - Math.min(appliedDiscount, maxDiscount));
             }
 
-            // Asegura que el crédito no sea menor al 110% del contado
             if (creditPrice < cashPrice * 1.10) {
                 creditPrice = cashPrice * 1.10;
             }
@@ -597,38 +491,32 @@
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
-            generateAmortizationTable(financedAmount, months, monthlyPayment);
+            generateAmortizationTable(financedAmount, months, monthlyPayment, downPaymentAmount);
         }
 
-        function generateAmortizationTable(financedAmount, months, monthlyPayment) {
+        function generateAmortizationTable(financedAmount, months, monthlyPayment, downPayment) {
             let tableBody = document.getElementById('amortizationTableBody');
             tableBody.innerHTML = '';
             let remainingBalance = financedAmount;
-
-            // Cada cuota amortiza una parte del capital (PVC dividido entre el plazo) y la diferencia es el interés
             const capitalAmortizedPerMonth = pvcSelected / months;
 
-            for (let i = 1; i <= months; i++) {
-                const interest = monthlyPayment - capitalAmortizedPerMonth;
-                remainingBalance -= capitalAmortizedPerMonth;
-
-                let row = `<tr>
-                    <td>${i}</td>
-                    <td>${monthlyPayment.toFixed(2)}</td>
-                    <td>${capitalAmortizedPerMonth.toFixed(2)}</td>
-                    <td>${interest.toFixed(2)}</td>
-                    <td>${remainingBalance.toFixed(2)}</td>
-                </tr>`;
-
-                tableBody.innerHTML += row;
-            }
-
-            // Fila de sumatoria al final
             tableBody.innerHTML += `<tr style="font-weight: bold;">
-                <td>Total</td>
+                <td>Subtotal</td>
                 <td>${(monthlyPayment * months).toFixed(2)}</td>
                 <td>${(capitalAmortizedPerMonth * months).toFixed(2)}</td>
                 <td>${((monthlyPayment - capitalAmortizedPerMonth) * months).toFixed(2)}</td>
+                <td>-</td>
+            </tr>`;
+            tableBody.innerHTML += `<tr style="font-weight: bold;">
+                <td>Entrada</td>
+                <td colspan="4">${downPayment.toFixed(2)}</td>
+            </tr>`;
+
+            tableBody.innerHTML += `<tr style="font-weight: bold;">
+                <td>Total</td>
+                <td>${((monthlyPayment * months) + downPayment).toFixed(2)}</td>
+                <td>${((capitalAmortizedPerMonth * months) + downPayment).toFixed(2)}</td>
+                <td>${(((monthlyPayment - capitalAmortizedPerMonth) * months)).toFixed(2)}</td>
                 <td>-</td>
             </tr>`;
         }
