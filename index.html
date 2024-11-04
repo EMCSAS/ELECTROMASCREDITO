@@ -528,15 +528,27 @@
             }
         }
 
+        function resetForm() {
+            document.getElementById("calculatorForm").reset(); // Resetea los valores del formulario
+            document.getElementById("productSelected").value = "";
+            document.getElementById("productSelectedType").textContent = "";
+            document.getElementById("cashPriceResult").textContent = "$0.00";
+            document.getElementById("creditPriceResult").textContent = "$0.00";
+            document.getElementById("financedAmountResult").textContent = "$0.00";
+            document.getElementById("monthlyPaymentResult").textContent = "$0.00";
+            document.getElementById("downPaymentAmountResult").textContent = "$0.00";
+            document.getElementById("financingTimeResult").textContent = "";
+            document.getElementById("phoneNumber").value = "";
+            document.getElementById("whatsappLink").href = "#";
+            document.getElementById("amortizationTableBody").innerHTML = ""; // Limpia la tabla de amortización
+        }
+
         function calculateInstallments() {
             const convenio = document.querySelector('input[name="convenio"]:checked').value;
             const selectedType = document.querySelector('input[name="entradaTipo"]:checked').value;
             let downPaymentAmount = 0;
 
-            // Precio contado (multiplica PVC por 1.20)
             let cashPrice = pvcSelected * 1.20;
-
-            // Precio a crédito con condiciones de multiplicador para 3, 6 y 12 meses
             const months = parseInt(document.querySelector('input[name="cuotas"]:checked').value);
             let creditMultiplier;
             if (months === 3) {
@@ -560,18 +572,14 @@
                 downPaymentPercentage = (downPaymentAmount / creditPrice) * 100;
             }
 
-            // Aplicación de recargos y descuentos según condiciones de entrada y convenio
             if (convenio === "no-convenio") {
                 if (downPaymentPercentage === 0) {
-                    creditPrice *= 1.08; // Aumenta el precio en un 8% si no hay entrada
+                    creditPrice *= 1.08;
                 } else if (downPaymentPercentage > 0 && downPaymentPercentage <= 8) {
-                    creditPrice *= (1 + downPaymentPercentage / 100); // Recargo proporcional de 1% a 8%
-                } else if (downPaymentPercentage >= 8.1 && downPaymentPercentage <= 11) {
-                    creditPrice = creditPrice; // No se aplica recargo
+                    creditPrice *= (1 + downPaymentPercentage / 100);
                 }
             }
 
-            // Aplicación de descuentos según el número de cuotas
             let maxDiscount = 0;
             if (months <= 3) {
                 maxDiscount = 0.5;
@@ -586,7 +594,6 @@
                 creditPrice *= (1 - Math.min(appliedDiscount, maxDiscount));
             }
 
-            // Asegura que el crédito no sea menor al 110% del contado
             if (creditPrice < cashPrice * 1.10) {
                 creditPrice = cashPrice * 1.10;
             }
@@ -601,7 +608,6 @@
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
-            // URL para WhatsApp con el mensaje de cotización
             const phoneNumber = document.getElementById("phoneNumber").value;
             const whatsappMessage = `Estimado cliente la cotización para el producto ${document.getElementById('productSelected').value} es:\n
             Precio de contado: ${document.getElementById('cashPriceResult').textContent}\n
@@ -620,19 +626,10 @@
             tableBody.innerHTML = '';
             let remainingBalance = financedAmount;
             let capitalIncremental = pvcSelected / months;
-            let interestDecremental = (monthlyPayment - capitalIncremental) / months;
-
-            tableBody.innerHTML += `<tr>
-                <td>0</td>
-                <td>-</td>
-                <td>${downPaymentAmount.toFixed(2)}</td>
-                <td>-</td>
-                <td>${(remainingBalance + downPaymentAmount).toFixed(2)}</td>
-            </tr>`;
 
             for (let i = 1; i <= months; i++) {
                 let capitalPayment = capitalIncremental * i;
-                let interestPayment = Math.max(monthlyPayment - capitalPayment, interestDecremental * (months - i + 1));
+                let interestPayment = monthlyPayment - capitalPayment;
                 remainingBalance -= capitalPayment;
 
                 let row = `<tr>
@@ -644,6 +641,7 @@
                 </tr>`;
                 tableBody.innerHTML += row;
             }
+
             tableBody.innerHTML += `<tr style="font-weight: bold;">
                 <td>Total</td>
                 <td>${(monthlyPayment * months).toFixed(2)}</td>
