@@ -6,7 +6,86 @@
     <title>Catálogo de productos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        /* Estilos originales permanecen igual */
+        /* Estilos de la página */
+        body {
+            background-color: #1b263b;
+            color: #fff;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.3;
+        }
+        .navbar {
+            background-color: #f39c12;
+            color: #fff;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin: 50px 0;
+        }
+        .navbar h1 {
+            font-family: 'Georgia', serif;
+            font-size: 3rem;
+            color: #fff;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            margin: 0 auto 50px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #f39c12;
+            font-weight: bold;
+            font-family: 'Verdana', sans-serif;
+        }
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .small-table {
+            font-size: 1rem;
+            width: 60%;
+            margin: 0 auto;
+        }
+        .btn-custom {
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            background-color: #e67e22;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: scale(1.05);
+        }
+        footer {
+            text-align: center;
+            color: #f39c12;
+            margin-top: 20px;
+        }
+        .amortization-table th, .amortization-table td {
+            padding: 10px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -21,14 +100,82 @@
 
         <h2 class="text-center mt-4">Simulación</h2>
         <form id="calculatorForm">
-            <!-- Formulario permanece igual -->
+            <div class="mb-3">
+                <label for="productSelected" class="form-label">Producto seleccionado:</label>
+                <input type="text" class="form-control" id="productSelected" readonly>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Cliente:</label>
+                <div class="radio-options">
+                    <label><input type="radio" name="convenio" value="convenio"> Con convenio</label>
+                    <label><input type="radio" name="convenio" value="no-convenio"> Sin convenio</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Número de cuotas:</label>
+                <div id="installmentMonths" class="radio-options">
+                    <label><input type="radio" name="cuotas" value="3"> 3</label>
+                    <label><input type="radio" name="cuotas" value="6"> 6</label>
+                    <label><input type="radio" name="cuotas" value="12"> 12</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tipo de entrada:</label>
+                <div class="radio-options">
+                    <label><input type="radio" name="entradaTipo" value="porcentaje" onclick="toggleDownPaymentFields()"> Porcentaje</label>
+                    <label><input type="radio" name="entradaTipo" value="efectivo" onclick="toggleDownPaymentFields()"> Monto en efectivo</label>
+                </div>
+            </div>
+
+            <div class="mb-3" id="percentageField" style="display:none;">
+                <label for="downPaymentPercentage" class="form-label">Entrada (%):</label>
+                <input type="number" class="form-control" id="downPaymentPercentage" value="0" min="0" max="100">
+            </div>
+
+            <div class="mb-3" id="amountField" style="display:none;">
+                <label for="downPaymentAmount" class="form-label">Entrada (monto en efectivo):</label>
+                <input type="number" class="form-control" id="downPaymentAmount" value="0" min="0">
+            </div>
+
+            <button type="button" class="btn-custom" onclick="calculateInstallments()">Calcular cuotas</button>
+            <button type="button" class="btn-custom" onclick="resetForm()">Nueva consulta</button>
         </form>
 
         <div class="mt-4">
             <h2 class="text-center mt-4" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Cotizador</h2>
             <table class="table table-bordered small-table">
                 <tbody>
-                    <!-- Contenido de tabla de cotizador permanece igual -->
+                    <tr>
+                        <td>Tipo de producto</td>
+                        <td id="productSelectedType"></td>
+                    </tr>
+                    <tr>
+                        <td>Precio de contado</td>
+                        <td id="cashPriceResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Precio a crédito</td>
+                        <td id="creditPriceResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Entrada</td>
+                        <td id="downPaymentAmountResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Valor financiado</td>
+                        <td id="financedAmountResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Cuota mensual</td>
+                        <td id="monthlyPaymentResult">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td>Tiempo de financiamiento</td>
+                        <td id="financingTimeResult"></td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -59,11 +206,106 @@
         let pvcSelected = 0;
 
         function loadCSV(file) {
-            // Carga y procesamiento del archivo CSV permanece igual
+            fetch(file)
+                .then(response => response.text())
+                .then(data => {
+                    const rows = data.split('\n');
+                    let currentCategory = '';
+                    let currentSubcategory = '';
+
+                    rows.slice(1).forEach(row => {
+                        const columns = row.split(';');
+                        const categoria = columns[0]?.trim();
+                        const subcategoria = columns[1]?.trim();
+                        const codigoSAP = columns[2]?.trim();
+                        const descripcion = columns[3]?.trim();
+                        const pvc = columns[4] ? parseFloat(columns[4].replace(',', '.')) : null;
+
+                        if (categoria) {
+                            currentCategory = categoria;
+                            categorias[currentCategory] = categorias[currentCategory] || {};
+                        }
+
+                        if (subcategoria) {
+                            currentSubcategory = subcategoria;
+                            categorias[currentCategory][currentSubcategory] = [];
+                        }
+
+                        if (pvc && currentCategory && currentSubcategory) {
+                            categorias[currentCategory][currentSubcategory].push({ codigoSAP, descripcion, pvc });
+                        }
+                    });
+                    populateCatalog();
+                })
+                .catch(error => console.error('Error al cargar el archivo CSV:', error));
         }
 
         function populateCatalog() {
-            // Generación del catálogo permanece igual
+            const accordionContainer = document.getElementById("catalogoAccordion");
+            accordionContainer.innerHTML = '';
+
+            Object.keys(categorias).forEach((categoria, categoryIndex) => {
+                const accordionItem = document.createElement('div');
+                accordionItem.classList.add('accordion-item');
+                accordionItem.innerHTML = `
+                    <h2 class="accordion-header" id="heading${categoryIndex}">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse${categoryIndex}" aria-expanded="false" aria-controls="collapse${categoryIndex}">
+                            ${categoria}
+                        </button>
+                    </h2>
+                    <div id="collapse${categoryIndex}" class="accordion-collapse collapse" aria-labelledby="heading${categoryIndex}" data-bs-parent="#catalogoAccordion">
+                        <div class="accordion-body" id="subcategoryContainer${categoryIndex}">
+                        </div>
+                    </div>
+                `;
+
+                accordionContainer.appendChild(accordionItem);
+
+                const subcategoryContainer = document.getElementById(`subcategoryContainer${categoryIndex}`);
+                Object.keys(categorias[categoria]).forEach((subcategoria, subcategoryIndex) => {
+                    const subcategoryAccordion = document.createElement('div');
+                    subcategoryAccordion.innerHTML = `
+                        <div class="accordion" id="subcategoryAccordion${categoryIndex}${subcategoryIndex}">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="subHeading${categoryIndex}${subcategoryIndex}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#subCollapse${categoryIndex}${subcategoryIndex}" aria-expanded="false" aria-controls="subCollapse${categoryIndex}${subcategoryIndex}">
+                                        ${subcategoria}
+                                    </button>
+                                </h2>
+                                <div id="subCollapse${categoryIndex}${subcategoryIndex}" class="accordion-collapse collapse" aria-labelledby="subHeading${categoryIndex}${subcategoryIndex}" data-bs-parent="#subcategoryAccordion${categoryIndex}${subcategoryIndex}">
+                                    <div class="accordion-body">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Producto</th>
+                                                    <th>Código SAP</th>
+                                                    <th>PVC</th>
+                                                    <th>Seleccionar</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="subcategoryBody${categoryIndex}${subcategoryIndex}">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    subcategoryContainer.appendChild(subcategoryAccordion);
+
+                    const tbody = document.getElementById(`subcategoryBody${categoryIndex}${subcategoryIndex}`);
+                    categorias[categoria][subcategoria].forEach(producto => {
+                        const tr = document.createElement("tr");
+                        tr.innerHTML = `
+                            <td>${producto.descripcion}</td>
+                            <td>${producto.codigoSAP}</td>
+                            <td class="pvc">$${producto.pvc.toFixed(2)}</td>
+                            <td><span class="select-product" onclick="selectProduct(this)">Seleccionar</span></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                });
+            });
         }
 
         function selectProduct(element) {
