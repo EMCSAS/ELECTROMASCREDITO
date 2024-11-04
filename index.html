@@ -604,8 +604,7 @@
 
             // URL para WhatsApp con el mensaje de cotización
             const phoneNumber = document.getElementById("phoneNumber").value;
-            const whatsappMessage = `Hola, te envío la cotización:\n
-            Producto: ${document.getElementById('productSelected').value}\n
+            const whatsappMessage = `Estimado cliente la cotización para el producto ${document.getElementById('productSelected').value} es:\n
             Precio de contado: ${document.getElementById('cashPriceResult').textContent}\n
             Precio a crédito: ${document.getElementById('creditPriceResult').textContent}\n
             Entrada: ${document.getElementById('downPaymentAmountResult').textContent}\n
