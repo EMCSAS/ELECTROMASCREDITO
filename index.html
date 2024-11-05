@@ -503,8 +503,7 @@
 
             let creditPrice = pvcSelected * creditMultiplier;
             let downPaymentPercentage = 0;
-            let downPaymentAmount = 0;
-
+           
             if (selectedType === 'porcentaje') {
                 downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
                 downPaymentAmount = (creditPrice * downPaymentPercentage) / 100;
