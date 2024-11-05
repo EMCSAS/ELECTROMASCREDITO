@@ -315,7 +315,7 @@
                     <tr>
                         <th>Plazo</th>
                         <th>Fecha</th>
-                        <th>Valor Financiado</th>
+                        <th>Valor financiado</th>
                         <th>Cuota</th>
                         <th>Interés</th>
                         <th>Capital</th>
@@ -503,6 +503,7 @@
 
             let creditPrice = pvcSelected * creditMultiplier;
             let downPaymentPercentage = 0;
+            let downPaymentAmount = 0;
 
             if (selectedType === 'porcentaje') {
                 downPaymentPercentage = parseFloat(document.getElementById('downPaymentPercentage').value);
@@ -553,10 +554,10 @@
             document.getElementById('downPaymentAmountResult').textContent = `$${downPaymentAmount.toFixed(2)}`;
             document.getElementById('financingTimeResult').textContent = `${months} meses`;
 
-            generateAmortizationTable(financedAmount, months, monthlyPayment, downPaymentAmount);
+            generateAmortizationTable(financedAmount, months, monthlyPayment, downPaymentAmount, creditMultiplier);
         }
 
-            function generateAmortizationTable(financedAmount, months, monthlyPayment, downPaymentAmount) {
+            function generateAmortizationTable(financedAmount, months, monthlyPayment, downPaymentAmount, creditMultiplier) {
                 const tableBody = document.getElementById('amortizationTableBody');
                 tableBody.innerHTML = '';
                 let remainingBalance = financedAmount; // Inicializa el saldo pendiente como el valor financiado total
@@ -573,7 +574,7 @@
                     <td></td>
                     <td></td>
                     <td>${downPaymentAmount.toFixed(2)}</td>
-                    <td></td>
+                    <td>${financedAmount.toFixed(2)}</td>
                 </tr>`;
             
                 // Genera las filas de amortización
