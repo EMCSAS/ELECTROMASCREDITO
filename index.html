@@ -272,7 +272,9 @@
             <button type="button" class="btn-custom" onclick="calculateInstallments()">Calcular cuotas</button>
             <button type="button" class="btn-custom" onclick="resetForm()">Nueva consulta</button>
         </form>
-
+        
+/*TABLA DE COTIZACIÓN*/
+        
             <div class="mt-4">
                 <h2 class="text-center mt-4" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Cotizador</h2>
                 <table class="table table-bordered small-table">
@@ -308,6 +310,20 @@
                     </tbody>
                 </table>
             </div>
+
+/*PARA ENVIAR LA COTIZACION POR WHATSAPP*/
+        
+            <!-- Nuevo campo para número de celular y botón de enviar por WhatsApp -->
+            <div class="mt-4">
+            <h2 class="text-center mt-4" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Enviar Cotización por WhatsApp</h2>
+            <div class="mb-3">
+                <label for="phoneNumber" class="form-label">Número de teléfono:</label>
+                <input type="text" class="form-control" id="phoneNumber" placeholder="Ingrese número de teléfono con código de país">
+            </div>
+            <button type="button" class="btn-custom" onclick="sendWhatsApp()">Enviar por WhatsApp</button>
+        </div>
+            
+/*TABLA DE AMORTIZACIÓN*/
         
             <h2 class="text-center mt-5" style="color: #f39c12;">Tabla de Amortización</h2>
             <table class="table table-bordered amortization-table">
@@ -323,20 +339,7 @@
                     </tr>
                 </thead>
                 <tbody id="amortizationTableBody"></tbody>
-            </table>
-        </div>
-
-//WHATSAPP
-            <!-- Nuevo campo para número de celular y botón de enviar por WhatsApp -->
-            <div class="mt-4">
-            <h2 class="text-center mt-4" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Enviar Cotización por WhatsApp</h2>
-            <div class="mb-3">
-                <label for="phoneNumber" class="form-label">Número de teléfono:</label>
-                <input type="text" class="form-control" id="phoneNumber" placeholder="Ingrese número de teléfono con código de país">
-            </div>
-            <button type="button" class="btn-custom" onclick="sendWhatsApp()">Enviar por WhatsApp</button>
-        </div>
-    
+            </table>        
     </div>
 
     <footer>
@@ -349,9 +352,9 @@
         let categorias = {};
         let pvcSelected = 0;
         
-//FUNCIONES UTILIZADAS PARA LOS CÁLCULOS
+/*FUNCIONES UTILIZADAS PARA LOS CÁLCULOS*/
 
-//PARA EL WHATSAPP     
+/*PARA EL WHATSAPP*/     
         function sendWhatsApp() {
             const phoneNumber = document.getElementById('phoneNumber').value.trim();
             if (!phoneNumber) {
@@ -369,7 +372,7 @@
             const financingTime = document.getElementById('financingTimeResult').textContent;
 
             // Crear mensaje de WhatsApp
-            const message = `*Cotización Electromáscrédito*%0A` +
+            const message = `*Estimado cliente, la cotización es la siguiente*%0A` +
                             `*Producto:* ${product}%0A` +
                             `*Precio de contado:* ${cashPrice}%0A` +
                             `*Precio a crédito:* ${creditPrice}%0A` +
@@ -384,7 +387,6 @@
             // Abrir WhatsApp en una nueva pestaña
             window.open(whatsappURL, '_blank');
         }
-
         
         function loadCSV(file) {
             fetch(file)
