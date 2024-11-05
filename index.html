@@ -309,15 +309,17 @@
                 </table>
             </div>
         
-            <h2 class="text-center mt-5" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Tabla de Amortización</h2>
+            <h2 class="text-center mt-5" style="color: #f39c12;">Tabla de Amortización</h2>
             <table class="table table-bordered amortization-table">
                 <thead>
                     <tr>
-                        <th>Mes</th>
-                        <th>Cuota</th>
-                        <th>Capital</th>
-                        <th>Interés</th>
-                        <th>Saldo Pendiente</th>
+                        <th>Plazo</th>
+                        <th>Fecha</th>
+                        <th>Valor Financiado</th>
+                        <th>CUOTA</th>
+                        <th>INTERES</th>
+                        <th>CAPITAL</th>
+                        <th>SALDO PENDIENTE</th>
                     </tr>
                 </thead>
                 <tbody id="amortizationTableBody"></tbody>
@@ -556,36 +558,48 @@
             let tableBody = document.getElementById('amortizationTableBody');
             tableBody.innerHTML = '';
             let remainingBalance = financedAmount;
-            let capitalIncremental = pvcSelected / months;
-            let interestDecremental = (monthlyPayment - capitalIncremental) / months;
+            let currentDate = new Date();
+            let interestRate = 0.05; // Ejemplo de tasa de interés mensual
+            let valorFinanciado = financedAmount;
 
+            // Registro inicial de entrada
             tableBody.innerHTML += `<tr>
                 <td>0</td>
+                <td>${currentDate.toLocaleDateString()}</td>
+                <td>-</td>
+                <td>-</td>
                 <td>-</td>
                 <td>${downPaymentAmount.toFixed(2)}</td>
-                <td>-</td>
                 <td>${(remainingBalance + downPaymentAmount).toFixed(2)}</td>
             </tr>`;
 
+            // Genera las filas de amortización
             for (let i = 1; i <= months; i++) {
-                let capitalPayment = capitalIncremental * i;
-                let interestPayment = Math.max(monthlyPayment - capitalPayment, interestDecremental * (months - i + 1));
+                currentDate.setMonth(currentDate.getMonth() + 1); // Incrementa un mes
+
+                let interestPayment = (remainingBalance * interestRate);
+                let capitalPayment = monthlyPayment - interestPayment;
                 remainingBalance -= capitalPayment;
 
-                let row = `<tr>
+                tableBody.innerHTML += `<tr>
                     <td>${i}</td>
+                    <td>${currentDate.toLocaleDateString()}</td>
+                    <td>${valorFinanciado.toFixed(2)}</td>
                     <td>${monthlyPayment.toFixed(2)}</td>
-                    <td>${capitalPayment.toFixed(2)}</td>
                     <td>${interestPayment.toFixed(2)}</td>
+                    <td>${capitalPayment.toFixed(2)}</td>
                     <td>${remainingBalance.toFixed(2)}</td>
                 </tr>`;
-                tableBody.innerHTML += row;
             }
+
+            // Agrega la fila de totales
             tableBody.innerHTML += `<tr style="font-weight: bold;">
                 <td>Total</td>
+                <td>-</td>
+                <td>-</td>
                 <td>${(monthlyPayment * months).toFixed(2)}</td>
-                <td>${(capitalIncremental * months).toFixed(2)}</td>
-                <td>${((monthlyPayment - capitalIncremental) * months).toFixed(2)}</td>
+                <td>${(interestRate * financedAmount).toFixed(2)}</td>
+                <td>${financedAmount.toFixed(2)}</td>
                 <td>-</td>
             </tr>`;
         }
