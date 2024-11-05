@@ -555,56 +555,57 @@
         }
 
             function generateAmortizationTable(financedAmount, months, monthlyPayment, downPaymentAmount) {
-            const tableBody = document.getElementById('amortizationTableBody');
-            tableBody.innerHTML = '';
-            let remainingBalance = financedAmount;
-            let currentDate = new Date();
-            let interestRate = 0.05; // Ejemplo de tasa de interés mensual
-            let valorFinanciado = financedAmount;
-        
-            // Fila inicial para la entrada
-            tableBody.innerHTML += `<tr>
-                <td>0</td>
-                <td>${currentDate.toLocaleDateString()}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>${downPaymentAmount.toFixed(2)}</td>
-                <td></td>
-            </tr>`;
-        
-            // Genera las filas de amortización
-            for (let i = 1; i <= months; i++) {
-                currentDate.setMonth(currentDate.getMonth() + 1); // Incrementa la fecha al siguiente mes
-        
-                let interestPayment = valorFinanciado * (interestRate / months); // INTERES = Valor financiado * % / tiempo de financiamiento
-                let capitalPayment = monthlyPayment - interestPayment; // CAPITAL = CUOTA - INTERES
-                remainingBalance -= capitalPayment;  // SALDO PENDIENTE = Saldo pendiente - CAPITAL
-        
-                let row = `<tr>
-                    <td>${i}</td>
+                const tableBody = document.getElementById('amortizationTableBody');
+                tableBody.innerHTML = '';
+                let remainingBalance = financedAmount; // Inicializa el saldo pendiente como el valor financiado total
+                let currentDate = new Date();
+                let interestRate = 0.05; // Ejemplo de tasa de interés mensual
+            
+                // Fila inicial para la entrada
+                tableBody.innerHTML += `<tr>
+                    <td>0</td>
                     <td>${currentDate.toLocaleDateString()}</td>
-                    <td>${valorFinanciado.toFixed(2)}</td>
-                    <td>${monthlyPayment.toFixed(2)}</td>
-                    <td>${interestPayment.toFixed(2)}</td>
-                    <td>${capitalPayment.toFixed(2)}</td>
-                    <td>${remainingBalance.toFixed(2)}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>${downPaymentAmount.toFixed(2)}</td>
+                    <td></td>
                 </tr>`;
-                
-                tableBody.innerHTML += row;
+            
+                // Genera las filas de amortización
+                for (let i = 1; i <= months; i++) {
+                    currentDate.setMonth(currentDate.getMonth() + 1); // Incrementa la fecha al siguiente mes
+            
+                    let valorFinanciado = remainingBalance; // Valor financiado (saldo inicial del periodo actual)
+                    let interestPayment = valorFinanciado * (interestRate / months); // INTERES = Saldo inicial * % / tiempo de financiamiento
+                    let capitalPayment = monthlyPayment - interestPayment; // CAPITAL = CUOTA - INTERES
+                    remainingBalance -= capitalPayment; // Actualiza el saldo pendiente después de aplicar el capital
+            
+                    // Genera una fila con los valores actualizados
+                    let row = `<tr>
+                        <td>${i}</td>
+                        <td>${currentDate.toLocaleDateString()}</td>
+                        <td>${valorFinanciado.toFixed(2)}</td> <!-- Valor financiado inicial para el periodo -->
+                        <td>${monthlyPayment.toFixed(2)}</td> <!-- Cuota mensual -->
+                        <td>${interestPayment.toFixed(2)}</td> <!-- Interés calculado sobre el saldo inicial -->
+                        <td>${capitalPayment.toFixed(2)}</td> <!-- Parte de la cuota aplicada al capital -->
+                        <td>${remainingBalance.toFixed(2)}</td> <!-- Saldo pendiente después del pago de capital -->
+                    </tr>`;
+                    
+                    tableBody.innerHTML += row;
+                }
+            
+                // Fila total
+                tableBody.innerHTML += `<tr style="font-weight: bold;">
+                    <td>Total</td>
+                    <td></td>
+                    <td></td>
+                    <td>${(monthlyPayment * months).toFixed(2)}</td> <!-- Total de las cuotas -->
+                    <td>${((financedAmount * interestRate)).toFixed(2)}</td> <!-- Total de intereses acumulados -->
+                    <td>${financedAmount.toFixed(2)}</td> <!-- Total del capital -->
+                    <td></td>
+                </tr>`;
             }
-        
-            // Fila total
-            tableBody.innerHTML += `<tr style="font-weight: bold;">
-                <td>Total</td>
-                <td></td>
-                <td></td>
-                <td>${(monthlyPayment * months).toFixed(2)}</td>
-                <td>${((valorFinanciado * interestRate)).toFixed(2)}</td>
-                <td>${valorFinanciado.toFixed(2)}</td>
-                <td></td>
-            </tr>`;
-        }
 
 
         document.addEventListener("DOMContentLoaded", function() {
