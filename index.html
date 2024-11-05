@@ -581,7 +581,7 @@
                     let valorFinanciado = remainingBalance; // Valor financiado (saldo inicial del periodo actual)
                     let interestPayment = valorFinanciado * (interestRate / months); // INTERES = Saldo inicial * % / tiempo de financiamiento
                     let capitalPayment = monthlyPayment - interestPayment; // CAPITAL = CUOTA - INTERES
-                    remainingBalance -= capitalPayment; // Actualiza el saldo pendiente después de aplicar el capital
+                    remainingBalance -= monthlyPayment; // Actualiza el saldo pendiente después de aplicar el capital
             
                     // Genera una fila con los valores actualizados
                     let row = `<tr>
@@ -591,7 +591,7 @@
                         <td>${monthlyPayment.toFixed(2)}</td> <!-- Cuota mensual -->
                         <td>${interestPayment.toFixed(2)}</td> <!-- Interés calculado sobre el saldo inicial -->
                         <td>${capitalPayment.toFixed(2)}</td> <!-- Parte de la cuota aplicada al capital -->
-                        <td>${remainingBalance.toFixed(2)}</td> <!-- Saldo pendiente después del pago de capital -->
+                        <td>${remainingBalance.toFixed(2)}</td> <!-- Saldo pendiente después del pago de la cuota -->
                     </tr>`;
                     
                     tableBody.innerHTML += row;
