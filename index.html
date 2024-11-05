@@ -312,7 +312,7 @@
             <h2 class="text-center mt-5" style="color: #f39c12;">Tabla de Amortización</h2>
             <table class="table table-bordered amortization-table">
                 <thead>
-                    <tr>
+                    <tr style="background-color: #f39c12; color: #fff;">
                         <th>Plazo</th>
                         <th>Fecha</th>
                         <th>Valor financiado</th>
@@ -587,7 +587,7 @@
                     let valorFinanciado = remainingBalance; // Valor financiado (saldo inicial del periodo actual)
                     let interestPayment = valorFinanciado * interestRate; // INTERES = Saldo inicial * % / tiempo de financiamiento
                     let capitalPayment = monthlyPayment - interestPayment; // CAPITAL = CUOTA - INTERES
-                    remainingBalance -= monthlyPayment; // Actualiza el saldo pendiente después de aplicar el capital
+                    remainingBalance -= monthlyPayment; // Actualiza el saldo pendiente después de restar la cuota
 
                     // Acumula los totales de interés y capital
                     totalInterest += interestPayment;
