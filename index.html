@@ -336,7 +336,9 @@
     <script>
         let categorias = {};
         let pvcSelected = 0;
-
+        
+//FUNCIONES UTILIZADAS PARA LOS CÁLCULOS
+        
         function loadCSV(file) {
             fetch(file)
                 .then(response => response.text())
@@ -559,7 +561,7 @@
                 tableBody.innerHTML = '';
                 let remainingBalance = financedAmount; // Inicializa el saldo pendiente como el valor financiado total
                 let currentDate = new Date();
-                let interestRate = (creditMultiplier - 1) / months;
+                let interestRate = (40) / 3;
             
                 // Fila inicial para la entrada
                 tableBody.innerHTML += `<tr>
