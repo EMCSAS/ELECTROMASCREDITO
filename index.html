@@ -564,7 +564,11 @@
                 
                 // Calcula la tasa de interés efectiva por cuota usando el multiplicador total y los meses de financiamiento
                 let interestRate = (Math.pow(creditMultiplier, 1 / months) - 1); // Tasa efectiva mensual basada en el multiplicador total
-            
+
+                // Variables para acumular el total de intereses y capital
+                let totalInterest = 0;
+                let totalCapital = 0;
+                
                 // Fila inicial para la entrada
                 tableBody.innerHTML += `<tr>
                     <td>0</td>
