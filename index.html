@@ -570,7 +570,7 @@
                 let totalCapital = 0;
                 
                 // Fila inicial para la entrada
-                tableBody.innerHTML += `<tr>
+                tableBody.innerHTML += `<tr style="background-color: #f39c12; color: #fff;">
                     <td>0</td>
                     <td>${currentDate.toLocaleDateString()}</td>
                     <td></td>
@@ -588,7 +588,14 @@
                     let interestPayment = valorFinanciado * interestRate; // INTERES = Saldo inicial * % / tiempo de financiamiento
                     let capitalPayment = monthlyPayment - interestPayment; // CAPITAL = CUOTA - INTERES
                     remainingBalance -= monthlyPayment; // Actualiza el saldo pendiente después de aplicar el capital
+
+                    // Acumula los totales de interés y capital
+                    totalInterest += interestPayment;
+                    totalCapital += capitalPayment;
             
+                    // Asegura que el saldo pendiente no sea negativo en la última cuota
+                    if (remainingBalance < 0) remainingBalance = 0;
+                    
                     // Genera una fila con los valores actualizados
                     let row = `<tr>
                         <td>${i}</td>
@@ -604,13 +611,13 @@
                 }
             
                 // Fila total
-                tableBody.innerHTML += `<tr style="font-weight: bold;">
+                tableBody.innerHTML += `<tr style="font-weight: bold; background-color: #f39c12; color: #fff;">
                     <td>Total</td>
                     <td></td>
                     <td></td>
                     <td>${(monthlyPayment * months).toFixed(2)}</td> <!-- Total de las cuotas -->
-                    <td>${((financedAmount * interestRate)).toFixed(2)}</td> <!-- Total de intereses acumulados -->
-                    <td>${financedAmount.toFixed(2)}</td> <!-- Total del capital -->
+                    <td>${totalInterest.toFixed(2)}</td> <!-- Total de intereses acumulados -->
+                    <td>${totalCapital.toFixed(2)}</td> <!-- Total del capital -->
                     <td></td>
                 </tr>`;
             }
