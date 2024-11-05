@@ -325,6 +325,18 @@
                 <tbody id="amortizationTableBody"></tbody>
             </table>
         </div>
+
+//WHATSAPP
+            <!-- Nuevo campo para número de celular y botón de enviar por WhatsApp -->
+            <div class="mt-4">
+            <h2 class="text-center mt-4" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Enviar Cotización por WhatsApp</h2>
+            <div class="mb-3">
+                <label for="phoneNumber" class="form-label">Número de teléfono:</label>
+                <input type="text" class="form-control" id="phoneNumber" placeholder="Ingrese número de teléfono con código de país">
+            </div>
+            <button type="button" class="btn-custom" onclick="sendWhatsApp()">Enviar por WhatsApp</button>
+        </div>
+    
     </div>
 
     <footer>
@@ -338,6 +350,41 @@
         let pvcSelected = 0;
         
 //FUNCIONES UTILIZADAS PARA LOS CÁLCULOS
+
+//PARA EL WHATSAPP     
+        function sendWhatsApp() {
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            if (!phoneNumber) {
+                alert("Por favor, ingrese un número de teléfono.");
+                return;
+            }
+
+            // Obtener datos de cotización
+            const product = document.getElementById('productSelectedType').textContent;
+            const cashPrice = document.getElementById('cashPriceResult').textContent;
+            const creditPrice = document.getElementById('creditPriceResult').textContent;
+            const downPayment = document.getElementById('downPaymentAmountResult').textContent;
+            const financedAmount = document.getElementById('financedAmountResult').textContent;
+            const monthlyPayment = document.getElementById('monthlyPaymentResult').textContent;
+            const financingTime = document.getElementById('financingTimeResult').textContent;
+
+            // Crear mensaje de WhatsApp
+            const message = `*Cotización Electromáscrédito*%0A` +
+                            `*Producto:* ${product}%0A` +
+                            `*Precio de contado:* ${cashPrice}%0A` +
+                            `*Precio a crédito:* ${creditPrice}%0A` +
+                            `*Entrada:* ${downPayment}%0A` +
+                            `*Valor financiado:* ${financedAmount}%0A` +
+                            `*Cuota mensual:* ${monthlyPayment}%0A` +
+                            `*Tiempo de financiamiento:* ${financingTime}%0A`;
+
+            // Crear enlace de WhatsApp
+            const whatsappURL = `https://wa.me/${phoneNumber}?text=${message}`;
+
+            // Abrir WhatsApp en una nueva pestaña
+            window.open(whatsappURL, '_blank');
+        }
+
         
         function loadCSV(file) {
             fetch(file)
