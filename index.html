@@ -561,7 +561,7 @@
                 tableBody.innerHTML = '';
                 let remainingBalance = financedAmount; // Inicializa el saldo pendiente como el valor financiado total
                 let currentDate = new Date();
-                let interestRate = (40) / 3;
+                let interestRate = (creditMultiplier - 1);
             
                 // Fila inicial para la entrada
                 tableBody.innerHTML += `<tr>
