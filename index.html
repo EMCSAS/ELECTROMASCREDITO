@@ -272,41 +272,42 @@
             <button type="button" class="btn-custom" onclick="calculateInstallments()">Calcular cuotas</button>
             <button type="button" class="btn-custom" onclick="resetForm()">Nueva consulta</button>
         </form>
+
             <div class="mt-4">
-                <h2 class="text-center mt-4" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Cotizador</h2>
-                <table class="table table-bordered small-table">
-                    <tbody>
-                        <tr>
-                            <td style="text-align: left;"><b>Tipo de producto</b></td>
-                            <td id="productSelectedType" style="text-align: left;"></td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left;"><b>Precio de contado</b></td>
-                            <td id="cashPriceResult" style="text-align: left;">$0.00</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left;"><b>Precio a crédito</b></td>
-                            <td id="creditPriceResult" style="text-align: left;">$0.00</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left;"><b>Entrada</b></td>
-                            <td id="downPaymentAmountResult" style="text-align: left;">$0.00</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left;"><b>Valor financiado</b></td>
-                            <td id="financedAmountResult" style="text-align: left;">$0.00</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left;"><b>Cuota mensual</b></td>
-                            <td id="monthlyPaymentResult" style="text-align: left;">$0.00</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left;"><b>Tiempo de financiamiento</b></td>
-                            <td id="financingTimeResult" style="text-align: left;"></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <h2 class="text-center mt-4" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Cotizador</h2>
+            <table class="table table-bordered small-table">
+                <tbody>
+                    <tr>
+                        <td style="text-align: right;"><b>Tipo de producto</b></td>
+                        <td id="productSelectedType" style="text-align: right;"></td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"><b>Precio de contado</b></td>
+                        <td id="cashPriceResult" style="text-align: right;">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"><b>Precio a crédito</b></td>
+                        <td id="creditPriceResult" style="text-align: right;">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"><b>Entrada</b></td>
+                        <td id="downPaymentAmountResult" style="text-align: right;">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"><b>Valor financiado</b></td>
+                        <td id="financedAmountResult" style="text-align: right;">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"><b>Cuota mensual</b></td>
+                        <td id="monthlyPaymentResult" style="text-align: right;">$0.00</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;"><b>Tiempo de financiamiento</b></td>
+                        <td id="financingTimeResult" style="text-align: right;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         
             <h2 class="text-center mt-5" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Tabla de Amortización</h2>
             <table class="table table-bordered amortization-table">
