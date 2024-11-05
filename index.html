@@ -273,7 +273,7 @@
             <button type="button" class="btn-custom" onclick="resetForm()">Nueva consulta</button>
         </form>
         
-/*TABLA DE COTIZACIÓN*/
+        /*TABLA DE COTIZACIÓN*/
         
             <div class="mt-4">
                 <h2 class="text-center mt-4" style="color: #f39c12; font-family: 'Verdana', sans-serif;">Cotizador</h2>
@@ -311,7 +311,7 @@
                 </table>
             </div>
 
-/*PARA ENVIAR LA COTIZACION POR WHATSAPP*/
+            /*PARA ENVIAR LA COTIZACION POR WHATSAPP*/
         
             <!-- Nuevo campo para número de celular y botón de enviar por WhatsApp -->
             <div class="mt-4">
@@ -323,7 +323,7 @@
             <button type="button" class="btn-custom" onclick="sendWhatsApp()">Enviar por WhatsApp</button>
         </div>
             
-/*TABLA DE AMORTIZACIÓN*/
+        /*TABLA DE AMORTIZACIÓN*/
         
             <h2 class="text-center mt-5" style="color: #f39c12;">Tabla de Amortización</h2>
             <table class="table table-bordered amortization-table">
@@ -352,9 +352,10 @@
         let categorias = {};
         let pvcSelected = 0;
         
-/*FUNCIONES UTILIZADAS PARA LOS CÁLCULOS*/
+        /*FUNCIONES UTILIZADAS PARA LOS CÁLCULOS*/
 
-/*PARA EL WHATSAPP*/     
+        /*PARA EL WHATSAPP*/     
+        
         function sendWhatsApp() {
             const phoneNumber = document.getElementById('phoneNumber').value.trim();
             if (!phoneNumber) {
