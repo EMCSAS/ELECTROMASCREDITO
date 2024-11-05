@@ -561,7 +561,9 @@
                 tableBody.innerHTML = '';
                 let remainingBalance = financedAmount; // Inicializa el saldo pendiente como el valor financiado total
                 let currentDate = new Date();
-                let interestRate = 0.4;
+                
+                // Calcula la tasa de interés efectiva por cuota usando el multiplicador total y los meses de financiamiento
+                let interestRate = (Math.pow(creditMultiplier, 1 / months) - 1); // Tasa efectiva mensual basada en el multiplicador total
             
                 // Fila inicial para la entrada
                 tableBody.innerHTML += `<tr>
@@ -579,7 +581,7 @@
                     currentDate.setMonth(currentDate.getMonth() + 1); // Incrementa la fecha al siguiente mes
             
                     let valorFinanciado = remainingBalance; // Valor financiado (saldo inicial del periodo actual)
-                    let interestPayment = valorFinanciado * (interestRate / months); // INTERES = Saldo inicial * % / tiempo de financiamiento
+                    let interestPayment = valorFinanciado * interestRate; // INTERES = Saldo inicial * % / tiempo de financiamiento
                     let capitalPayment = monthlyPayment - interestPayment; // CAPITAL = CUOTA - INTERES
                     remainingBalance -= monthlyPayment; // Actualiza el saldo pendiente después de aplicar el capital
             
