@@ -406,19 +406,12 @@
                         const descripcion = columns[3]?.trim();
                         const pvc = columns[4] ? parseFloat(columns[4].replace(',', '.')) : null;
 
-                        if (categoria) {
-                            currentCategory = categoria;
-                            categorias[currentCategory] = categorias[currentCategory] || {};
-                        }
-
-                        if (subcategoria) {
-                            currentSubcategory = subcategoria;
-                            categorias[currentCategory][currentSubcategory] = [];
-                        }
-
-                        if (pvc && currentCategory && currentSubcategory) {
-                            categorias[currentCategory][currentSubcategory].push({ codigoSAP, descripcion, pvc });
-                        }
+                        if (categoria) currentCategory = categoria;
+                        if (subcategoria) currentSubcategory = subcategoria;
+        
+                        if (!categorias[currentCategory]) categorias[currentCategory] = {};
+                        if (!categorias[currentCategory][currentSubcategory]) categorias[currentCategory][currentSubcategory] = [];
+                        if (pvc !== null) categorias[currentCategory][currentSubcategory].push({ codigoSAP, descripcion, pvc });
                     });
                     populateCatalog();
                 })
